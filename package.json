@@ -9,28 +9,43 @@
     "lint": "next lint",
     "prepare": "husky install"
   },
+  "prisma": {
+    "seed": "ts-node --compilerOptions {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
   "dependencies": {
-    "@geist-ui/core": "^2.3.8",
     "@mantine/hooks": "^7.12.2",
+    "@nextui-org/react": "^2.4.8",
     "@prisma/client": "^5.19.1",
     "@tanstack/react-query": "^5.56.2",
     "@tanstack/react-query-devtools": "^5.56.2",
     "axios": "^1.7.7",
+    "bcrypt": "^5.1.1",
+    "cookies": "^0.9.1",
+    "dayjs": "^1.11.13",
+    "framer-motion": "^11.5.6",
+    "jose": "^5.9.2",
     "next": "14.2.13",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-hook-form": "^7.53.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cookies": "^0.9.0",
     "@types/node": "^20",
     "@types/react": "18.2.18",
     "@types/react-dom": "^18",
+    "autoprefixer": "^10.4.20",
     "eslint": "^8",
     "eslint-config-next": "14.2.13",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-unused-imports": "^4.1.4",
     "husky": "^8.0.0",
+    "postcss": "^8.4.47",
     "prisma": "^5.19.1",
+    "tailwindcss": "^3.4.12",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }

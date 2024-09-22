@@ -1,5 +1,3 @@
-import type { ToastInput } from "@geist-ui/core";
-import { useToasts } from "@geist-ui/core";
 import type { QueryKey } from "@tanstack/react-query";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError, AxiosResponse } from "axios";
@@ -16,8 +14,8 @@ export type ActionOptions<R> = {
     | ((res: AxiosError<any> | Error) => string | undefined)
     | string;
   hideError?: boolean;
-  successNotifProps?: ToastInput;
-  errorNotifProps?: ToastInput;
+  // successNotifProps?: ToastInput;
+  // errorNotifProps?: ToastInput;
   overrideKeys?: QueryKey;
   mapKeysOnSettled?: boolean;
 };
@@ -28,7 +26,7 @@ export const useAction = <T = any, P = any, R = ApiResponse<T>>(
   options?: ActionOptions<R>
 ) => {
   const queryClient = useQueryClient();
-  const { setToast } = useToasts();
+  // const { setToast } = useToasts();
 
   return useMutation({
     mutationFn: apiFn,
@@ -40,13 +38,13 @@ export const useAction = <T = any, P = any, R = ApiResponse<T>>(
             ? successMessage(res)
             : successMessage;
 
-        const notifProps: ToastInput = {
-          text: message,
-          type: "success",
-          delay: AUTO_CLOSE,
-          ...(options?.successNotifProps || {}),
-        };
-        setToast(notifProps);
+        // const notifProps: ToastInput = {
+        //   text: message,
+        //   type: "success",
+        //   delay: AUTO_CLOSE,
+        //   ...(options?.successNotifProps || {}),
+        // };
+        // setToast(notifProps);
       }
 
       options?.onSuccess?.(res);
@@ -59,12 +57,12 @@ export const useAction = <T = any, P = any, R = ApiResponse<T>>(
             errorMessage instanceof Function
               ? errorMessage(error)
               : errorMessage;
-          setToast({
-            text: message,
-            type: "error",
-            delay: AUTO_CLOSE,
-            ...(options?.errorNotifProps || {}),
-          });
+          // setToast({
+          //   text: message,
+          //   type: "error",
+          //   delay: AUTO_CLOSE,
+          //   ...(options?.errorNotifProps || {}),
+          // });
           return;
         }
 
@@ -83,36 +81,36 @@ export const useAction = <T = any, P = any, R = ApiResponse<T>>(
             }
 
             setTimeout(() => {
-              setToast({
-                text: message || "Something went wrong.",
-                type: "error",
-                delay: AUTO_CLOSE,
-                ...(options?.errorNotifProps || {}),
-              });
+              // setToast({
+              //   text: message || "Something went wrong.",
+              //   type: "error",
+              //   delay: AUTO_CLOSE,
+              //   ...(options?.errorNotifProps || {}),
+              // });
             }, index * 300);
           });
           return;
         }
 
         if (axiosError?.response?.data?.message) {
-          setToast({
-            text: axiosError?.response?.data?.message,
-            type: "error",
-            delay: AUTO_CLOSE,
-            ...(options?.errorNotifProps || {}),
-          });
+          // setToast({
+          //   text: axiosError?.response?.data?.message,
+          //   type: "error",
+          //   delay: AUTO_CLOSE,
+          //   ...(options?.errorNotifProps || {}),
+          // });
           return;
         }
 
-        setToast({
-          text:
-            axiosError.response?.data?.error?.toString() ||
-            error.message ||
-            "Something went wrong.",
-          type: "error",
-          delay: AUTO_CLOSE,
-          ...(options?.errorNotifProps || {}),
-        });
+        // setToast({
+        //   text:
+        //     axiosError.response?.data?.error?.toString() ||
+        //     error.message ||
+        //     "Something went wrong.",
+        //   type: "error",
+        //   delay: AUTO_CLOSE,
+        //   ...(options?.errorNotifProps || {}),
+        // });
       }
       options?.onError?.(error);
     },

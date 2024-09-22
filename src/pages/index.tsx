@@ -1,13 +1,18 @@
-import { Button } from "@geist-ui/core";
 import React from "react";
+
+import Head from "next/head";
+
+import { AuthContainer } from "@/modules/auth/components";
 
 const Home = () => {
   return (
-    <div>
-      <Button auto type="secondary">
-        Geist UI Button
-      </Button>
-    </div>
+    <>
+      <Head>
+        <title>Login - E-Learning</title>
+      </Head>
+
+      <AuthContainer />
+    </>
   );
 };
 
