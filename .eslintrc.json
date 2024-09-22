@@ -1,6 +1,31 @@
 {
+  "plugins": [
+    "react-hooks",
+    "simple-import-sort",
+    "unused-imports",
+    "@typescript-eslint"
+  ],
   "extends": ["next/core-web-vitals", "next/typescript"],
   "rules": {
-    "@typescript-eslint/no-explicit-any": "off"
+    "simple-import-sort/exports": "warn",
+    "simple-import-sort/imports": [
+      "warn",
+      {
+        "groups": [
+          ["^react"],
+          ["^next"],
+          ["^@?\\w"],
+          ["^recoil"],
+          ["@/atoms/(.*)"],
+          ["@/(.*)"],
+          ["^[./]"]
+        ]
+      }
+    ],
+    "@typescript-eslint/no-explicit-any": "off",
+    "unused-imports/no-unused-imports": "warn",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/consistent-type-imports": "error",
+    "no-console": "error"
   }
 }

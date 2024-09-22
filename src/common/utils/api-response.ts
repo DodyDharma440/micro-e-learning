@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { NextApiRequest, NextApiResponse } from "next";
-import { PaginationResponse } from "../interfaces/api";
+import type { NextApiRequest, NextApiResponse } from "next";
+
+import type { PaginationResponse } from "../interfaces/api";
 
 export const createResponse = <T>(
   res: NextApiResponse,

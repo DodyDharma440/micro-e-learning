@@ -1,5 +1,7 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
+
 import { PrismaClient } from "@prisma/client";
+
 import { createErrResponse } from "./api-response";
 
 export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";

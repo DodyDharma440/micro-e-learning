@@ -1,0 +1,50 @@
+{
+    "Create Page": {
+        "prefix": "crpg",
+        "body": [
+            "import React from \"react\";",
+            "",
+            "import Head from \"next/head\";",
+            "",
+            "const ${1}Page = () => {",
+            "  return (",
+            "    <>",
+            "      <Head>",
+            "        <title>${1} - E-Learning</title>",
+            "      </Head>",
+            "",
+            "      $2",
+            "    </>",
+            "  );",
+            "};",
+            "",
+            "export default ${1}Page;"
+        ]
+    },
+    "Export Default As": {
+        "prefix": "exdefas",
+        "body": [
+            "export { default as $1 } from \"./$1\""
+        ]
+    },
+    "Get Hooks": {
+        "prefix": "get-all",
+        "body": [
+            "export const useGet$1s = get<${2:DataType}>(",
+            "   (args, ctx) => axios.get(`/${3:path}${args?.urlParams || \"\"}`, { signal: ctx?.signal }),",
+            "   [${4:\"QueryKey\"}]",
+            ")"
+        ]
+    },
+    "Get Server Side Props": {
+        "prefix": "gssp",
+        "body": [
+            "export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {",
+            "   return {",
+            "       props: {",
+            "       }",
+            "   }",
+            "}"
+        ]
+    },
+}
