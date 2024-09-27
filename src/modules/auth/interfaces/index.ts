@@ -8,4 +8,6 @@ export interface IUser extends BasicData {
   role: UserRole;
 }
 
-export interface ILoginInput extends Pick<IUser, "username" | "password"> {}
+export interface ILoginInput extends Pick<IUser, "username" | "password"> {
+  isRemember?: boolean;
+}

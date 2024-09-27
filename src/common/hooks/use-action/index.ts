@@ -1,10 +1,11 @@
+import type { ToastOptions } from "react-toastify";
+import { toast } from "react-toastify";
+
 import type { QueryKey } from "@tanstack/react-query";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError, AxiosResponse } from "axios";
 
 import type { ApiResponse } from "@/common/interfaces/api";
-
-const AUTO_CLOSE = 3000;
 
 export type ActionOptions<R> = {
   onSuccess?: (res: AxiosResponse<R>) => void;
@@ -14,8 +15,8 @@ export type ActionOptions<R> = {
     | ((res: AxiosError<any> | Error) => string | undefined)
     | string;
   hideError?: boolean;
-  // successNotifProps?: ToastInput;
-  // errorNotifProps?: ToastInput;
+  successNotifProps?: ToastOptions;
+  errorNotifProps?: ToastOptions;
   overrideKeys?: QueryKey;
   mapKeysOnSettled?: boolean;
 };
@@ -38,13 +39,9 @@ export const useAction = <T = any, P = any, R = ApiResponse<T>>(
             ? successMessage(res)
             : successMessage;
 
-        // const notifProps: ToastInput = {
-        //   text: message,
-        //   type: "success",
-        //   delay: AUTO_CLOSE,
-        //   ...(options?.successNotifProps || {}),
-        // };
-        // setToast(notifProps);
+        toast.success(message, {
+          ...(options?.errorNotifProps || {}),
+        });
       }
 
       options?.onSuccess?.(res);
@@ -57,12 +54,9 @@ export const useAction = <T = any, P = any, R = ApiResponse<T>>(
             errorMessage instanceof Function
               ? errorMessage(error)
               : errorMessage;
-          // setToast({
-          //   text: message,
-          //   type: "error",
-          //   delay: AUTO_CLOSE,
-          //   ...(options?.errorNotifProps || {}),
-          // });
+          toast.error(message, {
+            ...(options?.errorNotifProps || {}),
+          });
           return;
         }
 
@@ -81,36 +75,31 @@ export const useAction = <T = any, P = any, R = ApiResponse<T>>(
             }
 
             setTimeout(() => {
-              // setToast({
-              //   text: message || "Something went wrong.",
-              //   type: "error",
-              //   delay: AUTO_CLOSE,
-              //   ...(options?.errorNotifProps || {}),
-              // });
+              toast.error(message, {
+                ...(options?.errorNotifProps || {}),
+              });
             }, index * 300);
           });
           return;
         }
 
-        if (axiosError?.response?.data?.message) {
-          // setToast({
-          //   text: axiosError?.response?.data?.message,
-          //   type: "error",
-          //   delay: AUTO_CLOSE,
-          //   ...(options?.errorNotifProps || {}),
-          // });
+        if (axiosError?.response?.data?.error) {
+          toast.error(axiosError?.response?.data?.error, {
+            ...(options?.errorNotifProps || {}),
+          });
           return;
         }
 
-        // setToast({
-        //   text:
-        //     axiosError.response?.data?.error?.toString() ||
-        //     error.message ||
-        //     "Something went wrong.",
-        //   type: "error",
-        //   delay: AUTO_CLOSE,
-        //   ...(options?.errorNotifProps || {}),
-        // });
+        if (axiosError?.response?.data?.message) {
+          toast.error(axiosError?.response?.data?.message, {
+            ...(options?.errorNotifProps || {}),
+          });
+          return;
+        }
+
+        toast.error(error.message || "Something went wrong.", {
+          ...(options?.errorNotifProps || {}),
+        });
       }
       options?.onError?.(error);
     },
