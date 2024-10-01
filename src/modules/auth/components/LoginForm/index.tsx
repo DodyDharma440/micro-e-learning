@@ -21,6 +21,7 @@ const LoginForm = () => {
   const { mutate: login, isPending } = useLogin({
     onSuccess: () => {
       window.location.replace("/admin/dashboard");
+      localStorage.setItem("isLoggedIn", "true");
     },
   });
 

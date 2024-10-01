@@ -8,10 +8,13 @@ import { useTheme } from "next-themes";
 import { Avatar, Card, cn, Divider, Switch } from "@nextui-org/react";
 
 import { adminMenu } from "@/common/constants/layout";
+import { useUserProfile } from "@/modules/auth/hooks";
 
 const Sidebar = () => {
   const { pathname } = useRouter();
   const { theme, setTheme } = useTheme();
+
+  const { userData } = useUserProfile();
 
   return (
     <div className="fixed top-0 bottom-0 py-8">
@@ -32,14 +35,14 @@ const Sidebar = () => {
                 <Link href={path} key={index}>
                   <div
                     className={cn(
-                      "flex items-center p-2 rounded-md gap-3 hover:bg-black hover:bg-opacity-40",
+                      "flex items-center p-2 rounded-md gap-3 hover:bg-black hover:bg-opacity-5 hover:dark:bg-opacity-40",
                       {
-                        ["bg-black bg-opacity-20 hover:bg-opacity-25"]:
+                        ["bg-black bg-opacity-10 dark:bg-opacity-20 hover:bg-opacity-25"]:
                           isActive,
                       }
                     )}
                   >
-                    <div className="w-9 h-9 rounded-md bg-orange-500 dark:bg-orange-800 flex items-center justify-center text-white">
+                    <div className="w-9 h-9 rounded-md bg-orange-400 dark:bg-orange-800 flex items-center justify-center text-white">
                       <Icon size={20} />
                     </div>
                     <div>
@@ -71,9 +74,9 @@ const Sidebar = () => {
             <div className="flex items-center gap-3">
               <Avatar name="John" />
               <div>
-                <p className="mb-[2px] font-bold text-sm">John Doe</p>
-                <p className="text-[10px] text-gray-400 dark:text-gray-500">
-                  Superadmin
+                <p className="mb-[2px] font-bold text-sm">{userData?.name}</p>
+                <p className="text-[10px] text-gray-400 dark:text-gray-500 capitalize">
+                  {userData?.role}
                 </p>
               </div>
             </div>
