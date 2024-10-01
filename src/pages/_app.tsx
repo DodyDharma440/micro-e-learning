@@ -11,6 +11,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import "@/styles/globals.css";
 import { inter } from "@/common/configs/fonts";
+import { PageLayout } from "@/common/layouts";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -48,7 +49,9 @@ export default function App({ Component, pageProps }: AppProps) {
                 theme="colored"
                 transition={Bounce}
               />
-              <Component {...pageProps} />
+              <PageLayout>
+                <Component {...pageProps} />
+              </PageLayout>
             </main>
           </NextThemesProvider>
         </NextUIProvider>
