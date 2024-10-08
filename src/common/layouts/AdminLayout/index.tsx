@@ -8,9 +8,13 @@ type AdminLayoutProps = {
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   return (
-    <div className="container mx-auto min-h-screen">
-      <Sidebar />
-      <div className="ml-[280px] py-8 px-5">{children}</div>
+    <div className="relative overflow-hidden">
+      <div className="w-screen h-[1200px] rounded-full blur-[1200px] bg-blue-400 opacity-30 absolute -top-1/2" />
+      <div className="w-screen h-[500px] rounded-full blur-[500px] bg-orange-400 opacity-30 absolute -bottom-1/2 -right-1/2" />
+      <div className="container mx-auto min-h-screen">
+        <Sidebar />
+        <div className="ml-[280px] py-8 px-5">{children}</div>
+      </div>
     </div>
   );
 };

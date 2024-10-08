@@ -18,7 +18,7 @@ const Sidebar = () => {
 
   return (
     <div className="fixed top-0 bottom-0 py-8">
-      <Card className="w-[280px] h-full p-8">
+      <Card className="w-[280px] h-full p-8 bg-opacity-20 backdrop-blur-md">
         <div className="flex items-center gap-4">
           <div className="w-10 h-10 rounded-md bg-white bg-opacity-30"></div>
           <h1 className="font-semibold text-xl">E-Learning</h1>
@@ -42,7 +42,7 @@ const Sidebar = () => {
                       }
                     )}
                   >
-                    <div className="w-9 h-9 rounded-md bg-orange-400 dark:bg-orange-800 flex items-center justify-center text-white">
+                    <div className="w-9 h-9 rounded-md bg-blue-400 dark:bg-blue-500 bg-opacity-75 dark:bg-opacity-50 flex items-center justify-center text-white">
                       <Icon size={20} />
                     </div>
                     <div>
