@@ -8,6 +8,13 @@ async function main() {
   const password = "admin";
   const hashedPassword = await bcrypt.hash(password, 10);
 
+  await prisma.workPosition.createMany({
+    data: [{ name: "HRD" }, { name: "Programmer" }, { name: "Admin" }],
+  });
+  const workPosition = await prisma.workPosition.findFirst({
+    where: { name: "Admin" },
+  });
+
   const admin = await prisma.user.upsert({
     where: { username: "superadmin" },
     update: {},
@@ -17,6 +24,7 @@ async function main() {
       name: "Super Admin",
       updatedAt: new Date(),
       password: hashedPassword,
+      workPositionId: workPosition?.id ?? "",
     },
   });
 

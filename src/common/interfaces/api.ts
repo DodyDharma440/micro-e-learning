@@ -15,7 +15,7 @@ export interface PaginationResponse<T> {
 }
 
 export type BasicData = {
-  id: number;
+  id: string;
   createdAt: string | null;
   updatedAt: string | null;
   deletedAt?: string | null;

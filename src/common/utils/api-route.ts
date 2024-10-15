@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
+import type { Prisma } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 
 import { createErrResponse } from "./api-response";
@@ -16,6 +17,26 @@ if (process.env.NODE_ENV === "production") {
   }
   prisma = (global as any).prisma;
 }
+
+prisma.$use(async (params, next) => {
+  const modelsSoftDelete: Prisma.ModelName[] = ["Course"];
+
+  if (params.model && modelsSoftDelete.includes(params.model)) {
+    if (params.action == "delete") {
+      params.action = "update";
+      params.args["data"] = { deleted: true };
+    }
+    if (params.action == "deleteMany") {
+      params.action = "updateMany";
+      if (params.args.data != undefined) {
+        params.args.data["deleted"] = true;
+      } else {
+        params.args["data"] = { deleted: true };
+      }
+    }
+  }
+  return next(params);
+});
 
 type NextApiHandler = Partial<
   Record<

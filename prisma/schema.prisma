@@ -20,11 +20,88 @@ enum Role {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
+  id             String        @id @default(uuid())
+  username       String        @unique
+  name           String
+  password       String?
+  avatarUrl      String?
+  role           Role
+  workPositionId String
+  workPosition   WorkPosition  @relation(fields: [workPositionId], references: [id])
+  Course         Course[]
+  CourseForum    CourseForum[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @default(now())
+}
+
+model WorkPosition {
+  id        String   @id @default(uuid())
   name      String
-  password  String?
+  User      User[]
+  Course    Course[]
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-  role      Role
+}
+
+model Course {
+  id           String          @id @default(uuid())
+  name         String
+  slug         String          @unique
+  description  String?
+  thumbnailUrl String
+  trailerUrl   String?
+  hideTrailer  Boolean
+  trainerId    String
+  trainer      User            @relation(fields: [trainerId], references: [id])
+  categoryId   String
+  category     WorkPosition    @relation(fields: [categoryId], references: [id])
+  keypoints    Json?
+  enableForum  Boolean
+  chapters     CourseChapter[]
+  CourseForum  CourseForum[]
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @default(now())
+  deleted      Boolean         @default(false)
+}
+
+model CourseChapter {
+  id        String         @id @default(uuid())
+  name      String
+  order     Int
+  course    Course         @relation(fields: [courseId], references: [id])
+  courseId  String
+  lessons   CourseLesson[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @default(now())
+}
+
+enum CourseLessonType {
+  VIDEO
+  DOCUMENT
+}
+
+model CourseLesson {
+  id         String           @id @default(uuid())
+  name       String
+  order      Int
+  lessonType CourseLessonType
+  contentUrl String
+  chapter    CourseChapter    @relation(fields: [chapterId], references: [id])
+  chapterId  String
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @default(now())
+}
+
+model CourseForum {
+  id             String       @id @default(uuid())
+  content        String
+  parent         CourseForum? @relation("Parent", fields: [parentId], references: [id])
+  parentId       String?      @unique
+  parentRelation CourseForum? @relation("Parent")
+  courseId       String
+  course         Course       @relation(fields: [courseId], references: [id])
+  userId         String
+  user           User         @relation(fields: [userId], references: [id])
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @default(now())
 }
