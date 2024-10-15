@@ -19,7 +19,11 @@ if (process.env.NODE_ENV === "production") {
 }
 
 prisma.$use(async (params, next) => {
-  const modelsSoftDelete: Prisma.ModelName[] = ["Course"];
+  const modelsSoftDelete: Prisma.ModelName[] = [
+    "Course",
+    "CourseChapter",
+    "CourseLesson",
+  ];
 
   if (params.model && modelsSoftDelete.includes(params.model)) {
     if (params.action == "delete") {

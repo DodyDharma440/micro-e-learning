@@ -73,6 +73,7 @@ model CourseChapter {
   lessons   CourseLesson[]
   createdAt DateTime       @default(now())
   updatedAt DateTime       @default(now())
+  deleted   Boolean        @default(false)
 }
 
 enum CourseLessonType {
@@ -90,6 +91,7 @@ model CourseLesson {
   chapterId  String
   createdAt  DateTime         @default(now())
   updatedAt  DateTime         @default(now())
+  deleted    Boolean          @default(false)
 }
 
 model CourseForum {

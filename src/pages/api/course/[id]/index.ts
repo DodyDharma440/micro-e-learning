@@ -9,9 +9,9 @@ export default makeHandler((prisma) => ({
     const course = await prisma.course.findUnique({ where: { id } });
     return createResponse(res, course);
   },
-  PUT: async (req, res) => {
-    const payload = req.body as ICoursePayload;
+  PATCH: async (req, res) => {
     const courseId = req.query.id as string;
+
     const existedCourse = await prisma.course.findUnique({
       where: { id: courseId },
     });
@@ -21,6 +21,7 @@ export default makeHandler((prisma) => ({
       return;
     }
 
+    const payload = req.body as ICoursePayload;
     const isNameChanged = existedCourse?.name !== payload.name;
 
     let slug = existedCourse?.slug;

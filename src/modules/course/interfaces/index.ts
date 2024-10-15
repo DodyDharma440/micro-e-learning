@@ -40,3 +40,9 @@ export interface ICoursePayload
     ICourse,
     keyof BasicData | "trainer" | "category" | "chapters" | "slug"
   > {}
+
+export interface ICourseChapterPayload
+  extends Omit<ICourseChapter, keyof BasicData | "lessons"> {}
+
+export interface ICourseLessonPayload
+  extends Omit<ICourseLesson, keyof BasicData> {}
