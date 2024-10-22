@@ -1,6 +1,8 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { HiSave } from "react-icons/hi";
+
+import { useRouter } from "next/router";
 
 import {
   Button,
@@ -9,16 +11,22 @@ import {
   Radio,
   RadioGroup,
   Select,
+  SelectItem,
   Switch,
   Textarea,
 } from "@nextui-org/react";
 
+import { useUploadImage } from "@/common/actions/imagekit";
 import { Content, ImageUploader } from "@/common/components";
+import { useGetTrainers, useGetWorkPositions } from "@/modules/user/actions";
 
+import { useCreateCourse } from "../../actions";
 import type { ICourseForm } from "../../interfaces";
 import Keypoints from "./Keypoints";
 
 const CourseForm = () => {
+  const { push } = useRouter();
+
   const formMethods = useForm<ICourseForm>({
     defaultValues: {
       keypointsUi: [{ description: "" }],
@@ -34,7 +42,69 @@ const CourseForm = () => {
   } = formMethods;
   const isTrailer = useWatch({ control, name: "isTrailer" });
 
-  const submitHandler = useCallback((values: ICourseForm) => {}, []);
+  const { data: dataTrainers, isLoading: isLoadingTrainers } = useGetTrainers(
+    {},
+    { uniqueKey: ["course-form"] }
+  );
+  const trainerOptions = useMemo(() => {
+    return (dataTrainers?.data.data || []).map((t) => ({
+      label: t.name,
+      value: t.id,
+    }));
+  }, [dataTrainers?.data.data]);
+
+  const { data: dataPositions, isLoading: isLoadingPositions } =
+    useGetWorkPositions();
+  const positionOptions = useMemo(() => {
+    return (dataPositions?.data.data || []).map((t) => ({
+      label: t.name,
+      value: t.id,
+    }));
+  }, [dataPositions?.data.data]);
+
+  const { mutate: createCourse, isPending: isLoadingCreate } = useCreateCourse({
+    onSuccess: () => {
+      push("/admin/courses");
+    },
+  });
+
+  const { mutateAsync: uploadImage, isPending: isLoadingUpload } =
+    useUploadImage();
+
+  const submitHandler = useCallback(
+    (values: ICourseForm) => {
+      const {
+        thumbnailFile,
+        keypointsUi,
+        enableForumUi,
+        isTrailer,
+        ...formValues
+      } = values;
+
+      const makeUploadFd = () => {
+        const uploadFd = new FormData();
+        if (thumbnailFile) uploadFd.append("file", thumbnailFile);
+        uploadFd.append("fileName", `${values.name} Thumb`);
+        return uploadFd;
+      };
+
+      const uploadFd = makeUploadFd();
+
+      uploadImage(
+        { formValues: uploadFd },
+        {
+          onSuccess: (res) => {
+            formValues.thumbnailUrl = res.data.url;
+            formValues.keypoints = keypointsUi.map((k) => k.description);
+            formValues.hideTrailer = !isTrailer;
+            formValues.enableForum = enableForumUi === "yes";
+            createCourse({ formValues });
+          },
+        }
+      );
+    },
+    [createCourse, uploadImage]
+  );
 
   return (
     <FormProvider {...formMethods}>
@@ -45,7 +115,12 @@ const CourseForm = () => {
           backHref="/admin/courses"
           action={
             <div className="flex items-center">
-              <Button type="submit" color="primary" startContent={<HiSave />}>
+              <Button
+                type="submit"
+                color="primary"
+                startContent={<HiSave />}
+                isLoading={isLoadingCreate || isLoadingUpload}
+              >
                 Save
               </Button>
             </div>
@@ -141,9 +216,14 @@ const CourseForm = () => {
                               label="Target User"
                               isInvalid={Boolean(errors.categoryId?.message)}
                               errorMessage={errors.categoryId?.message}
+                              isDisabled={isLoadingPositions}
                               {...field}
                             >
-                              {[]}
+                              {positionOptions.map((pos) => (
+                                <SelectItem key={pos.value}>
+                                  {pos.label}
+                                </SelectItem>
+                              ))}
                             </Select>
                           );
                         }}
@@ -164,8 +244,13 @@ const CourseForm = () => {
                               isInvalid={Boolean(errors.trainerId?.message)}
                               errorMessage={errors.trainerId?.message}
                               {...field}
+                              isDisabled={isLoadingTrainers}
                             >
-                              {[]}
+                              {trainerOptions.map((trainer) => (
+                                <SelectItem key={trainer.value}>
+                                  {trainer.label}
+                                </SelectItem>
+                              ))}
                             </Select>
                           );
                         }}

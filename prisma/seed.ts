@@ -8,9 +8,13 @@ async function main() {
   const password = "admin";
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  await prisma.workPosition.createMany({
-    data: [{ name: "HRD" }, { name: "Programmer" }, { name: "Admin" }],
-  });
+  const positions = await prisma.workPosition.findMany();
+  if (!positions.length) {
+    await prisma.workPosition.createMany({
+      data: [{ name: "HRD" }, { name: "Programmer" }, { name: "Admin" }],
+    });
+  }
+
   const workPosition = await prisma.workPosition.findFirst({
     where: { name: "Admin" },
   });
