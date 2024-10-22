@@ -1,7 +1,13 @@
 import { apiELearning } from "@/common/configs/api";
-import { post } from "@/common/utils/react-query";
+import { get, post } from "@/common/utils/react-query";
 
-import type { ICoursePayload } from "../interfaces";
+import { COURSES } from "../constants";
+import type { ICourse, ICoursePayload } from "../interfaces";
+
+export const useGetCourses = get<ICourse[]>(
+  () => apiELearning.get("/course"),
+  [COURSES]
+);
 
 export const useCreateCourse = post<any, ICoursePayload>(
   ({ formValues }) => apiELearning.post("/course", formValues),

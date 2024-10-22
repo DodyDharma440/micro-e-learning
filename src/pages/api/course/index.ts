@@ -5,7 +5,9 @@ import type { ICoursePayload } from "@/modules/course/interfaces";
 
 export default makeHandler((prisma) => ({
   GET: async (req, res) => {
-    const courses = await prisma.course.findMany();
+    const courses = await prisma.course.findMany({
+      include: { category: true, trainer: true },
+    });
     return createResponse(res, courses);
   },
   POST: async (req, res) => {

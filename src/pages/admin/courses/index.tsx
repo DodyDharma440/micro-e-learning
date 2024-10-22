@@ -8,6 +8,7 @@ import { Button } from "@nextui-org/react";
 
 import { Content } from "@/common/components";
 import { withAuth } from "@/common/hocs";
+import { CourseList } from "@/modules/course/components";
 
 const CoursesPage = () => {
   const { push } = useRouter();
@@ -30,7 +31,7 @@ const CoursesPage = () => {
           </Button>
         }
       >
-        content
+        <CourseList />
       </Content>
     </>
   );
