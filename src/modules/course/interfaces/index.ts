@@ -44,6 +44,7 @@ export interface ICourseForm extends ICoursePayload {
   keypointsUi: Array<{ description: string }>;
   enableForumUi: "yes" | "no";
   isTrailer: boolean;
+  thumbnailFile: File;
 }
 
 export interface ICourseChapterPayload

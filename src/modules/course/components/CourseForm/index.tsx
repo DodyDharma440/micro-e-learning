@@ -56,7 +56,32 @@ const CourseForm = () => {
               <div className="col-span-4">
                 <div className="mb-6">
                   <p className="text-lg font-bold mb-2">Thumbnail</p>
-                  <ImageUploader description="course thumbnail" />
+                  <Controller
+                    control={control}
+                    name="thumbnailFile"
+                    rules={{
+                      required: "Thumbnail must be uploaded",
+                      validate: (val) => {
+                        if (val) {
+                          const sizeMB = val.size / 1024 / 1024;
+                          if (sizeMB > 1) {
+                            return "Max file size is 1MB";
+                          }
+                        }
+                      },
+                    }}
+                    render={({ field }) => {
+                      return (
+                        <>
+                          <ImageUploader
+                            description="course thumbnail"
+                            {...field}
+                            errorMessage={errors.thumbnailFile?.message}
+                          />
+                        </>
+                      );
+                    }}
+                  />
                 </div>
                 <div>
                   <div className="flex justify-between mb-2">
@@ -79,6 +104,8 @@ const CourseForm = () => {
                   {isTrailer ? (
                     <Input
                       label="Youtube URL"
+                      isInvalid={Boolean(errors.trailerUrl?.message)}
+                      errorMessage={errors.trailerUrl?.message}
                       {...register("trailerUrl", {
                         required: "Trailer URL should not be empty",
                       })}

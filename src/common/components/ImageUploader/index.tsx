@@ -21,6 +21,7 @@ type ImageUploaderProps = Omit<
   description?: string;
   withActionOverlay?: boolean;
   onClear?: () => void;
+  errorMessage?: string;
 };
 
 const ImageUploader = forwardRef<HTMLInputElement, ImageUploaderProps>(
@@ -35,6 +36,7 @@ const ImageUploader = forwardRef<HTMLInputElement, ImageUploaderProps>(
       description,
       withActionOverlay,
       onClear,
+      errorMessage,
       ...props
     },
     ref
@@ -68,6 +70,7 @@ const ImageUploader = forwardRef<HTMLInputElement, ImageUploaderProps>(
             htmlFor={withActionOverlay && imageUrl ? "" : id}
             description={description}
             {...frameProps}
+            errorMessage={errorMessage}
             ref={frameRef}
           >
             {imageUrl ? (
@@ -76,7 +79,7 @@ const ImageUploader = forwardRef<HTMLInputElement, ImageUploaderProps>(
                   src={imageUrl}
                   alt="Uploaded image"
                   fill
-                  style={{ objectFit: "cover" }}
+                  style={{ objectFit: "contain" }}
                 />
                 {withActionOverlay ? (
                   <div className="flex items-center justify-center opacity-0 transition-opacity duration-300 gap-4 absolute inset-0 bg-white bg-opacity-20 backdrop-blur-[4px] group-hover:opacity-100 z-10">

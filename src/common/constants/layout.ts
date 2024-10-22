@@ -15,7 +15,17 @@ export const adminPaths = [
 ];
 export const adminMenu: ISidebarItem[] = [
   { label: "Dashboard", path: "/admin/dashboard", icon: HiRectangleGroup },
-  { label: "Courses", path: "/admin/courses", icon: HiTv },
+  {
+    label: "Courses",
+    path: "/admin/courses",
+    icon: HiTv,
+    pathnames: [
+      "/admin/courses/create",
+      "/admin/courses/[id]/detail",
+      "/admin/courses/[id]/lessons",
+      "/admin/courses/[id]/edit",
+    ],
+  },
   {
     label: "User Management",
     path: "/admin/user-management",

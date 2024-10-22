@@ -28,8 +28,9 @@ const Sidebar = () => {
 
         <div className="flex flex-col h-full">
           <div className="-mx-2 flex flex-col gap-4 flex-1">
-            {adminMenu.map(({ icon: Icon, label, path }, index) => {
-              const isActive = path === pathname;
+            {adminMenu.map(({ icon: Icon, label, path, pathnames }, index) => {
+              const isActive =
+                path === pathname || pathnames?.includes(pathname);
 
               return (
                 <Link href={path} key={index}>

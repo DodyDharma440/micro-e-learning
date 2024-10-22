@@ -4,4 +4,5 @@ export interface ISidebarItem {
   icon: IconType;
   label: string;
   path: string;
+  pathnames?: string[];
 }
