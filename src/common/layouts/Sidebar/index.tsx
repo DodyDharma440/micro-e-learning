@@ -42,7 +42,7 @@ const Sidebar = () => {
                       }
                     )}
                   >
-                    <div className="w-9 h-9 rounded-md bg-blue-400 dark:bg-blue-500 bg-opacity-75 dark:bg-opacity-50 flex items-center justify-center text-white">
+                    <div className="w-9 h-9 rounded-md bg-primary-400 dark:bg-primary-400 flex items-center justify-center text-white">
                       <Icon size={20} />
                     </div>
                     <div>

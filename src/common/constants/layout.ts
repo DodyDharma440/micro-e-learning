@@ -6,6 +6,10 @@ import type { ISidebarItem } from "../interfaces/layout";
 export const adminPaths = [
   "/admin/dashboard",
   "/admin/courses",
+  "/admin/courses/create",
+  "/admin/courses/[id]/detail",
+  "/admin/courses/[id]/lessons",
+  "/admin/courses/[id]/edit",
   "/admin/user-management",
   "/admin/edit-profile",
 ];

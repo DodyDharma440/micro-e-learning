@@ -40,6 +40,11 @@ export interface ICoursePayload
     ICourse,
     keyof BasicData | "trainer" | "category" | "chapters" | "slug"
   > {}
+export interface ICourseForm extends ICoursePayload {
+  keypointsUi: Array<{ description: string }>;
+  enableForumUi: "yes" | "no";
+  isTrailer: boolean;
+}
 
 export interface ICourseChapterPayload
   extends Omit<ICourseChapter, keyof BasicData | "lessons"> {}

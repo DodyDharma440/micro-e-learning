@@ -5,6 +5,7 @@ import Head from "next/head";
 import { Button } from "@nextui-org/react";
 
 import { apiELearning } from "@/common/configs/api";
+import { withAuth } from "@/common/hocs";
 
 const AdminDashboardPage = () => {
   const handleLogout = useCallback(async () => {
@@ -24,4 +25,4 @@ const AdminDashboardPage = () => {
   );
 };
 
-export default AdminDashboardPage;
+export default withAuth(AdminDashboardPage, "superadmin");

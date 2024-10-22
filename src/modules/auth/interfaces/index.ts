@@ -1,6 +1,6 @@
 import type { BasicData } from "@/common/interfaces/api";
 
-export type UserRole = "admin" | "trainer" | "user";
+export type UserRole = "superadmin" | "trainer" | "user";
 
 export interface IUser extends BasicData {
   name: string;
