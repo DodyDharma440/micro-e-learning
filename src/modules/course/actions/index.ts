@@ -1,5 +1,5 @@
 import { apiELearning } from "@/common/configs/api";
-import { get, post } from "@/common/utils/react-query";
+import { get, post, remove } from "@/common/utils/react-query";
 
 import { COURSES } from "../constants";
 import type { ICourse, ICoursePayload } from "../interfaces";
@@ -13,4 +13,10 @@ export const useCreateCourse = post<any, ICoursePayload>(
   ({ formValues }) => apiELearning.post("/course", formValues),
   [],
   { successMessage: "Course created successfully" }
+);
+
+export const useDeleteCourse = remove<any>(
+  ({ id }) => apiELearning.delete(`/course/${id}`),
+  [COURSES],
+  { successMessage: "Course deleted successfully" }
 );

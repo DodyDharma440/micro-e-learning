@@ -8,9 +8,10 @@ import type { ICourse } from "../../interfaces";
 
 type CourseCardProps = {
   course: ICourse;
+  onDelete: (val: string) => void;
 };
 
-const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
+const CourseCard: React.FC<CourseCardProps> = ({ course, onDelete }) => {
   return (
     <Card isBlurred>
       <div className="h-[200px] relative overflow-hidden">
@@ -30,7 +31,9 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
           <Button className="w-full mb-2">Lessons</Button>
           <div className="flex gap-2 [&>button]:w-full">
             <Button color="primary">Edit</Button>
-            <Button color="danger">Delete</Button>
+            <Button color="danger" onClick={() => onDelete(course.id)}>
+              Delete
+            </Button>
           </div>
         </div>
       </div>

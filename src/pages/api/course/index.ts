@@ -7,6 +7,7 @@ export default makeHandler((prisma) => ({
   GET: async (req, res) => {
     const courses = await prisma.course.findMany({
       include: { category: true, trainer: true },
+      where: { deleted: false },
     });
     return createResponse(res, courses);
   },
