@@ -28,7 +28,40 @@ async function main() {
     },
   });
 
-  console.log({ admin });
+  const wpHrd = await prisma.workPosition.findFirst({
+    where: { name: "HRD" },
+  });
+  const wpProg = await prisma.workPosition.findFirst({
+    where: { name: "Programmer" },
+  });
+
+  const trainer1 = await prisma.user.upsert({
+    where: { username: "trainerhrd1" },
+    update: {},
+    create: {
+      username: "trainerhrd1",
+      name: "Trainer HRD 1",
+      role: "trainer",
+      workPositionId: wpHrd?.id ?? "",
+      password: hashedPassword,
+      updatedAt: new Date(),
+    },
+  });
+
+  const trainer2 = await prisma.user.upsert({
+    where: { username: "trainerprog1" },
+    update: {},
+    create: {
+      username: "trainerprog1",
+      name: "Trainer Programmer 1",
+      role: "trainer",
+      workPositionId: wpProg?.id ?? "",
+      password: hashedPassword,
+      updatedAt: new Date(),
+    },
+  });
+
+  console.log({ admin, trainers: [trainer1, trainer2] });
 }
 
 main()
