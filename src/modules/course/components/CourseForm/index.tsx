@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
 import { HiSave } from "react-icons/hi";
 
@@ -20,11 +20,15 @@ import { useUploadImage } from "@/common/actions/imagekit";
 import { Content, ImageUploader } from "@/common/components";
 import { useGetTrainers, useGetWorkPositions } from "@/modules/user/actions";
 
-import { useCreateCourse } from "../../actions";
-import type { ICourseForm } from "../../interfaces";
+import { useCreateCourse, useUpdateCourse } from "../../actions";
+import type { ICourse, ICourseForm } from "../../interfaces";
 import Keypoints from "./Keypoints";
 
-const CourseForm = () => {
+type CourseFormProps = {
+  course?: ICourse;
+};
+
+const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
   const { push } = useRouter();
 
   const formMethods = useForm<ICourseForm>({
@@ -39,8 +43,10 @@ const CourseForm = () => {
     handleSubmit,
     formState: { errors },
     register,
+    reset,
   } = formMethods;
   const isTrailer = useWatch({ control, name: "isTrailer" });
+  const thumbFile = useWatch({ control, name: "thumbnailFile" });
 
   const { data: dataTrainers, isLoading: isLoadingTrainers } = useGetTrainers(
     {},
@@ -67,6 +73,11 @@ const CourseForm = () => {
       push("/admin/courses");
     },
   });
+  const { mutate: updateCourse, isPending: isLoadingUpdate } = useUpdateCourse({
+    onSuccess: () => {
+      push("/admin/courses");
+    },
+  });
 
   const { mutateAsync: uploadImage, isPending: isLoadingUpload } =
     useUploadImage();
@@ -81,6 +92,10 @@ const CourseForm = () => {
         ...formValues
       } = values;
 
+      formValues.keypoints = keypointsUi.map((k) => k.description);
+      formValues.hideTrailer = !isTrailer;
+      formValues.enableForum = enableForumUi === "yes";
+
       const makeUploadFd = () => {
         const uploadFd = new FormData();
         if (thumbnailFile) uploadFd.append("file", thumbnailFile);
@@ -88,29 +103,69 @@ const CourseForm = () => {
         return uploadFd;
       };
 
-      const uploadFd = makeUploadFd();
+      if (course) {
+        if (thumbFile) {
+          const uploadFd = makeUploadFd();
+          uploadImage(
+            { formValues: uploadFd },
+            {
+              onSuccess: (res) => {
+                formValues.thumbnailUrl = res.data.url;
 
-      uploadImage(
-        { formValues: uploadFd },
-        {
-          onSuccess: (res) => {
-            formValues.thumbnailUrl = res.data.url;
-            formValues.keypoints = keypointsUi.map((k) => k.description);
-            formValues.hideTrailer = !isTrailer;
-            formValues.enableForum = enableForumUi === "yes";
-            createCourse({ formValues });
-          },
+                updateCourse({ formValues, id: course.id });
+              },
+            }
+          );
+        } else {
+          updateCourse({ formValues, id: course.id });
         }
-      );
+      } else {
+        const uploadFd = makeUploadFd();
+
+        uploadImage(
+          { formValues: uploadFd },
+          {
+            onSuccess: (res) => {
+              formValues.thumbnailUrl = res.data.url;
+              createCourse({ formValues });
+            },
+          }
+        );
+      }
     },
-    [createCourse, uploadImage]
+    [course, createCourse, thumbFile, updateCourse, uploadImage]
   );
+
+  useEffect(() => {
+    if (course) {
+      const {
+        name,
+        categoryId,
+        trainerId,
+        trailerUrl,
+        hideTrailer,
+        enableForum,
+        description,
+        keypoints,
+      } = course;
+      reset({
+        name,
+        categoryId,
+        trainerId,
+        isTrailer: !hideTrailer,
+        trailerUrl,
+        enableForumUi: enableForum ? "yes" : "no",
+        description,
+        keypointsUi: keypoints.map((k) => ({ description: k })),
+      });
+    }
+  }, [course, reset]);
 
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(submitHandler)}>
         <Content
-          title="Create Course"
+          title={`${course ? "Edit" : "Create"} Course`}
           withBackButton
           backHref="/admin/courses"
           action={
@@ -119,7 +174,9 @@ const CourseForm = () => {
                 type="submit"
                 color="primary"
                 startContent={<HiSave />}
-                isLoading={isLoadingCreate || isLoadingUpload}
+                isLoading={
+                  isLoadingCreate || isLoadingUpload || isLoadingUpdate
+                }
               >
                 Save
               </Button>
@@ -135,7 +192,9 @@ const CourseForm = () => {
                     control={control}
                     name="thumbnailFile"
                     rules={{
-                      required: "Thumbnail must be uploaded",
+                      required: course?.thumbnailUrl
+                        ? false
+                        : "Thumbnail must be uploaded",
                       validate: (val) => {
                         if (val) {
                           const sizeMB = val.size / 1024 / 1024;
@@ -151,6 +210,7 @@ const CourseForm = () => {
                           <ImageUploader
                             description="course thumbnail"
                             {...field}
+                            imageUrl={course?.thumbnailUrl}
                             errorMessage={errors.thumbnailFile?.message}
                           />
                         </>
@@ -217,6 +277,7 @@ const CourseForm = () => {
                               isInvalid={Boolean(errors.categoryId?.message)}
                               errorMessage={errors.categoryId?.message}
                               isDisabled={isLoadingPositions}
+                              selectedKeys={[field.value]}
                               {...field}
                             >
                               {positionOptions.map((pos) => (
@@ -244,6 +305,7 @@ const CourseForm = () => {
                               isInvalid={Boolean(errors.trainerId?.message)}
                               errorMessage={errors.trainerId?.message}
                               {...field}
+                              selectedKeys={[field.value]}
                               isDisabled={isLoadingTrainers}
                             >
                               {trainerOptions.map((trainer) => (

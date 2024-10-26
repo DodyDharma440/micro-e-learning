@@ -1,6 +1,7 @@
 import React from "react";
 
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 import { Button, Card } from "@nextui-org/react";
 
@@ -12,6 +13,8 @@ type CourseCardProps = {
 };
 
 const CourseCard: React.FC<CourseCardProps> = ({ course, onDelete }) => {
+  const { push } = useRouter();
+
   return (
     <Card isBlurred>
       <div className="h-[200px] relative overflow-hidden">
@@ -30,7 +33,12 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onDelete }) => {
         <div className="mt-3">
           <Button className="w-full mb-2">Lessons</Button>
           <div className="flex gap-2 [&>button]:w-full">
-            <Button color="primary">Edit</Button>
+            <Button
+              color="primary"
+              onClick={() => push(`/admin/courses/${course.id}/edit`)}
+            >
+              Edit
+            </Button>
             <Button color="danger" onClick={() => onDelete(course.id)}>
               Delete
             </Button>
