@@ -13,7 +13,12 @@ export default makeHandler((prisma) => ({
   POST: async (req, res) => {
     const payload = req.body as ICourseChapterPayload;
 
-    const createdChapter = await prisma.courseChapter.create({ data: payload });
+    const createdChapter = await prisma.courseChapter.create({
+      data: {
+        ...payload,
+        courseId: req.query.id as string,
+      },
+    });
     return createResponse(res, createdChapter, 201);
   },
 }));

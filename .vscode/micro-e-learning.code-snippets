@@ -47,4 +47,16 @@
             "}"
         ]
     },
+    "Modal Component": {
+        "prefix": "modalcmp",
+        "body": [
+            "<Modal isOpen={isOpen} onClose={onClose}>",
+            "   <ModalContent>",
+            "       <ModalHeader></ModalHeader>",
+            "       <ModalBody></ModalBody>",
+            "       <ModalFooter></ModalFooter>",
+            "   </ModalContent>",
+            "</Modal>",
+        ]
+    }
 }

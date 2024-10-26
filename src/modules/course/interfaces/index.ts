@@ -52,3 +52,11 @@ export interface ICourseChapterPayload
 
 export interface ICourseLessonPayload
   extends Omit<ICourseLesson, keyof BasicData> {}
+
+export interface IChapterForm extends ICourseChapterPayload {
+  lessons: ICourseLessonPayload[];
+}
+
+export interface IChapterLessonsForm {
+  chapters: IChapterForm[];
+}

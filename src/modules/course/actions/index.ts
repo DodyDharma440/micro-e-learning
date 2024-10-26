@@ -2,7 +2,12 @@ import { apiELearning } from "@/common/configs/api";
 import { get, getById, patch, post, remove } from "@/common/utils/react-query";
 
 import { COURSES } from "../constants";
-import type { ICourse, ICoursePayload } from "../interfaces";
+import type {
+  ICourse,
+  ICourseChapter,
+  ICourseChapterPayload,
+  ICoursePayload,
+} from "../interfaces";
 
 export const useGetCourses = get<ICourse[]>(
   () => apiELearning.get("/course"),
@@ -30,4 +35,26 @@ export const useDeleteCourse = remove<any>(
   ({ id }) => apiELearning.delete(`/course/${id}`),
   [COURSES],
   { successMessage: "Course deleted successfully" }
+);
+
+export const useCreateChapter = patch<ICourseChapter, ICourseChapterPayload>(
+  ({ formValues, id }) =>
+    apiELearning.post(`/course/${id}/chapter`, formValues),
+  []
+);
+
+export const useUpdateChapter = patch<
+  ICourseChapter,
+  ICourseChapterPayload,
+  string,
+  { courseId: string }
+>(
+  ({ formValues, id, courseId }) =>
+    apiELearning.patch(`/course/${courseId}/chapter/${id}`, formValues),
+  []
+);
+
+export const useDeleteChapter = remove<any>(
+  ({ id }) => apiELearning.delete(`/course/-/chapter/${id}`),
+  []
 );

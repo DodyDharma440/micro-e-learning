@@ -6,7 +6,15 @@ import type { ICoursePayload } from "@/modules/course/interfaces";
 export default makeHandler((prisma) => ({
   GET: async (req, res) => {
     const id = req.query.id as string;
-    const course = await prisma.course.findUnique({ where: { id } });
+    const course = await prisma.course.findUnique({
+      where: { id },
+      include: {
+        chapters: {
+          where: { deleted: false },
+          include: { lessons: { where: { deleted: false } } },
+        },
+      },
+    });
     return createResponse(res, course);
   },
   PATCH: async (req, res) => {

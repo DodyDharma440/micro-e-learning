@@ -26,7 +26,7 @@ export default makeHandler((prisma) => ({
     const payload = req.body as Partial<ICourseChapterPayload>;
 
     const updatedChapter = await prisma.courseChapter.update({
-      data: payload,
+      data: { ...payload, courseId: req.query.id as string },
       where: { id: chapterId },
     });
     return createResponse(res, updatedChapter);
@@ -40,6 +40,7 @@ export default makeHandler((prisma) => ({
       return createErrResponse(res, "Chapter not found", 404);
     }
 
+    await prisma.courseLesson.deleteMany({ where: { chapterId } });
     await prisma.courseChapter.delete({ where: { id: chapterId } });
     return createResponse(res, true);
   },

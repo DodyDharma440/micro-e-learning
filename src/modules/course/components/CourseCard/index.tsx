@@ -1,6 +1,8 @@
 import React from "react";
+import { HiOutlineChatBubbleLeft } from "react-icons/hi2";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { Button, Card } from "@nextui-org/react";
@@ -17,13 +19,20 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onDelete }) => {
 
   return (
     <Card isBlurred>
-      <div className="h-[200px] relative overflow-hidden">
+      <div className="h-[200px] relative overflow-hidden bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-5">
         <Image
           src={course.thumbnailUrl}
           alt="thumb"
           fill
           className="object-cover"
         />
+        {course.enableForum ? (
+          <Link href={`/course/${course.slug}/forum`}>
+            <Button isIconOnly className="absolute top-2 right-2">
+              <HiOutlineChatBubbleLeft />
+            </Button>
+          </Link>
+        ) : null}
       </div>
       <div className="p-4">
         <p className="text-xl font-bold line-clamp-2 mb-2">{course.name}</p>
@@ -31,8 +40,10 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onDelete }) => {
           {course.category.name} | {course.trainer.name}
         </p>
         <div className="mt-3">
-          <Button className="w-full mb-2">Lessons</Button>
           <div className="flex gap-2 [&>button]:w-full">
+            <Button onClick={() => push(`/admin/courses/${course.id}/lessons`)}>
+              Lessons
+            </Button>
             <Button
               color="primary"
               onClick={() => push(`/admin/courses/${course.id}/edit`)}
