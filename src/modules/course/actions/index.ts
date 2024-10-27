@@ -27,7 +27,7 @@ export const useCreateCourse = post<any, ICoursePayload>(
   { successMessage: "Course created successfully" }
 );
 
-export const useUpdateCourse = patch<any, ICoursePayload>(
+export const useUpdateCourse = patch<any, Partial<ICoursePayload>>(
   ({ formValues, id }) => apiELearning.patch(`/course/${id}`, formValues),
   [],
   { successMessage: "Course updated successfully" }

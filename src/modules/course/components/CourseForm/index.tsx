@@ -36,6 +36,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
       keypointsUi: [{ description: "" }],
       enableForumUi: "yes",
       isTrailer: true,
+      status: "draft",
     },
   });
   const {
@@ -147,6 +148,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
         enableForum,
         description,
         keypoints,
+        status,
       } = course;
       reset({
         name,
@@ -157,6 +159,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
         enableForumUi: enableForum ? "yes" : "no",
         description,
         keypointsUi: keypoints.map((k) => ({ description: k })),
+        status,
       });
     }
   }, [course, reset]);

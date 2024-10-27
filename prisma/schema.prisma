@@ -43,6 +43,12 @@ model WorkPosition {
   updatedAt DateTime @default(now())
 }
 
+enum CourseStatus {
+  draft
+  published
+  archive
+}
+
 model Course {
   id           String          @id @default(uuid())
   name         String
@@ -62,6 +68,7 @@ model Course {
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @default(now())
   deleted      Boolean         @default(false)
+  status       CourseStatus    @default(draft)
 }
 
 model CourseChapter {

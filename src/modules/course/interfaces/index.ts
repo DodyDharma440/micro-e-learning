@@ -1,4 +1,4 @@
-import type { CourseLessonType } from "@prisma/client";
+import type { CourseLessonType, CourseStatus } from "@prisma/client";
 
 import type { BasicData } from "@/common/interfaces/api";
 import type { IUser } from "@/modules/auth/interfaces";
@@ -33,6 +33,7 @@ export interface ICourse extends BasicData {
   keypoints: string[];
   enableForum: boolean;
   chapters: ICourseChapter[];
+  status: CourseStatus;
   _count: { chapters: number };
 }
 
