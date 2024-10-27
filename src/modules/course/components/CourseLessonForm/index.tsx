@@ -66,6 +66,7 @@ const CourseLessonForm: React.FC<CourseLessonFormProps> = ({ course }) => {
                   chapter={chapter}
                   onEdit={open}
                   onDelete={openDelete}
+                  onUpdateChapters={setChapters}
                 />
               </div>
             );

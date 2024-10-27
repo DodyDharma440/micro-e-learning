@@ -6,6 +6,8 @@ import type {
   ICourse,
   ICourseChapter,
   ICourseChapterPayload,
+  ICourseLesson,
+  ICourseLessonPayload,
   ICoursePayload,
 } from "../interfaces";
 
@@ -56,5 +58,30 @@ export const useUpdateChapter = patch<
 
 export const useDeleteChapter = remove<any>(
   ({ id }) => apiELearning.delete(`/course/-/chapter/${id}`),
+  []
+);
+
+export const useCreateLesson = patch<ICourseLesson, ICourseLessonPayload>(
+  ({ formValues, id }) =>
+    apiELearning.post(`/course/-/chapter/${id}/lesson`, formValues),
+  []
+);
+
+export const useUpdateLesson = patch<
+  ICourseLesson,
+  ICourseLessonPayload,
+  string,
+  { chapterId: string }
+>(
+  ({ formValues, id, chapterId }) =>
+    apiELearning.patch(
+      `/course/-/chapter/${chapterId}/lesson/${id}`,
+      formValues
+    ),
+  []
+);
+
+export const useDeleteLesson = remove<any>(
+  ({ id }) => apiELearning.delete(`/course/-/chapter/-/lesson/${id}`),
   []
 );

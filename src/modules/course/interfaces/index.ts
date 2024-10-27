@@ -60,3 +60,8 @@ export interface IChapterForm extends ICourseChapterPayload {
 export interface IChapterLessonsForm {
   chapters: IChapterForm[];
 }
+
+export interface ICourseLessonForm extends ICourseLessonPayload {
+  documentFile?: File | null;
+  youtubeUrl?: string;
+}

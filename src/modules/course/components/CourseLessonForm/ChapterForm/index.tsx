@@ -84,7 +84,7 @@ const ChapterForm: React.FC<ChapterFormProps> = ({
       if (chapter) {
         reset({ name: chapter.name });
       } else {
-        reset();
+        reset({ order: 0, name: "" });
       }
     }
   }, [chapter, isOpen, reset, setValue]);
