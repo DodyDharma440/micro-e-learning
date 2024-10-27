@@ -73,7 +73,7 @@ const Sidebar = () => {
 
           <Card className="p-4" isBlurred>
             <div className="flex items-center gap-3">
-              <Avatar name="John" />
+              <Avatar name={userData?.name} />
               <div>
                 <p className="mb-[2px] font-bold text-sm">{userData?.name}</p>
                 <p className="text-[10px] text-gray-400 dark:text-gray-500 capitalize">
