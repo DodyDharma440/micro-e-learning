@@ -4,11 +4,14 @@ import { HiOutlinePencil } from "react-icons/hi2";
 
 import { Button, Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
 
+import { AlertDialog, EmptyPlaceholder } from "@/common/components";
 import { useDisclosureData } from "@/common/hooks";
+import { useDeleteLesson } from "@/modules/course/actions";
 import type { ICourseLesson } from "@/modules/course/interfaces";
 import { type ICourseChapter } from "@/modules/course/interfaces";
 
 import LessonForm from "../LessonForm";
+import LessonItem from "../LessonItem";
 
 type ChapterItemProps = {
   index: number;
@@ -26,6 +29,26 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
 }) => {
   const [isOpenLesson, { open, close }, lessonData] =
     useDisclosureData<ICourseLesson | null>();
+  const [isOpenDelete, { open: openDelete, close: closeDelete }, deleteData] =
+    useDisclosureData<ICourseLesson | null>();
+
+  const { mutate: deleteLesson, isPending: isLoadingDelete } = useDeleteLesson({
+    onSuccess: () => {
+      onUpdateChapters((prev) => {
+        const index = prev.findIndex((c) => c.id === chapter.id);
+        prev[index] = {
+          ...prev[index],
+          lessons: prev[index].lessons.filter((l) => l.id !== deleteData?.id),
+        };
+        return [...prev];
+      });
+      closeDelete();
+    },
+  });
+
+  const handleDelete = () => {
+    deleteLesson({ id: deleteData?.id ?? "" });
+  };
 
   return (
     <>
@@ -49,9 +72,24 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
         </CardHeader>
         <Divider />
         <CardBody className="px-6 py-4">
-          {chapter.lessons.map((lesson) => {
-            return <div key={lesson.id}>{lesson.name}</div>;
-          })}
+          {chapter.lessons.length ? (
+            <div className="flex flex-col gap-2 mb-4">
+              {chapter.lessons.map((lesson) => {
+                return (
+                  <LessonItem
+                    key={lesson.id}
+                    lesson={lesson}
+                    onDelete={openDelete}
+                    onEdit={open}
+                  />
+                );
+              })}
+            </div>
+          ) : (
+            <div className="mb-4">
+              <EmptyPlaceholder iconSize={30} message="No lessons yet" />
+            </div>
+          )}
           <Button
             color="primary"
             variant="light"
@@ -102,6 +140,19 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
               break;
           }
         }}
+      />
+
+      <AlertDialog
+        isOpen={isOpenDelete}
+        onClose={isLoadingDelete ? () => {} : closeDelete}
+        title="Delete Lesson"
+        message="Are you sure want to delete this lesson?"
+        cancelButtonText="Cancel"
+        confirmButtonText="Delete"
+        color="danger"
+        onCancel={isLoadingDelete ? () => {} : closeDelete}
+        onConfirm={handleDelete}
+        confirmButtonProps={{ isLoading: isLoadingDelete }}
       />
     </>
   );

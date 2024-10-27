@@ -42,6 +42,11 @@ const DocumentUploader = forwardRef<HTMLInputElement, DocumentUploaderProps>(
       return value ? URL.createObjectURL(value) : defaultUrl || "";
     }, [defaultUrl, value]);
 
+    const fileName = useMemo(() => {
+      const fileNameUrl = docUrl.split("/");
+      return value?.name ?? fileNameUrl[fileNameUrl.length - 1];
+    }, [docUrl, value]);
+
     return (
       <>
         <input
@@ -78,7 +83,7 @@ const DocumentUploader = forwardRef<HTMLInputElement, DocumentUploaderProps>(
             {docUrl ? (
               <>
                 <HiDocument size={40} />
-                <p className="text-xs mt-1">{value?.name}</p>
+                <p className="text-xs mt-1 text-center">{fileName}</p>
                 <div className="flex items-center gap-2 mt-4">
                   <Button
                     color="danger"

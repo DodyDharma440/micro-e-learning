@@ -6,7 +6,13 @@ import type { ICoursePayload } from "@/modules/course/interfaces";
 export default makeHandler((prisma) => ({
   GET: async (req, res) => {
     const courses = await prisma.course.findMany({
-      include: { category: true, trainer: true },
+      include: {
+        category: true,
+        trainer: true,
+        _count: {
+          select: { chapters: { where: { deleted: false } } },
+        },
+      },
       where: { deleted: false },
     });
     return createResponse(res, courses);

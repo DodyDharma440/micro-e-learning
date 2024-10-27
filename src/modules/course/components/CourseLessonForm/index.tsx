@@ -103,7 +103,7 @@ const CourseLessonForm: React.FC<CourseLessonFormProps> = ({ course }) => {
       <AlertDialog
         isOpen={isOpenDelete}
         onClose={isLoadingDelete ? () => {} : closeDelete}
-        title="Delete Course"
+        title="Delete Chapter"
         message="Are you sure want to delete this chapter? All lessons in this will be deleted automatically."
         cancelButtonText="Cancel"
         confirmButtonText="Delete"

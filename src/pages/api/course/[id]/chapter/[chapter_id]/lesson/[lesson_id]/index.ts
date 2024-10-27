@@ -14,8 +14,9 @@ export default makeHandler((prisma) => ({
 
     const payload = req.body as ICourseLessonPayload;
 
-    const updatedlesson = await prisma.courseLesson.create({
+    const updatedlesson = await prisma.courseLesson.update({
       data: payload,
+      where: { id: lessonId },
     });
     return createResponse(res, updatedlesson);
   },

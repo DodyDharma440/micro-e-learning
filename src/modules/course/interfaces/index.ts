@@ -33,12 +33,13 @@ export interface ICourse extends BasicData {
   keypoints: string[];
   enableForum: boolean;
   chapters: ICourseChapter[];
+  _count: { chapters: number };
 }
 
 export interface ICoursePayload
   extends Omit<
     ICourse,
-    keyof BasicData | "trainer" | "category" | "chapters" | "slug"
+    keyof BasicData | "trainer" | "category" | "chapters" | "slug" | "_count"
   > {}
 export interface ICourseForm extends ICoursePayload {
   keypointsUi: Array<{ description: string }>;

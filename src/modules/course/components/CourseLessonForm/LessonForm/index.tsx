@@ -72,6 +72,7 @@ const LessonForm: React.FC<LessonFormProps> = ({
     },
   });
   const lessonType = useWatch({ control, name: "lessonType" });
+  const contentUrl = useWatch({ control, name: "contentUrl" });
 
   const { mutate: createLesson, isPending: isLoadingCreate } =
     useCreateLesson();
@@ -186,22 +187,20 @@ const LessonForm: React.FC<LessonFormProps> = ({
         const { name, order, contentUrl, lessonType } = lesson;
         setValue("name", name);
         setValue("order", order);
-        setValue("contentUrl", contentUrl);
+        setValue("contentUrl", lessonType === "DOCUMENT" ? contentUrl : "");
         setValue("lessonType", lessonType);
+        setValue("youtubeUrl", lessonType === "VIDEO" ? contentUrl : "");
       } else {
         reset({
           name: "",
           order: 0,
           lessonType: "VIDEO",
           youtubeUrl: "",
+          documentFile: null,
         });
       }
     }
   }, [isOpen, lesson, reset, setValue]);
-
-  useEffect(() => {
-    setValue("contentUrl", "");
-  }, [lessonType, setValue]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -277,9 +276,7 @@ const LessonForm: React.FC<LessonFormProps> = ({
                 control={control}
                 name="documentFile"
                 rules={{
-                  required: lesson?.contentUrl
-                    ? false
-                    : "Document must be uploaded",
+                  required: contentUrl ? false : "Document must be uploaded",
                   validate: (val) => {
                     if (val) {
                       const sizeMB = val.size / 1024 / 1024;
@@ -295,8 +292,12 @@ const LessonForm: React.FC<LessonFormProps> = ({
                       <DocumentUploader
                         description="lesson document"
                         {...field}
-                        onClear={() => setValue("documentFile", null)}
+                        onClear={() => {
+                          setValue("documentFile", null);
+                          setValue("contentUrl", "");
+                        }}
                         errorMessage={errors.documentFile?.message}
+                        docUrl={contentUrl}
                       />
                     </>
                   );

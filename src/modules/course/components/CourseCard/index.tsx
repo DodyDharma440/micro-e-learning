@@ -1,4 +1,5 @@
 import React from "react";
+import { HiOutlinePencil, HiOutlineTrash } from "react-icons/hi";
 import { HiOutlineChatBubbleLeft } from "react-icons/hi2";
 
 import Image from "next/image";
@@ -26,33 +27,37 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onDelete }) => {
           fill
           className="object-cover"
         />
-        {course.enableForum ? (
-          <Link href={`/course/${course.slug}/forum`}>
-            <Button isIconOnly className="absolute top-2 right-2">
-              <HiOutlineChatBubbleLeft />
-            </Button>
-          </Link>
-        ) : null}
+        <div className="flex items-center gap-2 absolute top-2 right-2">
+          {course.enableForum ? (
+            <Link href={`/course/${course.slug}/forum`}>
+              <Button isIconOnly>
+                <HiOutlineChatBubbleLeft />
+              </Button>
+            </Link>
+          ) : null}
+          <Button
+            isIconOnly
+            color="primary"
+            onClick={() => push(`/admin/courses/${course.id}/edit`)}
+          >
+            <HiOutlinePencil />
+          </Button>
+          <Button isIconOnly color="danger" onClick={() => onDelete(course.id)}>
+            <HiOutlineTrash />
+          </Button>
+        </div>
       </div>
       <div className="p-4">
         <p className="text-xl font-bold line-clamp-2 mb-2">{course.name}</p>
         <p className="text-xs text-opacity-80">
-          {course.category.name} | {course.trainer.name}
+          {course._count.chapters} Chapters
         </p>
         <div className="mt-3">
           <div className="flex gap-2 [&>button]:w-full">
             <Button onClick={() => push(`/admin/courses/${course.id}/lessons`)}>
               Lessons
             </Button>
-            <Button
-              color="primary"
-              onClick={() => push(`/admin/courses/${course.id}/edit`)}
-            >
-              Edit
-            </Button>
-            <Button color="danger" onClick={() => onDelete(course.id)}>
-              Delete
-            </Button>
+            <Button color="primary">Publish</Button>
           </div>
         </div>
       </div>
