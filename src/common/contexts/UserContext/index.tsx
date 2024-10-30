@@ -4,9 +4,11 @@ import { useRouter } from "next/router";
 
 import { Loader } from "@/common/components";
 import { useGetProfile } from "@/modules/auth/actions";
+import type { IUser } from "@/modules/auth/interfaces";
 
 type UserCtx = {
   isLoggedIn: boolean;
+  userData?: IUser;
 };
 
 export const UserContext = createContext<UserCtx>({ isLoggedIn: false });
@@ -20,7 +22,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-  const { isLoading, isRefetching, error } = useGetProfile(
+  const { data, isLoading, isRefetching, error } = useGetProfile(
     {},
     { enabled: isLoggedIn && pathname !== "/logout" }
   );
@@ -32,7 +34,12 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ isLoggedIn: isLoggedIn }}>
+    <UserContext.Provider
+      value={{
+        isLoggedIn: isLoggedIn,
+        userData: data?.data.data,
+      }}
+    >
       <Loader
         isLoading={isLoading}
         isRefetching={isRefetching}

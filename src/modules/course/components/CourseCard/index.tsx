@@ -18,7 +18,8 @@ import type { ICourse } from "../../interfaces";
 
 type CourseCardProps = {
   course: ICourse;
-  onDelete: (val: string) => void;
+  onDelete?: (val: string) => void;
+  isReadOnly?: boolean;
 };
 
 const statusActionLabel: Record<CourseStatus, string> = {
@@ -33,7 +34,11 @@ const statusActionColor: Record<CourseStatus, ChipProps["color"]> = {
   archive: "danger",
 };
 
-const CourseCard: React.FC<CourseCardProps> = ({ course, onDelete }) => {
+const CourseCard: React.FC<CourseCardProps> = ({
+  course,
+  onDelete,
+  isReadOnly,
+}) => {
   const { push } = useRouter();
 
   const [status, setStatus] = useState(course.status);
@@ -98,25 +103,31 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onDelete }) => {
           fill
           className="object-cover"
         />
-        <div className="flex items-center gap-2 absolute top-2 right-2">
-          {course.enableForum ? (
-            <Link href={`/course/${course.slug}/forum`}>
-              <Button isIconOnly>
-                <HiOutlineChatBubbleLeft />
-              </Button>
-            </Link>
-          ) : null}
-          <Button
-            isIconOnly
-            color="primary"
-            onClick={() => push(`/admin/courses/${course.id}/edit`)}
-          >
-            <HiOutlinePencil />
-          </Button>
-          <Button isIconOnly color="danger" onClick={() => onDelete(course.id)}>
-            <HiOutlineTrash />
-          </Button>
-        </div>
+        {!isReadOnly ? (
+          <div className="flex items-center gap-2 absolute top-2 right-2">
+            {course.enableForum ? (
+              <Link href={`/course/${course.slug}/forum`}>
+                <Button isIconOnly>
+                  <HiOutlineChatBubbleLeft />
+                </Button>
+              </Link>
+            ) : null}
+            <Button
+              isIconOnly
+              color="primary"
+              onClick={() => push(`/admin/courses/${course.id}/edit`)}
+            >
+              <HiOutlinePencil />
+            </Button>
+            <Button
+              isIconOnly
+              color="danger"
+              onClick={() => onDelete?.(course.id)}
+            >
+              <HiOutlineTrash />
+            </Button>
+          </div>
+        ) : null}
 
         <div className="absolute bottom-2 right-2">
           <Chip className="capitalize px-3" color={statusActionColor[status]}>
@@ -129,30 +140,36 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onDelete }) => {
         <p className="text-xs text-opacity-80">
           {course._count.chapters} Chapters
         </p>
-        <div className="mt-3">
-          <div className="flex gap-2 [&>button]:w-full">
-            <Button onClick={() => push(`/admin/courses/${course.id}/lessons`)}>
-              Lessons
-            </Button>
-            <Button color="primary" onClick={handleSetMessage}>
-              {statusActionLabel[status]}
-            </Button>
+        {!isReadOnly ? (
+          <div className="mt-3">
+            <div className="flex gap-2 [&>button]:w-full">
+              <Button
+                onClick={() => push(`/admin/courses/${course.id}/lessons`)}
+              >
+                Lessons
+              </Button>
+              <Button color="primary" onClick={handleSetMessage}>
+                {statusActionLabel[status]}
+              </Button>
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
 
-      <AlertDialog
-        isOpen={isOpen}
-        onClose={isLoadingUpdate ? () => {} : close}
-        title="Change Status"
-        message={alertMessage}
-        cancelButtonText="Cancel"
-        confirmButtonText="Confirm"
-        onCancel={isLoadingUpdate ? () => {} : close}
-        onConfirm={handleChangeStatus}
-        color="primary"
-        confirmButtonProps={{ isLoading: isLoadingUpdate }}
-      />
+      {!isReadOnly ? (
+        <AlertDialog
+          isOpen={isOpen}
+          onClose={isLoadingUpdate ? () => {} : close}
+          title="Change Status"
+          message={alertMessage}
+          cancelButtonText="Cancel"
+          confirmButtonText="Confirm"
+          onCancel={isLoadingUpdate ? () => {} : close}
+          onConfirm={handleChangeStatus}
+          color="primary"
+          confirmButtonProps={{ isLoading: isLoadingUpdate }}
+        />
+      ) : null}
     </Card>
   );
 };

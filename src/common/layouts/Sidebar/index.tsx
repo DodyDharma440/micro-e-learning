@@ -8,13 +8,13 @@ import { useTheme } from "next-themes";
 import { Avatar, Card, cn, Divider, Switch } from "@nextui-org/react";
 
 import { adminMenu } from "@/common/constants/layout";
-import { useUserProfile } from "@/modules/auth/hooks";
+import { useUserContext } from "@/common/contexts";
 
 const Sidebar = () => {
   const { pathname } = useRouter();
   const { theme, setTheme } = useTheme();
 
-  const { userData } = useUserProfile();
+  const { userData } = useUserContext();
 
   return (
     <div className="fixed top-0 bottom-0 py-8">

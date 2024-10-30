@@ -65,7 +65,20 @@ async function main() {
     },
   });
 
-  console.log({ admin, trainers: [trainer1, trainer2] });
+  const user1 = await prisma.user.upsert({
+    where: { username: "user1" },
+    update: {},
+    create: {
+      username: "user1",
+      name: "User 1",
+      role: "user",
+      workPositionId: wpProg?.id ?? "",
+      password: hashedPassword,
+      updatedAt: new Date(),
+    },
+  });
+
+  console.log({ admin, trainers: [trainer1, trainer2], users: [user1] });
 }
 
 main()

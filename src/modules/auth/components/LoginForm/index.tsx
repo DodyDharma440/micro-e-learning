@@ -5,6 +5,8 @@ import { HiEye, HiEyeSlash } from "react-icons/hi2";
 import { useDisclosure } from "@mantine/hooks";
 import { Button, Checkbox, Input } from "@nextui-org/react";
 
+import { redirectDest } from "@/modules/user/constants";
+
 import { useLogin } from "../../actions";
 import type { ILoginInput } from "../../interfaces";
 
@@ -19,8 +21,8 @@ const LoginForm = () => {
     reset,
   } = useForm<ILoginInput>();
   const { mutate: login, isPending } = useLogin({
-    onSuccess: () => {
-      window.location.replace("/admin/dashboard");
+    onSuccess: ({ data }) => {
+      window.location.replace(redirectDest[data.data.role]);
       localStorage.setItem("isLoggedIn", "true");
     },
   });

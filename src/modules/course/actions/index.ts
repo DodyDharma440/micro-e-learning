@@ -1,7 +1,7 @@
 import { apiELearning } from "@/common/configs/api";
 import { get, getById, patch, post, remove } from "@/common/utils/react-query";
 
-import { COURSES } from "../constants";
+import { COURSES, USER_COURSES } from "../constants";
 import type {
   ICourse,
   ICourseChapter,
@@ -84,4 +84,9 @@ export const useUpdateLesson = patch<
 export const useDeleteLesson = remove<any>(
   ({ id }) => apiELearning.delete(`/course/-/chapter/-/lesson/${id}`),
   []
+);
+
+export const useGetUserCourses = get<ICourse[]>(
+  () => apiELearning.get("/course/user"),
+  [USER_COURSES]
 );

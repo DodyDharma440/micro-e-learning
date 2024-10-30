@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 
 import { Loader } from "@/common/components";
 import { useUserContext } from "@/common/contexts";
-import { useUserProfile } from "@/modules/auth/hooks";
 import type { UserRole } from "@/modules/auth/interfaces";
 
 export const withAuth = <P extends object = {}>(
@@ -13,8 +12,7 @@ export const withAuth = <P extends object = {}>(
 ) => {
   const Component = (props: P) => {
     const { replace } = useRouter();
-    const { isLoggedIn } = useUserContext();
-    const { userData } = useUserProfile();
+    const { isLoggedIn, userData } = useUserContext();
 
     useEffect(() => {
       if (!isLoggedIn) {
