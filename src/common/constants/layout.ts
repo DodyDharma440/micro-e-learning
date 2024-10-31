@@ -35,4 +35,8 @@ export const adminMenu: ISidebarItem[] = [
   { label: "Logout", path: "/logout", icon: HiLogout },
 ];
 
-export const userPaths = ["/user/courses", "/user/edit-profile"];
+export const userPaths = [
+  "/user/courses",
+  "/user/courses/[slug]",
+  "/user/edit-profile",
+];

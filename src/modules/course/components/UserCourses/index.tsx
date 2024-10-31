@@ -1,12 +1,14 @@
 import React from "react";
 
+import Link from "next/link";
+
 import { EmptyPlaceholder, Loader } from "@/common/components";
 
-import { useGetCourses } from "../../actions";
+import { useGetUserCourses } from "../../actions";
 import CourseCard from "../CourseCard";
 
 const UserCourses = () => {
-  const { data, isLoading, isRefetching, error } = useGetCourses();
+  const { data, isLoading, isRefetching, error } = useGetUserCourses();
   const courses = data?.data.data || [];
 
   return (
@@ -16,7 +18,9 @@ const UserCourses = () => {
           {courses.map((course) => {
             return (
               <div key={course.id} className="col-span-4">
-                <CourseCard course={course} isReadOnly />
+                <Link href={`/user/courses/${course.slug}`}>
+                  <CourseCard course={course} isReadOnly withProgress />
+                </Link>
               </div>
             );
           })}

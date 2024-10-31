@@ -67,3 +67,15 @@ export interface ICourseLessonForm extends ICourseLessonPayload {
   documentFile?: File | null;
   youtubeUrl?: string;
 }
+
+export interface ICourseProgress extends BasicData {
+  userId: string;
+  courseId: string;
+  courseLessonId: string;
+  isCompleted: boolean;
+}
+
+export interface ICourseProgressPayload
+  extends Omit<ICourseProgress, keyof BasicData | "userId"> {
+  id?: string;
+}

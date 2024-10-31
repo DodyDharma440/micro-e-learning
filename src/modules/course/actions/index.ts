@@ -1,7 +1,7 @@
 import { apiELearning } from "@/common/configs/api";
 import { get, getById, patch, post, remove } from "@/common/utils/react-query";
 
-import { COURSES, USER_COURSES } from "../constants";
+import { COURSE, COURSE_SLUG, COURSES, USER_COURSES } from "../constants";
 import type {
   ICourse,
   ICourseChapter,
@@ -18,7 +18,7 @@ export const useGetCourses = get<ICourse[]>(
 
 export const useGetCourse = getById<ICourse>(
   ({ id }) => apiELearning.get(`/course/${id}`),
-  ({ id }) => [COURSES, id]
+  ({ id }) => [COURSE, id]
 );
 
 export const useCreateCourse = post<any, ICoursePayload>(
@@ -89,4 +89,9 @@ export const useDeleteLesson = remove<any>(
 export const useGetUserCourses = get<ICourse[]>(
   () => apiELearning.get("/course/user"),
   [USER_COURSES]
+);
+
+export const useGetCourseBySlug = getById<ICourse>(
+  ({ id }) => apiELearning.get(`/course/slug/${id}`),
+  ({ id }) => [COURSE_SLUG, id]
 );

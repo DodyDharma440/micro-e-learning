@@ -17,6 +17,9 @@ export default makeHandler((prisma) => ({
         trainer: true,
         _count: {
           select: {
+            CourseProgress: {
+              where: { isCompleted: true },
+            },
             chapters: {
               where: { deleted: false },
             },
@@ -24,8 +27,7 @@ export default makeHandler((prisma) => ({
         },
       },
       where: {
-        deleted: false,
-        categoryId: user?.workPositionId,
+        AND: [{ deleted: false }, { categoryId: user?.workPositionId }],
       },
     });
     return createResponse(res, courses);

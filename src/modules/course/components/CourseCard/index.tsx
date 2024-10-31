@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 
 import { useDisclosure } from "@mantine/hooks";
 import type { ChipProps } from "@nextui-org/react";
-import { Button, Card, Chip } from "@nextui-org/react";
+import { Button, Card, Chip, Divider, Progress } from "@nextui-org/react";
 import type { CourseStatus } from "@prisma/client";
 
 import { AlertDialog } from "@/common/components";
@@ -20,6 +20,7 @@ type CourseCardProps = {
   course: ICourse;
   onDelete?: (val: string) => void;
   isReadOnly?: boolean;
+  withProgress?: boolean;
 };
 
 const statusActionLabel: Record<CourseStatus, string> = {
@@ -38,6 +39,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
   course,
   onDelete,
   isReadOnly,
+  withProgress,
 }) => {
   const { push } = useRouter();
 
@@ -153,6 +155,24 @@ const CourseCard: React.FC<CourseCardProps> = ({
               </Button>
             </div>
           </div>
+        ) : null}
+
+        {withProgress ? (
+          <>
+            <Divider className="my-4" />
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <p className="font-medium">Progress</p>
+                <p className="font-bold">50%</p>
+              </div>
+              <Progress
+                aria-label="course progress"
+                size="md"
+                value={50}
+                color="success"
+              />
+            </div>
+          </>
         ) : null}
       </div>
 
