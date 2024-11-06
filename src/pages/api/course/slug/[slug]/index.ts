@@ -12,7 +12,7 @@ export default makeHandler((prisma) => ({
     const slug = req.query.slug as string;
 
     const course = await prisma.course.findUnique({
-      where: { slug },
+      where: { slug, status: "published" },
       include: {
         chapters: {
           where: { deleted: false },
@@ -21,6 +21,10 @@ export default makeHandler((prisma) => ({
         CourseProgress: user?.role === "user",
       },
     });
+
+    if (!course) {
+      return createErrResponse(res, "Course not found", 404);
+    }
 
     if (user?.role === "user" && course?.categoryId !== user.workPositionId) {
       return createErrResponse(

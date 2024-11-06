@@ -27,7 +27,10 @@ export default makeHandler((prisma) => ({
         },
       },
       where: {
-        AND: [{ deleted: false }, { categoryId: user?.workPositionId }],
+        AND: [
+          { deleted: false },
+          { categoryId: user?.workPositionId, status: "published" },
+        ],
       },
     });
     return createResponse(res, courses);

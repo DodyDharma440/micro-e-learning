@@ -6,6 +6,7 @@ import Head from "next/head";
 import { Content, Loader } from "@/common/components";
 import { useGetCourseBySlug } from "@/modules/course/actions";
 import { UserCourseDetail } from "@/modules/course/components";
+import { CourseDetailProvider } from "@/modules/course/contexts";
 
 type UserCourseDetailPageProps = {
   courseSlug: string;
@@ -24,11 +25,13 @@ const UserCourseDetailPage: NextPage<UserCourseDetailPageProps> = ({
         <title>Courses - E-Learning</title>
       </Head>
 
-      <Content title="My Courses">
-        <Loader isLoading={isLoading} isRefetching={isRefetching} error={error}>
-          <UserCourseDetail course={data?.data.data} />
-        </Loader>
-      </Content>
+      <Loader isLoading={isLoading} isRefetching={isRefetching} error={error}>
+        <CourseDetailProvider course={data?.data.data}>
+          <Content title={data?.data.data.name}>
+            <UserCourseDetail />
+          </Content>
+        </CourseDetailProvider>
+      </Loader>
     </>
   );
 };

@@ -1,13 +1,19 @@
 import React from "react";
 
-import type { ICourse } from "../../interfaces";
+import ChapterList from "./ChapterList";
+import LessonView from "./LessonView";
 
-type UserCourseDetailProps = {
-  course?: ICourse;
-};
-
-const UserCourseDetail: React.FC<UserCourseDetailProps> = ({}) => {
-  return <div>UserCourseDetail</div>;
+const UserCourseDetail = () => {
+  return (
+    <div className="grid grid-cols-12 gap-6">
+      <div className="col-span-8">
+        <LessonView />
+      </div>
+      <div className="col-span-4">
+        <ChapterList />
+      </div>
+    </div>
+  );
 };
 
 export default UserCourseDetail;
