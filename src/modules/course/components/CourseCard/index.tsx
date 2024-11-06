@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { HiOutlinePencil, HiOutlineTrash } from "react-icons/hi";
 import { HiOutlineChatBubbleLeft } from "react-icons/hi2";
 
@@ -92,6 +92,15 @@ const CourseCard: React.FC<CourseCardProps> = ({
     }
   };
 
+  const totalProgress = useMemo(() => {
+    const totalLesson = course.chapters.reduce((prev, curr) => {
+      prev += curr._count?.lessons ?? 0;
+      return prev;
+    }, 0);
+    const result = (100 * (course?._count.CourseProgress ?? 0)) / totalLesson;
+    return result.toFixed(0);
+  }, [course?._count.CourseProgress, course.chapters]);
+
   useEffect(() => {
     setStatus(course.status);
   }, [course.status]);
@@ -106,36 +115,40 @@ const CourseCard: React.FC<CourseCardProps> = ({
           className="object-cover"
         />
         {!isReadOnly ? (
-          <div className="flex items-center gap-2 absolute top-2 right-2">
-            {course.enableForum ? (
-              <Link href={`/course/${course.slug}/forum`}>
-                <Button isIconOnly>
-                  <HiOutlineChatBubbleLeft />
-                </Button>
-              </Link>
-            ) : null}
-            <Button
-              isIconOnly
-              color="primary"
-              onClick={() => push(`/admin/courses/${course.id}/edit`)}
-            >
-              <HiOutlinePencil />
-            </Button>
-            <Button
-              isIconOnly
-              color="danger"
-              onClick={() => onDelete?.(course.id)}
-            >
-              <HiOutlineTrash />
-            </Button>
-          </div>
+          <>
+            <div className="flex items-center gap-2 absolute top-2 right-2">
+              {course.enableForum ? (
+                <Link href={`/course/${course.slug}/forum`}>
+                  <Button isIconOnly>
+                    <HiOutlineChatBubbleLeft />
+                  </Button>
+                </Link>
+              ) : null}
+              <Button
+                isIconOnly
+                color="primary"
+                onClick={() => push(`/admin/courses/${course.id}/edit`)}
+              >
+                <HiOutlinePencil />
+              </Button>
+              <Button
+                isIconOnly
+                color="danger"
+                onClick={() => onDelete?.(course.id)}
+              >
+                <HiOutlineTrash />
+              </Button>
+            </div>
+            <div className="absolute bottom-2 right-2">
+              <Chip
+                className="capitalize px-3"
+                color={statusActionColor[status]}
+              >
+                {status}
+              </Chip>
+            </div>
+          </>
         ) : null}
-
-        <div className="absolute bottom-2 right-2">
-          <Chip className="capitalize px-3" color={statusActionColor[status]}>
-            {status}
-          </Chip>
-        </div>
       </div>
       <div className="p-4">
         <p className="text-xl font-bold line-clamp-2 mb-2">{course.name}</p>
@@ -163,12 +176,12 @@ const CourseCard: React.FC<CourseCardProps> = ({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <p className="font-medium">Progress</p>
-                <p className="font-bold">50%</p>
+                <p className="font-bold">{totalProgress}%</p>
               </div>
               <Progress
                 aria-label="course progress"
                 size="md"
-                value={50}
+                value={Number(totalProgress)}
                 color="success"
               />
             </div>

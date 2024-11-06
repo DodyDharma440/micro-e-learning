@@ -1,9 +1,13 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
+import { useDidUpdate } from "@mantine/hooks";
+
+import { useUpdateLastLesson } from "../../actions";
 import type { ICourse } from "../../interfaces";
 
 export type CourseDetailCtx = {
   course?: ICourse;
+  setCourse: React.Dispatch<React.SetStateAction<ICourse | undefined>>;
   activeLesson: string | null;
   setActiveLesson: React.Dispatch<React.SetStateAction<string | null>>;
 };
@@ -11,6 +15,7 @@ export type CourseDetailCtx = {
 export const CourseDetailContext = createContext<CourseDetailCtx>({
   activeLesson: null,
   setActiveLesson: () => {},
+  setCourse: () => {},
 });
 
 type CourseDetailProviderProps = {
@@ -19,15 +24,38 @@ type CourseDetailProviderProps = {
 };
 
 export const CourseDetailProvider: React.FC<CourseDetailProviderProps> = ({
-  course,
+  course: initialCourse,
   children,
 }) => {
   const [activeLesson, setActiveLesson] = useState<string | null>(null);
+  const [course, setCourse] = useState(initialCourse);
+
+  const { mutate: updateLastLesson } = useUpdateLastLesson();
+
+  useEffect(() => {
+    setCourse(initialCourse);
+  }, [initialCourse]);
+
+  useEffect(() => {
+    if (initialCourse) {
+      const lastLessonId =
+        initialCourse.CourseUserLastLesson?.[0]?.courseLessonId;
+      setActiveLesson(lastLessonId ?? null);
+    }
+  }, [initialCourse]);
+
+  useDidUpdate(() => {
+    if (course && activeLesson)
+      updateLastLesson({
+        formValues: { courseId: course?.id, lessonId: activeLesson },
+      });
+  }, [activeLesson]);
 
   return (
     <CourseDetailContext.Provider
       value={{
         course,
+        setCourse,
         activeLesson,
         setActiveLesson,
       }}

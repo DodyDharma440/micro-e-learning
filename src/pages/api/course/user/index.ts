@@ -15,13 +15,19 @@ export default makeHandler((prisma) => ({
       include: {
         category: true,
         trainer: true,
+        chapters: {
+          select: {
+            _count: {
+              select: {
+                lessons: { where: { deleted: false } },
+              },
+            },
+          },
+        },
         _count: {
           select: {
             CourseProgress: {
               where: { isCompleted: true },
-            },
-            chapters: {
-              where: { deleted: false },
             },
           },
         },

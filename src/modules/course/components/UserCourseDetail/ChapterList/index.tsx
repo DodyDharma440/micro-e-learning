@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { HiCheck } from "react-icons/hi";
 import { HiOutlineDocument, HiOutlineTv } from "react-icons/hi2";
 
@@ -15,10 +15,23 @@ import { useCourseDetail } from "@/modules/course/contexts";
 
 const ChapterList = () => {
   const { course, activeLesson, setActiveLesson } = useCourseDetail();
+  const [activeChapter, setActiveChapter] = useState(new Set([""]));
+
+  useEffect(() => {
+    const chapter = course?.chapters.find((c) =>
+      c.lessons.some((l) => l.id === activeLesson)
+    );
+    setActiveChapter(new Set([chapter?.id ?? ""]));
+  }, [activeLesson, course?.chapters]);
 
   return (
     <Card className="p-4" isBlurred shadow="md">
-      <Accordion variant="bordered">
+      <Accordion
+        selectionMode="multiple"
+        selectedKeys={activeChapter}
+        onSelectionChange={(val) => setActiveChapter(val as Set<string>)}
+        variant="bordered"
+      >
         {(course?.chapters ?? []).map((chapter) => {
           return (
             <AccordionItem
@@ -31,7 +44,7 @@ const ChapterList = () => {
               <Listbox aria-label="User Menu" className="mb-5 p-0 gap-0">
                 {chapter.lessons.map((lesson) => {
                   const isActive = lesson.id === activeLesson;
-                  const isCompleted = false;
+                  const isCompleted = lesson.CourseProgress?.[0]?.isCompleted;
                   const Icon =
                     lesson.lessonType === "VIDEO"
                       ? HiOutlineTv

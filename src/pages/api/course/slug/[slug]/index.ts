@@ -16,9 +16,29 @@ export default makeHandler((prisma) => ({
       include: {
         chapters: {
           where: { deleted: false },
-          include: { lessons: { where: { deleted: false } } },
+          include: {
+            lessons: {
+              where: {
+                deleted: false,
+              },
+              include: {
+                CourseProgress:
+                  user?.role === "user"
+                    ? { select: { isCompleted: true } }
+                    : false,
+              },
+            },
+          },
         },
-        CourseProgress: user?.role === "user",
+        CourseUserLastLesson:
+          user?.role === "user"
+            ? { where: { userId: userData?.id, course: { slug } } }
+            : false,
+        _count: {
+          select: {
+            CourseProgress: { where: { isCompleted: true } },
+          },
+        },
       },
     });
 

@@ -10,6 +10,7 @@ export interface ICourseLesson extends BasicData {
   lessonType: CourseLessonType;
   contentUrl: string;
   chapterId: string;
+  CourseProgress?: [{ isCompleted: boolean }];
 }
 
 export interface ICourseChapter extends BasicData {
@@ -17,6 +18,9 @@ export interface ICourseChapter extends BasicData {
   order: number;
   courseId: string;
   lessons: ICourseLesson[];
+  _count?: {
+    lessons: number;
+  };
 }
 
 export interface ICourse extends BasicData {
@@ -34,13 +38,20 @@ export interface ICourse extends BasicData {
   enableForum: boolean;
   chapters: ICourseChapter[];
   status: CourseStatus;
-  _count: { chapters: number };
+  CourseUserLastLesson?: [ICourseLastLesson];
+  _count: { chapters?: number; CourseProgress?: number };
 }
 
 export interface ICoursePayload
   extends Omit<
     ICourse,
-    keyof BasicData | "trainer" | "category" | "chapters" | "slug" | "_count"
+    | keyof BasicData
+    | "trainer"
+    | "category"
+    | "chapters"
+    | "slug"
+    | "_count"
+    | "CourseUserLastLesson"
   > {}
 export interface ICourseForm extends ICoursePayload {
   keypointsUi: Array<{ description: string }>;
@@ -50,10 +61,10 @@ export interface ICourseForm extends ICoursePayload {
 }
 
 export interface ICourseChapterPayload
-  extends Omit<ICourseChapter, keyof BasicData | "lessons"> {}
+  extends Omit<ICourseChapter, keyof BasicData | "lessons" | "_count"> {}
 
 export interface ICourseLessonPayload
-  extends Omit<ICourseLesson, keyof BasicData> {}
+  extends Omit<ICourseLesson, keyof BasicData | "CourseProgress"> {}
 
 export interface IChapterForm extends ICourseChapterPayload {
   lessons: ICourseLessonPayload[];
@@ -76,6 +87,14 @@ export interface ICourseProgress extends BasicData {
 }
 
 export interface ICourseProgressPayload
-  extends Omit<ICourseProgress, keyof BasicData | "userId"> {
-  id?: string;
+  extends Omit<ICourseProgress, keyof BasicData | "userId"> {}
+
+export interface ICourseLastLesson extends BasicData {
+  courseLessonId: string;
+  courseId: string;
+}
+
+export interface ICourseLastLessonPayload {
+  lessonId: string;
+  courseId: string;
 }

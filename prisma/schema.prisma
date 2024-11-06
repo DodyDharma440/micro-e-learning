@@ -20,19 +20,20 @@ enum Role {
 }
 
 model User {
-  id             String           @id @default(uuid())
-  username       String           @unique
-  name           String
-  password       String?
-  avatarUrl      String?
-  role           Role
-  workPositionId String
-  workPosition   WorkPosition     @relation(fields: [workPositionId], references: [id])
-  Course         Course[]
-  CourseForum    CourseForum[]
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @default(now())
-  CourseProgress CourseProgress[]
+  id                   String                 @id @default(uuid())
+  username             String                 @unique
+  name                 String
+  password             String?
+  avatarUrl            String?
+  role                 Role
+  workPositionId       String
+  workPosition         WorkPosition           @relation(fields: [workPositionId], references: [id])
+  Course               Course[]
+  CourseForum          CourseForum[]
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @default(now())
+  CourseProgress       CourseProgress[]
+  CourseUserLastLesson CourseUserLastLesson[]
 }
 
 model WorkPosition {
@@ -51,26 +52,27 @@ enum CourseStatus {
 }
 
 model Course {
-  id             String           @id @default(uuid())
-  name           String
-  slug           String           @unique
-  description    String?
-  thumbnailUrl   String
-  trailerUrl     String?
-  hideTrailer    Boolean
-  trainerId      String
-  trainer        User             @relation(fields: [trainerId], references: [id])
-  categoryId     String
-  category       WorkPosition     @relation(fields: [categoryId], references: [id])
-  keypoints      Json?
-  enableForum    Boolean
-  chapters       CourseChapter[]
-  CourseForum    CourseForum[]
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @default(now())
-  deleted        Boolean          @default(false)
-  status         CourseStatus     @default(draft)
-  CourseProgress CourseProgress[]
+  id                   String                 @id @default(uuid())
+  name                 String
+  slug                 String                 @unique
+  description          String?
+  thumbnailUrl         String
+  trailerUrl           String?
+  hideTrailer          Boolean
+  trainerId            String
+  trainer              User                   @relation(fields: [trainerId], references: [id])
+  categoryId           String
+  category             WorkPosition           @relation(fields: [categoryId], references: [id])
+  keypoints            Json?
+  enableForum          Boolean
+  chapters             CourseChapter[]
+  CourseForum          CourseForum[]
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @default(now())
+  deleted              Boolean                @default(false)
+  status               CourseStatus           @default(draft)
+  CourseProgress       CourseProgress[]
+  CourseUserLastLesson CourseUserLastLesson[]
 }
 
 model CourseChapter {
@@ -91,17 +93,18 @@ enum CourseLessonType {
 }
 
 model CourseLesson {
-  id             String           @id @default(uuid())
-  name           String
-  order          Int
-  lessonType     CourseLessonType
-  contentUrl     String
-  chapter        CourseChapter    @relation(fields: [chapterId], references: [id])
-  chapterId      String
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @default(now())
-  deleted        Boolean          @default(false)
-  CourseProgress CourseProgress[]
+  id                   String                 @id @default(uuid())
+  name                 String
+  order                Int
+  lessonType           CourseLessonType
+  contentUrl           String
+  chapter              CourseChapter          @relation(fields: [chapterId], references: [id])
+  chapterId            String
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @default(now())
+  deleted              Boolean                @default(false)
+  CourseProgress       CourseProgress[]
+  CourseUserLastLesson CourseUserLastLesson[]
 }
 
 model CourseForum {
@@ -123,10 +126,20 @@ model CourseProgress {
   user           User         @relation(fields: [userId], references: [id])
   userId         String
   lesson         CourseLesson @relation(fields: [courseLessonId], references: [id])
-  courseLessonId String
+  courseLessonId String       @unique
   course         Course       @relation(fields: [courseId], references: [id])
   courseId       String
   isCompleted    Boolean      @default(false)
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @default(now())
+}
+
+model CourseUserLastLesson {
+  id             String       @id @default(uuid())
+  user           User         @relation(fields: [userId], references: [id])
+  course         Course       @relation(fields: [courseId], references: [id])
+  courseId       String
+  lesson         CourseLesson @relation(fields: [courseLessonId], references: [id])
+  courseLessonId String
+  userId         String       @unique
 }

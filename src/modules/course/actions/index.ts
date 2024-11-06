@@ -6,9 +6,11 @@ import type {
   ICourse,
   ICourseChapter,
   ICourseChapterPayload,
+  ICourseLastLessonPayload,
   ICourseLesson,
   ICourseLessonPayload,
   ICoursePayload,
+  ICourseProgressPayload,
 } from "../interfaces";
 
 export const useGetCourses = get<ICourse[]>(
@@ -94,4 +96,15 @@ export const useGetUserCourses = get<ICourse[]>(
 export const useGetCourseBySlug = getById<ICourse>(
   ({ id }) => apiELearning.get(`/course/slug/${id}`),
   ({ id }) => [COURSE_SLUG, id]
+);
+
+export const useUpdateCourseProgress = post<any, ICourseProgressPayload>(
+  ({ formValues }) => apiELearning.patch("/course/progress/update", formValues),
+  []
+);
+
+export const useUpdateLastLesson = post<any, ICourseLastLessonPayload>(
+  ({ formValues }) =>
+    apiELearning.patch("/course/progress/last-lesson", formValues),
+  []
 );
