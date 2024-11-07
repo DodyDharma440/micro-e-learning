@@ -23,3 +23,9 @@ export type BasicData = {
   updatedBy?: string | null;
   deletedBy?: string | null;
 };
+
+export interface IFileData {
+  name: string;
+  fileId: string;
+  url: string;
+}

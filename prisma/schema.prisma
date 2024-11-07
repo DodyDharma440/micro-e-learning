@@ -24,7 +24,7 @@ model User {
   username             String                 @unique
   name                 String
   password             String?
-  avatarUrl            String?
+  avatar               Json?
   role                 Role
   workPositionId       String
   workPosition         WorkPosition           @relation(fields: [workPositionId], references: [id])

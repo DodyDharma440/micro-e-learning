@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { HiPencil } from "react-icons/hi2";
+import { toast } from "react-toastify";
 
 import Image from "next/image";
 
 import { Button, Card, Input } from "@nextui-org/react";
 
+import { useUploadImage } from "@/common/actions/imagekit";
 import { useUserContext } from "@/common/contexts";
 
 import { useUpdateProfile } from "../../actions";
@@ -35,6 +37,36 @@ const EditProfileForm = () => {
     updateProfile({ formValues: values });
   };
 
+  const { mutateAsync: uploadImage, isPending: isLoadingUpload } =
+    useUploadImage();
+
+  const handleUpdatePicture = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    const fileSize = (file?.size ?? 0) / (1024 * 1024);
+    if (fileSize > 1) {
+      toast.error("Maximum file size is 1 MB");
+      return;
+    }
+
+    if (file) {
+      const uploadFd = new FormData();
+      if (file) uploadFd.append("file", file);
+      uploadFd.append("fileName", file.name);
+      uploadImage(
+        { formValues: uploadFd },
+        {
+          onSuccess: ({ data: { fileId, name, url } }) => {
+            updateProfile({
+              formValues: {
+                avatar: { fileId, name, url },
+              },
+            });
+          },
+        }
+      );
+    }
+  };
+
   useEffect(() => {
     reset({
       username: userData?.username,
@@ -49,18 +81,29 @@ const EditProfileForm = () => {
           <h2 className="font-bold mb-4">Profile Picture</h2>
           <div className="flex items-center justify-center">
             <div className="w-[150px] h-[150px] bg-gray-200/60 dark:bg-neutral-800 rounded-full relative">
-              {userData?.avatarUrl ? (
+              {userData?.avatar?.url ? (
                 <Image
-                  src={userData.avatarUrl}
+                  src={userData.avatar.url}
                   alt="avatar"
                   fill
                   className="object-cover"
                 />
               ) : null}
+              <input
+                type="file"
+                className="hidden"
+                id="upload-picture"
+                accept="image/jpg,image/jpeg,image/png"
+                value=""
+                onChange={handleUpdatePicture}
+              />
               <Button
+                as="label"
+                htmlFor="upload-picture"
                 isIconOnly
                 color="secondary"
-                className="absolute bottom-0 right-0"
+                className="absolute bottom-0 right-0 cursor-pointer"
+                isLoading={isLoadingUpload}
               >
                 <HiPencil />
               </Button>

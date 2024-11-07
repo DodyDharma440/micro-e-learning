@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { post } from "../utils/react-query";
+import { post, remove } from "../utils/react-query";
 
 interface ISignIKResponse {
   token: string;
@@ -57,3 +57,17 @@ export const useUploadImage = post<any, FormData, {}, IUploadIKResponse>(
   },
   []
 );
+
+export const useDeleteImage = remove<any>(async ({ id }) => {
+  try {
+    return axios.delete(`https://upload.imagekit.io/api/v1/files/${id}`, {
+      headers: {
+        Authorization: `Basic ${btoa(process.env.IMAGEKIT_PRIVATE_KEY!)}`,
+      },
+    });
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error("🚀 ~ e:", e);
+    throw new Error("Error deleting...");
+  }
+}, []);

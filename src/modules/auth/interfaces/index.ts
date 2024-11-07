@@ -1,4 +1,4 @@
-import type { BasicData } from "@/common/interfaces/api";
+import type { BasicData, IFileData } from "@/common/interfaces/api";
 
 export type UserRole = "superadmin" | "trainer" | "user";
 
@@ -7,7 +7,7 @@ export interface IUser extends BasicData {
   username: string;
   password: string;
   role: UserRole;
-  avatarUrl: string | null;
+  avatar: IFileData | null;
 }
 
 export interface ILoginInput extends Pick<IUser, "username" | "password"> {

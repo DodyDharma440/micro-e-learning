@@ -65,6 +65,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
                   className="transition-transform"
                   color="primary"
                   name={userData?.name}
+                  src={userData?.avatar?.url}
                   size="sm"
                 />
               </DropdownTrigger>
