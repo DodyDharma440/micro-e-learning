@@ -93,13 +93,16 @@ const CourseCard: React.FC<CourseCardProps> = ({
   };
 
   const totalProgress = useMemo(() => {
-    const totalLesson = course.chapters.reduce((prev, curr) => {
-      prev += curr._count?.lessons ?? 0;
-      return prev;
-    }, 0);
-    const result = (100 * (course?._count.CourseProgress ?? 0)) / totalLesson;
-    return result.toFixed(0);
-  }, [course?._count.CourseProgress, course.chapters]);
+    if (withProgress) {
+      const totalLesson = course.chapters?.reduce((prev, curr) => {
+        prev += curr._count?.lessons ?? 0;
+        return prev;
+      }, 0);
+      const result = (100 * (course?._count.CourseProgress ?? 0)) / totalLesson;
+      return result.toFixed(0);
+    }
+    return "0";
+  }, [course?._count.CourseProgress, course.chapters, withProgress]);
 
   useEffect(() => {
     setStatus(course.status);

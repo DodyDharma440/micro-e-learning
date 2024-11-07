@@ -7,6 +7,7 @@ export interface IUser extends BasicData {
   username: string;
   password: string;
   role: UserRole;
+  avatarUrl: string | null;
 }
 
 export interface ILoginInput extends Pick<IUser, "username" | "password"> {

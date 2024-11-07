@@ -73,7 +73,12 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
                   <p className="font-semibold">Signed in as</p>
                   <p className="font-semibold">{userData?.username}</p>
                 </DropdownItem>
-                <DropdownItem key="settings">Edit Profile</DropdownItem>
+                <DropdownItem
+                  key="settings"
+                  onClick={() => push("/user/edit-profile")}
+                >
+                  Edit Profile
+                </DropdownItem>
                 <DropdownItem
                   key="logout"
                   color="danger"
