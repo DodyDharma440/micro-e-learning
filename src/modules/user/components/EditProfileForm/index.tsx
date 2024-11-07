@@ -8,10 +8,15 @@ import { Button, Card, Input } from "@nextui-org/react";
 
 import { useUserContext } from "@/common/contexts";
 
+import { useUpdateProfile } from "../../actions";
 import type { IEditProfilePayload } from "../../interfaces";
+import PasswordForm from "./PasswordForm";
 
 const EditProfileForm = () => {
-  const { userData } = useUserContext();
+  const {
+    userData,
+    userQuery: { refetch },
+  } = useUserContext();
   const {
     register,
     reset,
@@ -19,7 +24,16 @@ const EditProfileForm = () => {
     handleSubmit,
   } = useForm<IEditProfilePayload>();
 
-  const submitHandler = () => {};
+  const { mutate: updateProfile, isPending: isLoadingUpdate } =
+    useUpdateProfile({
+      onSuccess: () => {
+        refetch();
+      },
+    });
+
+  const submitHandler = (values: IEditProfilePayload) => {
+    updateProfile({ formValues: values });
+  };
 
   useEffect(() => {
     reset({
@@ -74,17 +88,19 @@ const EditProfileForm = () => {
                   required: "Name should not be empty",
                 })}
               />
-              <Button type="submit" className="ml-auto" color="primary">
+              <Button
+                isLoading={isLoadingUpdate}
+                type="submit"
+                className="ml-auto"
+                color="primary"
+              >
                 Update
               </Button>
             </div>
           </div>
         </form>
         <hr className="border-gray-200 dark:border-neutral-800 my-4" />
-        <div>
-          <h2 className="font-bold mb-4">Change Password</h2>
-          <Button color="primary">Reset My Password</Button>
-        </div>
+        <PasswordForm />
       </Card>
     </div>
   );

@@ -10,3 +10,8 @@ export interface IEditProfilePayload
     name: string;
     username: string;
   }> {}
+
+export interface IUpdatePasswordPayload {
+  oldPassword: string;
+  newPassword: string;
+}

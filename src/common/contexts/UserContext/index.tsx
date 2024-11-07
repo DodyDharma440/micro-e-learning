@@ -9,9 +9,10 @@ import type { IUser } from "@/modules/auth/interfaces";
 type UserCtx = {
   isLoggedIn: boolean;
   userData?: IUser;
+  userQuery: ReturnType<typeof useGetProfile>;
 };
 
-export const UserContext = createContext<UserCtx>({ isLoggedIn: false });
+export const UserContext = createContext<UserCtx>({ isLoggedIn: false } as any);
 
 type UserProviderProps = {
   children: React.ReactNode;
@@ -22,10 +23,11 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-  const { data, isLoading, isRefetching, error } = useGetProfile(
+  const userQuery = useGetProfile(
     {},
     { enabled: isLoggedIn && pathname !== "/logout" }
   );
+  const { data, isLoading, error } = userQuery;
 
   useEffect(() => {
     const isLogin = localStorage.getItem("isLoggedIn") || "false";
@@ -38,14 +40,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       value={{
         isLoggedIn: isLoggedIn,
         userData: data?.data.data,
+        userQuery,
       }}
     >
-      <Loader
-        isLoading={isLoading}
-        isRefetching={isRefetching}
-        error={error}
-        placeholderHeight="100vh"
-      >
+      <Loader isLoading={isLoading} error={error} placeholderHeight="100vh">
         {isLoaded ? <>{children}</> : null}
       </Loader>
     </UserContext.Provider>
