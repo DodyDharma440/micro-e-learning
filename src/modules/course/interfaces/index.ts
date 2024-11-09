@@ -98,3 +98,12 @@ export interface ICourseLastLessonPayload {
   lessonId: string;
   courseId: string;
 }
+
+export interface ICourseForumPayload {
+  courseId: string;
+  content: string;
+}
+
+export interface ICourseForumReplyPayload extends ICourseForumPayload {
+  parentId: string;
+}

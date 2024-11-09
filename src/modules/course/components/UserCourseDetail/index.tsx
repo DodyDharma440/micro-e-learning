@@ -1,6 +1,8 @@
 import React, { useMemo } from "react";
 import { HiOutlineChatBubbleLeftEllipsis } from "react-icons/hi2";
 
+import { useRouter } from "next/router";
+
 import { Button, Card, Progress } from "@nextui-org/react";
 
 import { useCourseDetail } from "../../contexts";
@@ -8,6 +10,8 @@ import ChapterList from "./ChapterList";
 import LessonView from "./LessonView";
 
 const UserCourseDetail = () => {
+  const { push } = useRouter();
+
   const { course } = useCourseDetail();
   const totalProgress = useMemo(() => {
     const totalLesson = (course?.chapters ?? []).reduce((prev, curr) => {
@@ -40,6 +44,7 @@ const UserCourseDetail = () => {
         </div>
         {course?.enableForum ? (
           <Button
+            onClick={() => push(`/user/courses/${course.slug}/forums`)}
             color="secondary"
             startContent={<HiOutlineChatBubbleLeftEllipsis />}
           >

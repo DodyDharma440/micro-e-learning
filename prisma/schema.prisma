@@ -34,6 +34,7 @@ model User {
   updatedAt            DateTime               @default(now())
   CourseProgress       CourseProgress[]
   CourseUserLastLesson CourseUserLastLesson[]
+  CourseForumReply     CourseForumReply[]
 }
 
 model WorkPosition {
@@ -73,6 +74,7 @@ model Course {
   status               CourseStatus           @default(draft)
   CourseProgress       CourseProgress[]
   CourseUserLastLesson CourseUserLastLesson[]
+  CourseForumReply     CourseForumReply[]
 }
 
 model CourseChapter {
@@ -108,17 +110,28 @@ model CourseLesson {
 }
 
 model CourseForum {
-  id             String       @id @default(uuid())
-  content        String
-  parent         CourseForum? @relation("Parent", fields: [parentId], references: [id])
-  parentId       String?      @unique
-  parentRelation CourseForum? @relation("Parent")
-  courseId       String
-  course         Course       @relation(fields: [courseId], references: [id])
-  userId         String
-  user           User         @relation(fields: [userId], references: [id])
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @default(now())
+  id               String             @id @default(uuid())
+  content          String
+  courseId         String
+  course           Course             @relation(fields: [courseId], references: [id])
+  userId           String
+  user             User               @relation(fields: [userId], references: [id])
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now())
+  CourseForumReply CourseForumReply[]
+}
+
+model CourseForumReply {
+  id        String      @id @default(uuid())
+  content   String
+  parent    CourseForum @relation(fields: [parentId], references: [id])
+  parentId  String
+  courseId  String
+  course    Course      @relation(fields: [courseId], references: [id])
+  userId    String
+  user      User        @relation(fields: [userId], references: [id])
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @default(now())
 }
 
 model CourseProgress {

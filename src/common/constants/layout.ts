@@ -38,5 +38,6 @@ export const adminMenu: ISidebarItem[] = [
 export const userPaths = [
   "/user/courses",
   "/user/courses/[slug]",
+  "/user/courses/[slug]/forums",
   "/user/edit-profile",
 ];

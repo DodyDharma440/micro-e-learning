@@ -4,6 +4,7 @@ import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 
 import { Content, Loader } from "@/common/components";
+import { withAuth } from "@/common/hocs";
 import { useGetCourseBySlug } from "@/modules/course/actions";
 import { UserCourseDetail } from "@/modules/course/components";
 import { CourseDetailProvider } from "@/modules/course/contexts";
@@ -44,4 +45,4 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   };
 };
 
-export default UserCourseDetailPage;
+export default withAuth(UserCourseDetailPage, "user");
