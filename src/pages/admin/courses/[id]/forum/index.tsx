@@ -5,23 +5,23 @@ import Head from "next/head";
 
 import { Loader } from "@/common/components";
 import { withAuth } from "@/common/hocs";
-import { useGetCourseBySlug } from "@/modules/course/actions";
+import { useGetCourse } from "@/modules/course/actions";
 import { CourseForum } from "@/modules/course/components";
 import { CourseDetailProvider } from "@/modules/course/contexts";
 
-export type CourseForumPageProps = {
-  slug: string;
+type CourseForumPageProps = {
+  courseId: string;
 };
 
-const CourseForumPage: NextPage<CourseForumPageProps> = ({ slug }) => {
-  const { data, isLoading, isRefetching, error } = useGetCourseBySlug({
-    id: slug,
+const CourseForumPage: NextPage<CourseForumPageProps> = ({ courseId }) => {
+  const { data, isLoading, isRefetching, error } = useGetCourse({
+    id: courseId,
   });
 
   return (
     <>
       <Head>
-        <title>Course Forum - E-Learning</title>
+        <title>Course Lesson - E-Learning</title>
       </Head>
 
       <Loader isLoading={isLoading} isRefetching={isRefetching} error={error}>
@@ -36,9 +36,9 @@ const CourseForumPage: NextPage<CourseForumPageProps> = ({ slug }) => {
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   return {
     props: {
-      slug: params?.slug,
+      courseId: params?.id,
     },
   };
 };
 
-export default withAuth(CourseForumPage, "user");
+export default withAuth(CourseForumPage, "superadmin");

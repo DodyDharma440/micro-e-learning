@@ -3,7 +3,6 @@ import { HiOutlinePencil, HiOutlineTrash } from "react-icons/hi";
 import { HiOutlineChatBubbleLeft } from "react-icons/hi2";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { useDisclosure } from "@mantine/hooks";
@@ -121,11 +120,12 @@ const CourseCard: React.FC<CourseCardProps> = ({
           <>
             <div className="flex items-center gap-2 absolute top-2 right-2">
               {course.enableForum ? (
-                <Link href={`/course/${course.slug}/forum`}>
-                  <Button isIconOnly>
-                    <HiOutlineChatBubbleLeft />
-                  </Button>
-                </Link>
+                <Button
+                  isIconOnly
+                  onClick={() => push(`/admin/courses/${course.id}/forum`)}
+                >
+                  <HiOutlineChatBubbleLeft />
+                </Button>
               ) : null}
               <Button
                 isIconOnly

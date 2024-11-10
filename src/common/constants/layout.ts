@@ -10,6 +10,7 @@ export const adminPaths = [
   "/admin/courses/[id]/detail",
   "/admin/courses/[id]/lessons",
   "/admin/courses/[id]/edit",
+  "/admin/courses/[id]/forum",
   "/admin/user-management",
   "/admin/edit-profile",
 ];
@@ -24,6 +25,7 @@ export const adminMenu: ISidebarItem[] = [
       "/admin/courses/[id]/detail",
       "/admin/courses/[id]/lessons",
       "/admin/courses/[id]/edit",
+      "/admin/courses/[id]/forum",
     ],
   },
   {

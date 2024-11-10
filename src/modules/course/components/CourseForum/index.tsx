@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { HiOutlineChevronRight } from "react-icons/hi";
 
 import { useDisclosure } from "@mantine/hooks";
@@ -6,21 +6,24 @@ import { Avatar, Button, Divider } from "@nextui-org/react";
 import dayjs from "dayjs";
 
 import { Content, EmptyPlaceholder, Loader } from "@/common/components";
+import { useUserContext } from "@/common/contexts";
 
 import { useGetCourseForum } from "../../actions";
 import { useCourseDetail } from "../../contexts";
 import type { ICourseForum } from "../../interfaces";
 import QuestionForm from "./QuestionForm";
 
-type CourseForumProps = {
-  slug: string;
-};
+const CourseForum = () => {
+  const { userData } = useUserContext();
+  const isAdmin = useMemo(() => {
+    return ["superadmin", "trainer"].includes(userData?.role ?? "");
+  }, [userData?.role]);
 
-const CourseForum: React.FC<CourseForumProps> = ({ slug }) => {
   const { course } = useCourseDetail();
-  const { data, isLoading, isRefetching, error } = useGetCourseForum({
-    id: slug,
-  });
+  const { data, isLoading, isRefetching, error } = useGetCourseForum(
+    { id: course?.slug ?? "" },
+    { enabled: Boolean(course?.slug) }
+  );
   const [isOpen, { open, close }] = useDisclosure();
   const [forum, setForum] = useState<ICourseForum[]>([]);
 
@@ -34,7 +37,7 @@ const CourseForum: React.FC<CourseForumProps> = ({ slug }) => {
       title={`Forum Discussion - ${course?.name}`}
       action={
         <Button color="primary" onClick={open}>
-          Ask Question
+          Ask Question {isAdmin ? `/ Send Announcement` : ""}
         </Button>
       }
     >

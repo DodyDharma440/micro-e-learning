@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 
 import {
@@ -31,6 +31,10 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
   onSuccess,
 }) => {
   const { userData } = useUserContext();
+  const isAdmin = useMemo(() => {
+    return ["superadmin", "trainer"].includes(userData?.role ?? "");
+  }, [userData?.role]);
+
   const { course } = useCourseDetail();
   const {
     register,
@@ -64,14 +68,18 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalContent>
         <form onSubmit={handleSubmit(submitHandler)}>
-          <ModalHeader>Ask Question</ModalHeader>
+          <ModalHeader>
+            Ask Question {isAdmin ? `/ Send Announcement` : ""}
+          </ModalHeader>
           <ModalBody>
             <Textarea
-              label="Question"
+              label={isAdmin ? "Question/Announcement" : "Question"}
               errorMessage={errors.content?.message}
               isInvalid={Boolean(errors.content?.message)}
               {...register("content", {
-                required: "Question should not be empty",
+                required: `${
+                  isAdmin ? "Question/Announcement" : "Question"
+                } should not be empty`,
               })}
             />
           </ModalBody>
