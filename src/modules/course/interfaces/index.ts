@@ -99,6 +99,16 @@ export interface ICourseLastLessonPayload {
   courseId: string;
 }
 
+export interface ICourseForum extends BasicData {
+  courseId: string;
+  userId: string;
+  user: IUser;
+  content: string;
+  _count?: {
+    CourseForumReply?: number;
+  };
+}
+
 export interface ICourseForumPayload {
   courseId: string;
   content: string;

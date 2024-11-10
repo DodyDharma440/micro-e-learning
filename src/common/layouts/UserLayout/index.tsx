@@ -1,6 +1,7 @@
 import React from "react";
 import { HiMoon, HiSun } from "react-icons/hi2";
 
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTheme } from "next-themes";
 
@@ -32,7 +33,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
       <div className="w-screen h-[700px] rounded-full blur-[500px] bg-primary-500 opacity-30 absolute -bottom-1/2 -right-1/2 z-10" />
       <div className="w-screen h-[600px] rounded-full blur-[500px] bg-secondary-500 opacity-40 absolute -top-1/3 -left-1/2 z-10" />
 
-      <div className="container mx-auto relative z-20">
+      <div className="container max-w-[1200px] mx-auto relative z-20">
         <Navbar
           classNames={{
             base: "border my-4 border-gray-300 dark:border-gray-600 rounded-xl sticky top-4",
@@ -40,7 +41,9 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
           }}
         >
           <NavbarBrand>
-            <p className="font-bold text-inherit">E-LEARNING</p>
+            <Link href="/user/courses">
+              <p className="font-bold text-inherit">E-LEARNING</p>
+            </Link>
           </NavbarBrand>
 
           <NavbarContent as="div" justify="end">

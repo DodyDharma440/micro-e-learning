@@ -1,11 +1,19 @@
 import { apiELearning } from "@/common/configs/api";
 import { get, getById, patch, post, remove } from "@/common/utils/react-query";
 
-import { COURSE, COURSE_SLUG, COURSES, USER_COURSES } from "../constants";
+import {
+  COURSE,
+  COURSE_FORUM,
+  COURSE_SLUG,
+  COURSES,
+  USER_COURSES,
+} from "../constants";
 import type {
   ICourse,
   ICourseChapter,
   ICourseChapterPayload,
+  ICourseForum,
+  ICourseForumPayload,
   ICourseLastLessonPayload,
   ICourseLesson,
   ICourseLessonPayload,
@@ -107,4 +115,15 @@ export const useUpdateLastLesson = post<any, ICourseLastLessonPayload>(
   ({ formValues }) =>
     apiELearning.patch("/course/progress/last-lesson", formValues),
   []
+);
+
+export const useGetCourseForum = getById<ICourseForum[]>(
+  ({ id }) => apiELearning.get(`/course/forum?slug=${id}`),
+  ({ id }) => [COURSE_FORUM, id]
+);
+
+export const useSendQuestion = post<any, ICourseForumPayload>(
+  ({ formValues }) => apiELearning.post(`/course/forum`, formValues),
+  [],
+  { successMessage: "Your question has been sent" }
 );

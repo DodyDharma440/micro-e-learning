@@ -66,7 +66,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
               {...cancelButtonProps}
               onClick={onCancel || onClose}
             >
-              {cancelButtonText || "Batal"}
+              {cancelButtonText || "Cancel"}
             </Button>
             <Button
               compact={false}
@@ -75,7 +75,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
               {...confirmButtonProps}
               onClick={onConfirm}
             >
-              {confirmButtonText || "Konfirmasi"}
+              {confirmButtonText || "Confirm"}
             </Button>
           </div>
         </ModalFooter>

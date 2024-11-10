@@ -32,7 +32,7 @@ const Content: React.FC<ContentProps> = ({
             <Button
               isIconOnly
               aria-label="Back"
-              className="bg-gray-200 dark:bg-gray-700"
+              variant="light"
               onClick={() =>
                 backAction ? backAction() : backHref ? push(backHref) : back()
               }

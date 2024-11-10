@@ -21,6 +21,10 @@ export default makeHandler((prisma) => ({
           },
         },
       },
+      orderBy: [
+        { CourseForumReply: { _count: "desc" } },
+        { createdAt: "desc" },
+      ],
     });
 
     return createResponse(res, forums);
