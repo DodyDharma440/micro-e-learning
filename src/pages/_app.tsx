@@ -3,6 +3,7 @@ import { Bounce, ToastContainer } from "react-toastify";
 
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import { PagesProgressBar as ProgressBar } from "next-nprogress-bar";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 import { NextUIProvider } from "@nextui-org/react";
@@ -58,6 +59,12 @@ export default function App({ Component, pageProps }: AppProps) {
 
                 <PageLayout>
                   <Component {...pageProps} />
+                  <ProgressBar
+                    height="3px"
+                    color="#016fee"
+                    options={{ showSpinner: false }}
+                    shallowRouting
+                  />
                 </PageLayout>
               </main>
             </UserProvider>
