@@ -9,7 +9,11 @@ export default makeHandler((prisma) => ({
       where: { id },
       include: {
         user: true,
-        CourseForumReply: true,
+        CourseForumReply: {
+          include: {
+            user: true,
+          },
+        },
       },
     });
 

@@ -4,6 +4,7 @@ import { get, getById, patch, post, remove } from "@/common/utils/react-query";
 import {
   COURSE,
   COURSE_FORUM,
+  COURSE_FORUM_DETAIL,
   COURSE_SLUG,
   COURSES,
   USER_COURSES,
@@ -14,6 +15,7 @@ import type {
   ICourseChapterPayload,
   ICourseForum,
   ICourseForumPayload,
+  ICourseForumReplyPayload,
   ICourseLastLessonPayload,
   ICourseLesson,
   ICourseLessonPayload,
@@ -126,4 +128,15 @@ export const useSendQuestion = post<any, ICourseForumPayload>(
   ({ formValues }) => apiELearning.post(`/course/forum`, formValues),
   [],
   { successMessage: "Your question has been sent" }
+);
+
+export const useGetForumDetail = getById<ICourseForum>(
+  ({ id }) => apiELearning.get(`/course/forum/${id}`),
+  ({ id }) => [COURSE_FORUM_DETAIL, id]
+);
+
+export const useSendQuestionReply = post<any, ICourseForumReplyPayload>(
+  ({ formValues }) => apiELearning.post(`/course/forum/reply`, formValues),
+  [],
+  { successMessage: "Your reply has been sent" }
 );

@@ -99,6 +99,10 @@ export interface ICourseLastLessonPayload {
   courseId: string;
 }
 
+export interface ICourseForumReply extends ICourseForum {
+  parentId: string;
+}
+
 export interface ICourseForum extends BasicData {
   courseId: string;
   userId: string;
@@ -107,6 +111,7 @@ export interface ICourseForum extends BasicData {
   _count?: {
     CourseForumReply?: number;
   };
+  CourseForumReply?: ICourseForumReply[];
 }
 
 export interface ICourseForumPayload {

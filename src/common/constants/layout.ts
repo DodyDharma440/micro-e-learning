@@ -41,5 +41,6 @@ export const userPaths = [
   "/user/courses",
   "/user/courses/[slug]",
   "/user/courses/[slug]/forums",
+  "/user/courses/[slug]/forums/[id]",
   "/user/edit-profile",
 ];

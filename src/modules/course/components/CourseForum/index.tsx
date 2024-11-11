@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { HiOutlineChevronRight } from "react-icons/hi";
+
+import { useRouter } from "next/router";
 
 import { useDisclosure } from "@mantine/hooks";
-import { Avatar, Button, Divider } from "@nextui-org/react";
-import dayjs from "dayjs";
+import { Button } from "@nextui-org/react";
 
 import { Content, EmptyPlaceholder, Loader } from "@/common/components";
 import { useUserContext } from "@/common/contexts";
@@ -11,9 +11,12 @@ import { useUserContext } from "@/common/contexts";
 import { useGetCourseForum } from "../../actions";
 import { useCourseDetail } from "../../contexts";
 import type { ICourseForum } from "../../interfaces";
+import ForumItem from "../ForumItem";
 import QuestionForm from "./QuestionForm";
 
 const CourseForum = () => {
+  const { push } = useRouter();
+
   const { userData } = useUserContext();
   const isAdmin = useMemo(() => {
     return ["superadmin", "trainer"].includes(userData?.role ?? "");
@@ -46,36 +49,13 @@ const CourseForum = () => {
           <>
             {forum.map((question) => {
               return (
-                <React.Fragment key={question.id}>
-                  <div className="flex items-center">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-4 mb-2">
-                        <Avatar
-                          size="sm"
-                          name={question.user.name}
-                          src={question.user.avatar?.url}
-                        />
-                        <div>
-                          <p className="font-bold">{question.user.name}</p>
-                          <p className="text-xs text-neutral-500 dark:text-gray-400">
-                            {dayjs(question.createdAt).fromNow()} &bull;{" "}
-                            {question._count?.CourseForumReply ?? 0} replies
-                          </p>
-                        </div>
-                      </div>
-
-                      <p className="text-sm">{question.content}</p>
-                    </div>
-                    <Button
-                      variant="light"
-                      color="secondary"
-                      endContent={<HiOutlineChevronRight />}
-                    >
-                      View Replies
-                    </Button>
-                  </div>
-                  <Divider className="my-4" />
-                </React.Fragment>
+                <ForumItem
+                  key={question.id}
+                  question={question}
+                  onViewReplies={() =>
+                    push(`/user/courses/${course?.slug}/forums/${question.id}`)
+                  }
+                />
               );
             })}
           </>
