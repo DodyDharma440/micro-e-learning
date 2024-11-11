@@ -30,6 +30,20 @@ const CourseForum = () => {
   const [isOpen, { open, close }] = useDisclosure();
   const [forum, setForum] = useState<ICourseForum[]>([]);
 
+  const makeReplyUrl = (id: string) => {
+    if (userData?.role) {
+      switch (userData.role) {
+        case "superadmin":
+          return `/admin/courses/${course?.id}/forum/${id}`;
+        case "trainer":
+          return `/trainer/courses/${course?.id}/forum/${id}`;
+        case "user":
+          return `/user/courses/${course?.slug}/forums/${id}`;
+      }
+    }
+    return "";
+  };
+
   useEffect(() => {
     setForum(data?.data.data || []);
   }, [data?.data.data]);
@@ -52,9 +66,7 @@ const CourseForum = () => {
                 <ForumItem
                   key={question.id}
                   question={question}
-                  onViewReplies={() =>
-                    push(`/user/courses/${course?.slug}/forums/${question.id}`)
-                  }
+                  onViewReplies={() => push(makeReplyUrl(question.id))}
                 />
               );
             })}

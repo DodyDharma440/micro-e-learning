@@ -32,6 +32,7 @@ const ForumDetail: React.FC<ForumDetailProps> = ({ questionId }) => {
     <Loader isLoading={isLoading} isRefetching={isRefetching} error={error}>
       <Content
         title={question?.content}
+        withBackButton
         action={
           <Button color="primary" onClick={open}>
             Add Reply
