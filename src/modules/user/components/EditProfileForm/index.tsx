@@ -80,23 +80,25 @@ const EditProfileForm = () => {
         <div>
           <h2 className="font-bold mb-4">Profile Picture</h2>
           <div className="flex items-center justify-center">
-            <div className="w-[150px] h-[150px] bg-gray-200/60 dark:bg-neutral-800 rounded-full relative">
-              {userData?.avatar?.url ? (
-                <Image
-                  src={userData.avatar.url}
-                  alt="avatar"
-                  fill
-                  className="object-cover"
+            <div className="relative">
+              <div className="w-[150px] h-[150px] bg-gray-200/60 dark:bg-neutral-800 rounded-full relative overflow-hidden">
+                {userData?.avatar?.url ? (
+                  <Image
+                    src={userData.avatar.url}
+                    alt="avatar"
+                    fill
+                    className="object-cover"
+                  />
+                ) : null}
+                <input
+                  type="file"
+                  className="hidden"
+                  id="upload-picture"
+                  accept="image/jpg,image/jpeg,image/png"
+                  value=""
+                  onChange={handleUpdatePicture}
                 />
-              ) : null}
-              <input
-                type="file"
-                className="hidden"
-                id="upload-picture"
-                accept="image/jpg,image/jpeg,image/png"
-                value=""
-                onChange={handleUpdatePicture}
-              />
+              </div>
               <Button
                 as="label"
                 htmlFor="upload-picture"
