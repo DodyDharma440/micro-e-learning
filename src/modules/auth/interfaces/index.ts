@@ -7,6 +7,7 @@ export interface IUser extends BasicData {
   username: string;
   password: string;
   role: UserRole;
+  workPositionId: string;
   avatar: IFileData | null;
 }
 
