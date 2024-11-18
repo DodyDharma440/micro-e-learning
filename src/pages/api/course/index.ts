@@ -15,13 +15,11 @@ export default makeHandler((prisma) => ({
     });
 
     const count = await prisma.course.count({
-      ...searchParam,
-      where: { deleted: false },
+      where: { ...(searchParam as any).where, deleted: false },
     });
 
     const results = await prisma.course.findMany({
       ...parseParams(req, "pagination"),
-      ...searchParam,
       include: {
         category: true,
         trainer: true,
@@ -29,7 +27,7 @@ export default makeHandler((prisma) => ({
           select: { chapters: { where: { deleted: false } } },
         },
       },
-      where: { deleted: false },
+      where: { ...(searchParam as any).where, deleted: false },
     });
 
     createResponse(res, paginationResponse(results, count));
