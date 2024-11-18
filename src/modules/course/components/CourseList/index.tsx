@@ -1,15 +1,35 @@
-import React from "react";
+import React, { useCallback, useMemo, useState } from "react";
 
-import { AlertDialog, EmptyPlaceholder, Loader } from "@/common/components";
-import { useDisclosureData } from "@/common/hooks";
+import { useRouter } from "next/router";
 
-import { useDeleteCourse, useGetCourses } from "../../actions";
-import CourseCard from "../CourseCard";
+import type { CourseStatus } from "@prisma/client";
+
+import { AlertDialog, DataTable } from "@/common/components";
+import {
+  useDataTableLifecycle,
+  useDisclosureData,
+  useServerDataTable,
+} from "@/common/hooks";
+
+import { useDeleteCourse, useGetCourses, useUpdateCourse } from "../../actions";
+import { courseColumns, COURSES } from "../../constants";
+import type { ICourse } from "../../interfaces";
 
 const CourseList = () => {
-  const { data, isLoading, isRefetching, error } = useGetCourses();
+  const { push } = useRouter();
 
-  const courses = data?.data.data || [];
+  const {
+    paginationProps,
+    perPageProps,
+    searchProps,
+    tableLifecycleProps,
+    tableParams,
+  } = useServerDataTable();
+  const { data, isLoading, isRefetching, error, refetch } = useGetCourses({
+    urlParams: `?${tableParams}`,
+  });
+
+  const courses = data?.data.data.nodes || [];
 
   const [isOpenDelete, { open: openDelete, close: closeDelete }, deleteData] =
     useDisclosureData<string>();
@@ -21,21 +41,93 @@ const CourseList = () => {
     if (deleteData) deleteCourse({ id: deleteData });
   };
 
+  const [isOpenStatus, { open: openStatus, close: closeStatus }, statusData] =
+    useDisclosureData<ICourse>();
+  const { mutate: updateCourse, isPending: isLoadingStatus } = useUpdateCourse({
+    overrideKeys: [COURSES],
+  });
+
+  const handleChangeStatus = () => {
+    const handleUpdate = (nextStatus: CourseStatus) => {
+      updateCourse(
+        { formValues: { status: nextStatus }, id: statusData?.id ?? "" },
+        {
+          onSuccess: () => {
+            closeStatus();
+          },
+        }
+      );
+    };
+
+    switch (status) {
+      case "draft":
+        handleUpdate("published");
+        break;
+      case "published":
+        handleUpdate("archive");
+        break;
+      case "archive":
+        handleUpdate("published");
+        break;
+    }
+  };
+
+  const [alertMessage, setAlertMessage] = useState("");
+  const handleSetMessage = useCallback(
+    (course: ICourse) => {
+      openStatus(course);
+      switch (course.status) {
+        case "draft":
+          setAlertMessage("Are you sure you want to publish this course?");
+          break;
+        case "published":
+          setAlertMessage("Are you sure you want to archive this course?");
+          break;
+        case "archive":
+          setAlertMessage("Are you sure you want to unarchive this course?");
+          break;
+      }
+    },
+    [openStatus]
+  );
+
+  const columns = useMemo(() => {
+    return courseColumns({
+      onDelete: openDelete,
+      onEdit: (course) => push(`/admin/courses/${course.id}/edit`),
+      onStatus: handleSetMessage,
+    });
+  }, [handleSetMessage, openDelete, push]);
+
+  useDataTableLifecycle({
+    refetcher: refetch,
+    total: data?.data.data.totalCount,
+    ...tableLifecycleProps,
+  });
+
   return (
-    <Loader isLoading={isLoading} isRefetching={isRefetching} error={error}>
-      {courses.length ? (
-        <div className="grid grid-cols-12 gap-4">
-          {courses.map((course) => {
-            return (
-              <div key={course.id} className="col-span-4">
-                <CourseCard course={course} onDelete={openDelete} />
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <EmptyPlaceholder message="No courses yet" />
-      )}
+    <>
+      <DataTable.Wrapper content="search-perpage">
+        <DataTable.PerPage {...perPageProps} />
+        <DataTable.Search {...searchProps} />
+      </DataTable.Wrapper>
+
+      <DataTable.Container paginationProps={paginationProps}>
+        <DataTable
+          data={courses}
+          columns={columns}
+          isLoading={isLoading}
+          isRefetching={isRefetching}
+          error={error}
+          elementProps={{
+            td: (cell) => {
+              return {
+                className: cell?.id.includes("status") ? "capitalize" : "",
+              };
+            },
+          }}
+        />
+      </DataTable.Container>
 
       <AlertDialog
         isOpen={isOpenDelete}
@@ -49,7 +141,20 @@ const CourseList = () => {
         onConfirm={handleDelete}
         confirmButtonProps={{ isLoading: isLoadingDelete }}
       />
-    </Loader>
+
+      <AlertDialog
+        isOpen={isOpenStatus}
+        onClose={isLoadingStatus ? () => {} : close}
+        title="Change Status"
+        message={alertMessage}
+        cancelButtonText="Cancel"
+        confirmButtonText="Confirm"
+        onCancel={isLoadingStatus ? () => {} : close}
+        onConfirm={handleChangeStatus}
+        color="primary"
+        confirmButtonProps={{ isLoading: isLoadingStatus }}
+      />
+    </>
   );
 };
 

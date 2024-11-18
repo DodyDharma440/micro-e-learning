@@ -1,4 +1,5 @@
 import { apiELearning } from "@/common/configs/api";
+import type { PaginationResponse } from "@/common/interfaces/api";
 import { get, getById, patch, post, remove } from "@/common/utils/react-query";
 
 import {
@@ -23,8 +24,11 @@ import type {
   ICourseProgressPayload,
 } from "../interfaces";
 
-export const useGetCourses = get<ICourse[]>(
-  () => apiELearning.get("/course"),
+export const useGetCourses = get<PaginationResponse<ICourse>>(
+  (args, ctx) =>
+    apiELearning.get(`/course${args?.urlParams ?? ""}`, {
+      signal: ctx?.signal,
+    }),
   [COURSES]
 );
 
