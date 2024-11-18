@@ -51,7 +51,22 @@ const handler = makeHandler((prisma) => ({
       return;
     }
 
-    await prisma.user.delete({ where: { id: user.id } });
+    const hasCourse = await prisma.course.count({ where: { trainerId: id } });
+
+    if (hasCourse) {
+      createErrResponse(
+        res,
+        "Can't delete. This user already as a trainer in some course",
+        400
+      );
+      return;
+    }
+
+    await prisma.$transaction([
+      prisma.courseForum.deleteMany({ where: { userId: id } }),
+      prisma.courseForumReply.deleteMany({ where: { userId: id } }),
+      prisma.user.delete({ where: { id: user.id } }),
+    ]);
 
     createResponse(res, "Success");
   },

@@ -140,9 +140,9 @@ const DataTable = <D extends object, V = any>({
       <Table>
         <TableHeader>
           {headerGroups.map((headerGroup) => (
-            <TableRow
+            <React.Fragment
               key={headerGroup.id}
-              {...getElementProps(elementProps?.trHead, headerGroup)}
+              // {...getElementProps(elementProps?.trHead, headerGroup)}
             >
               {headerGroup.headers.map((header) => {
                 const { sortKey, justifyHeader } = header.column.columnDef;
@@ -193,23 +193,29 @@ const DataTable = <D extends object, V = any>({
                   </TableColumn>
                 );
               })}
-            </TableRow>
+            </React.Fragment>
           ))}
         </TableHeader>
 
         <TableBody>
           {isRefetching && !isLoading ? (
             <>
-              <TableRow className="absolute bg-gray-500 bg-opacity-50 inset-0 z-20">
-                <></>
-              </TableRow>
-              <TableRow className="absolute inset-0 z-30">
+              <TableRow className="absolute bg-gray-500 bg-opacity-50 inset-0 z-30">
                 <TableCell
                   colSpan={columns.length}
-                  className="w-full flex items-center justify-center"
+                  className="w-full h-full flex items-center justify-center"
                 >
                   <Spinner />
                 </TableCell>
+                {
+                  [...Array(columns.length - 1)].map((_, i) => {
+                    return (
+                      <TableCell className="hidden" key={i}>
+                        <></>
+                      </TableCell>
+                    );
+                  }) as any
+                }
               </TableRow>
             </>
           ) : (
@@ -222,6 +228,15 @@ const DataTable = <D extends object, V = any>({
                   <Spinner />
                 </div>
               </TableCell>
+              {
+                [...Array(columns.length - 1)].map((_, i) => {
+                  return (
+                    <TableCell className="hidden" key={i}>
+                      <></>
+                    </TableCell>
+                  );
+                }) as any
+              }
             </TableRow>
           ) : error ? (
             <TableRow className="h-[300px]">
@@ -231,6 +246,15 @@ const DataTable = <D extends object, V = any>({
                   <p className="mt-2">{getErrorMessage(error)}</p>
                 </div>
               </TableCell>
+              {
+                [...Array(columns.length - 1)].map((_, i) => {
+                  return (
+                    <TableCell className="hidden" key={i}>
+                      <></>
+                    </TableCell>
+                  );
+                }) as any
+              }
             </TableRow>
           ) : [data.length, rowModels.rows.length].includes(0) ? (
             <TableRow className="h-[300px]">
@@ -240,6 +264,15 @@ const DataTable = <D extends object, V = any>({
                   <p className="mt-2">No Data</p>
                 </div>
               </TableCell>
+              {
+                [...Array(columns.length - 1)].map((_, i) => {
+                  return (
+                    <TableCell className="hidden" key={i}>
+                      <></>
+                    </TableCell>
+                  );
+                }) as any
+              }
             </TableRow>
           ) : (
             <>

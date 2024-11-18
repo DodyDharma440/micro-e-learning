@@ -7,7 +7,7 @@ import { USERS } from "../constants";
 import type { IUserPayload } from "../interfaces";
 
 export const useGetUsers = get<PaginationResponse<IUser>>(
-  () => apiELearning.get("/user-management"),
+  (args) => apiELearning.get(`/user-management${args?.urlParams ?? ""}`),
   [USERS]
 );
 

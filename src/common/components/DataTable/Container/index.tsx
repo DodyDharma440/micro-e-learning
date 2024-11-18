@@ -1,7 +1,5 @@
 import React from "react";
 
-import { Divider } from "@nextui-org/react";
-
 import type { DataTablePaginationProps } from "../Pagination";
 import DataTablePagination from "../Pagination";
 
@@ -21,7 +19,6 @@ const DataTableContainer: React.FC<DataTableContainerProps> = ({
       {children}
       {paginationProps ? (
         <>
-          <Divider />
           <div className="p-4">
             <DataTablePagination {...paginationProps} />
           </div>

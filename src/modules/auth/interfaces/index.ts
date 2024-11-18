@@ -1,4 +1,5 @@
 import type { BasicData, IFileData } from "@/common/interfaces/api";
+import type { IWorkPosition } from "@/modules/user/interfaces";
 
 export type UserRole = "superadmin" | "trainer" | "user";
 
@@ -8,6 +9,7 @@ export interface IUser extends BasicData {
   password: string;
   role: UserRole;
   workPositionId: string;
+  workPosition: IWorkPosition;
   avatar: IFileData | null;
 }
 

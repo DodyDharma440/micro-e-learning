@@ -1,5 +1,5 @@
-import _DataTable from "./DataTable";
 import DataTableContainer from "./Container";
+import _DataTable from "./DataTable";
 import DataTablePagination from "./Pagination";
 import DataTableSearch from "./Search";
 

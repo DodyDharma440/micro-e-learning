@@ -1,1 +1,1 @@
-export { default as UserManagementContainer } from "./UserManagementContainer";
+export { default as UserContainer } from "./UserContainer";

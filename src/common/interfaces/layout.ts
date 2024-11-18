@@ -9,7 +9,7 @@ export interface ISidebarItem {
 
 export type SortType = "asc" | "desc" | "default";
 
-export interface TableActionArgs<T, I = number> {
+export interface TableActionArgs<T, I = string> {
   onEdit: (data: T) => void;
   onDelete: (id: I) => void;
 }

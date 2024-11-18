@@ -21,7 +21,9 @@ const DataTablePerPage: React.FC<DataTablePerPageProps> = ({
     <div className="flex items-center gap-2">
       <p className="text-sm">Show</p>
       <Select
-        label="Target User"
+        placeholder="Target User"
+        className="w-[80px]"
+        value={`${perPage}`}
         selectedKeys={[`${perPage}`]}
         onChange={(e) => onChange(Number(e.target.value))}
       >

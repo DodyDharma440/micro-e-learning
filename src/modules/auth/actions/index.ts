@@ -7,7 +7,7 @@ import type { ILoginInput, IUser, UserRole } from "../interfaces";
 export const useLogin = post<{ token: string; role: UserRole }, ILoginInput>(
   ({ formValues }) => apiELearning.post("/auth/login", formValues),
   [],
-  { successMessage: "Berhasil login" }
+  { successMessage: "Login success" }
 );
 
 export const useGetProfile = get<IUser>(

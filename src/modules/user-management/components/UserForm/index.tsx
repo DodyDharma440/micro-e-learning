@@ -18,7 +18,7 @@ import {
 import type { IUser } from "@/modules/auth/interfaces";
 import { useGetWorkPositions } from "@/modules/user/actions";
 
-import { useCreateUser } from "../../actions";
+import { useCreateUser, useUpdateUser } from "../../actions";
 import type { IUserPayload } from "../../interfaces";
 
 type InputTogglerProps = {
@@ -59,7 +59,7 @@ const UserForm: React.FC<UserFormProps> = ({ isOpen, onClose, editValue }) => {
   const { mutate: createUser, isPending: isLoadingCreate } = useCreateUser({
     onSuccess: onClose,
   });
-  const { mutate: updateUser, isPending: isLoadingUpdate } = useCreateUser({
+  const { mutate: updateUser, isPending: isLoadingUpdate } = useUpdateUser({
     onSuccess: onClose,
   });
 
@@ -89,9 +89,7 @@ const UserForm: React.FC<UserFormProps> = ({ isOpen, onClose, editValue }) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { confirmPassword, password, ...formValues } = values;
     if (editValue) {
-      updateUser({
-        formValues,
-      });
+      updateUser({ formValues, id: editValue.id });
     } else {
       createUser({ formValues: { ...formValues, password } });
     }
@@ -99,15 +97,25 @@ const UserForm: React.FC<UserFormProps> = ({ isOpen, onClose, editValue }) => {
 
   useEffect(() => {
     if (isOpen) {
-      reset({
-        name: "",
-        username: "",
-        password: "",
-        role: "user",
-        workPositionId: "",
-      });
+      if (editValue) {
+        const { name, username, role, workPositionId } = editValue;
+        reset({
+          name,
+          username,
+          role,
+          workPositionId,
+        });
+      } else {
+        reset({
+          name: "",
+          username: "",
+          password: "",
+          role: "user",
+          workPositionId: "",
+        });
+      }
     }
-  }, [isOpen, reset]);
+  }, [editValue, isOpen, reset]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -116,22 +124,42 @@ const UserForm: React.FC<UserFormProps> = ({ isOpen, onClose, editValue }) => {
           <ModalHeader>{editValue ? "Edit" : "Add"} User</ModalHeader>
           <ModalBody>
             <div className="flex flex-col gap-4">
-              <Input
-                label="Full Name"
-                errorMessage={errors.name?.message}
-                isInvalid={Boolean(errors.name?.message)}
-                {...register("name", {
+              <Controller
+                control={control}
+                name="name"
+                rules={{
                   required: "Name should not be empty",
-                })}
+                }}
+                render={({ field }) => {
+                  return (
+                    <Input
+                      label="Full Name"
+                      isInvalid={Boolean(errors.name?.message)}
+                      errorMessage={errors.name?.message}
+                      {...field}
+                      onValueChange={field.onChange}
+                    />
+                  );
+                }}
               />
-              <Input
-                label="Username"
-                errorMessage={errors.username?.message}
-                isInvalid={Boolean(errors.username?.message)}
-                autoComplete="off"
-                {...register("username", {
+              <Controller
+                control={control}
+                name="username"
+                rules={{
                   required: "Username should not be empty",
-                })}
+                }}
+                render={({ field }) => {
+                  return (
+                    <Input
+                      label="Username"
+                      autoComplete="off"
+                      isInvalid={Boolean(errors.username?.message)}
+                      errorMessage={errors.username?.message}
+                      {...field}
+                      onValueChange={field.onChange}
+                    />
+                  );
+                }}
               />
 
               <Controller
@@ -183,46 +211,50 @@ const UserForm: React.FC<UserFormProps> = ({ isOpen, onClose, editValue }) => {
                 }}
               />
 
-              <Input
-                label="New password"
-                description="Password can't be revealed next time after the user created. Make sure backup the password."
-                type={isShowPw ? "text" : "password"}
-                isInvalid={Boolean(errors.password?.message)}
-                errorMessage={errors.password?.message}
-                autoComplete="new-password"
-                {...register("password", {
-                  required: "Password should not be empty",
-                  minLength: {
-                    value: 8,
-                    message: "Password must be at least 8 characters",
-                  },
-                })}
-                endContent={
-                  <InputToggler isShow={isShowPw} onToggle={togglePw} />
-                }
-              />
-
-              <Input
-                label="Confirm new password"
-                type={isShowConfirmPw ? "text" : "password"}
-                isInvalid={Boolean(errors.confirmPassword?.message)}
-                autoComplete="new-password"
-                errorMessage={errors.confirmPassword?.message}
-                {...register("confirmPassword", {
-                  required: "Confirm password should not be empty",
-                  validate: (val) => {
-                    if (val !== passwordVal) {
-                      return "Password does not match";
+              {!editValue ? (
+                <>
+                  <Input
+                    label="New password"
+                    description="Password can't be revealed next time after the user created. Make sure backup the password."
+                    type={isShowPw ? "text" : "password"}
+                    isInvalid={Boolean(errors.password?.message)}
+                    errorMessage={errors.password?.message}
+                    autoComplete="new-password"
+                    {...register("password", {
+                      required: "Password should not be empty",
+                      minLength: {
+                        value: 8,
+                        message: "Password must be at least 8 characters",
+                      },
+                    })}
+                    endContent={
+                      <InputToggler isShow={isShowPw} onToggle={togglePw} />
                     }
-                  },
-                })}
-                endContent={
-                  <InputToggler
-                    isShow={isShowConfirmPw}
-                    onToggle={toggleConfirmPw}
                   />
-                }
-              />
+
+                  <Input
+                    label="Confirm new password"
+                    type={isShowConfirmPw ? "text" : "password"}
+                    isInvalid={Boolean(errors.confirmPassword?.message)}
+                    autoComplete="new-password"
+                    errorMessage={errors.confirmPassword?.message}
+                    {...register("confirmPassword", {
+                      required: "Confirm password should not be empty",
+                      validate: (val) => {
+                        if (val !== passwordVal) {
+                          return "Password does not match";
+                        }
+                      },
+                    })}
+                    endContent={
+                      <InputToggler
+                        isShow={isShowConfirmPw}
+                        onToggle={toggleConfirmPw}
+                      />
+                    }
+                  />
+                </>
+              ) : null}
             </div>
           </ModalBody>
           <ModalFooter>
