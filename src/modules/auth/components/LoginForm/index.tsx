@@ -64,7 +64,7 @@ const LoginForm = () => {
           isInvalid={Boolean(errors.username?.message)}
           errorMessage={errors.username?.message}
           {...register("username", {
-            required: "Username harus diisi",
+            required: "Username should not be empty",
           })}
         />
         <Input
@@ -73,7 +73,7 @@ const LoginForm = () => {
           isInvalid={Boolean(errors.password?.message)}
           errorMessage={errors.password?.message}
           {...register("password", {
-            required: "Password harus diisi",
+            required: "Password should not be empty",
           })}
           endContent={
             <button

@@ -1,7 +1,7 @@
 import type { IUser } from "@/modules/auth/interfaces";
 
 export interface IUserPayload
-  extends Pick<
-    IUser,
-    "name" | "password" | "role" | "username" | "workPositionId"
-  > {}
+  extends Pick<IUser, "name" | "role" | "username" | "workPositionId"> {
+  password?: string;
+  confirmPassword?: string;
+}
