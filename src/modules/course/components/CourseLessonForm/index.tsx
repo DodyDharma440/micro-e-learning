@@ -4,6 +4,7 @@ import { HiPlus } from "react-icons/hi";
 import { Button } from "@nextui-org/react";
 
 import { AlertDialog, Content, EmptyPlaceholder } from "@/common/components";
+import { useUserContext } from "@/common/contexts";
 import { useDisclosureData } from "@/common/hooks";
 
 import { useDeleteChapter } from "../../actions";
@@ -17,6 +18,7 @@ type CourseLessonFormProps = {
 };
 
 const CourseLessonForm: React.FC<CourseLessonFormProps> = ({ course }) => {
+  const { userData } = useUserContext();
   const [chapters, setChapters] = useState<ICourseChapter[]>([]);
 
   const [isOpen, { open, close }, chapterData] =
@@ -45,7 +47,9 @@ const CourseLessonForm: React.FC<CourseLessonFormProps> = ({ course }) => {
     <Content
       title={`Course Lessons - ${course?.name}`}
       withBackButton
-      backHref="/admin/courses"
+      backHref={`/${
+        userData?.role === "trainer" ? "trainer" : "admin"
+      }/courses`}
       action={
         <Button
           startContent={<HiPlus />}

@@ -22,7 +22,7 @@ const CoursesPage = () => {
         action={
           <Button
             as={Link}
-            href="/admin/courses/create"
+            href="/trainer/courses/create"
             startContent={<HiPlus />}
             color="primary"
           >
@@ -36,4 +36,4 @@ const CoursesPage = () => {
   );
 };
 
-export default withAuth(CoursesPage, "superadmin");
+export default withAuth(CoursesPage, "trainer");

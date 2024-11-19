@@ -2,7 +2,7 @@ import React from "react";
 
 import { useRouter } from "next/router";
 
-import { adminPaths, userPaths } from "@/common/constants/layout";
+import { adminPaths, trainerPaths, userPaths } from "@/common/constants/layout";
 
 import AdminLayout from "../AdminLayout";
 import UserLayout from "../UserLayout";
@@ -19,6 +19,8 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
       {adminPaths.includes(pathname) ? (
         <AdminLayout>{children}</AdminLayout>
       ) : userPaths.includes(pathname) ? (
+        <UserLayout>{children}</UserLayout>
+      ) : trainerPaths.includes(pathname) ? (
         <UserLayout>{children}</UserLayout>
       ) : (
         children

@@ -46,3 +46,14 @@ export const userPaths = [
   "/user/courses/[slug]/forums/[id]",
   "/user/edit-profile",
 ];
+
+export const trainerPaths = [
+  "/trainer/courses",
+  "/trainer/courses/create",
+  "/trainer/courses/[id]/detail",
+  "/trainer/courses/[id]/lessons",
+  "/trainer/courses/[id]/edit",
+  "/trainer/courses/[id]/forum",
+  "/trainer/courses/[id]/forum/[question_id]",
+  "/trainer/edit-profile",
+];

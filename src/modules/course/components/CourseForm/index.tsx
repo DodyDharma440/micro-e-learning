@@ -18,6 +18,7 @@ import {
 
 import { useUploadImage } from "@/common/actions/imagekit";
 import { Content, ImageUploader } from "@/common/components";
+import { useUserContext } from "@/common/contexts";
 import { useGetTrainers, useGetWorkPositions } from "@/modules/user/actions";
 
 import { useCreateCourse, useUpdateCourse } from "../../actions";
@@ -30,6 +31,8 @@ type CourseFormProps = {
 
 const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
   const { push } = useRouter();
+  const { userData } = useUserContext();
+  const isTrainer = userData?.role === "trainer";
 
   const formMethods = useForm<ICourseForm>({
     defaultValues: {
@@ -45,6 +48,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
     formState: { errors },
     register,
     reset,
+    setValue,
   } = formMethods;
   const isTrailer = useWatch({ control, name: "isTrailer" });
   const thumbFile = useWatch({ control, name: "thumbnailFile" });
@@ -71,12 +75,12 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
 
   const { mutate: createCourse, isPending: isLoadingCreate } = useCreateCourse({
     onSuccess: () => {
-      push("/admin/courses");
+      push(`/${isTrainer ? "trainer" : "admin"}/courses`);
     },
   });
   const { mutate: updateCourse, isPending: isLoadingUpdate } = useUpdateCourse({
     onSuccess: () => {
-      push("/admin/courses");
+      push(`/${isTrainer ? "trainer" : "admin"}/courses`);
     },
   });
 
@@ -161,8 +165,12 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
         keypointsUi: keypoints.map((k) => ({ description: k })),
         status,
       });
+    } else {
+      if (userData?.role === "trainer") {
+        setValue("trainerId", userData.id);
+      }
     }
-  }, [course, reset]);
+  }, [course, reset, setValue, userData?.id, userData?.role]);
 
   return (
     <FormProvider {...formMethods}>
@@ -170,7 +178,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
         <Content
           title={`${course ? "Edit" : "Create"} Course`}
           withBackButton
-          backHref="/admin/courses"
+          backHref={`/${isTrainer ? "trainer" : "admin"}/courses`}
           action={
             <div className="flex items-center">
               <Button
@@ -295,31 +303,35 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
                     </div>
 
                     <div className="col-span-6">
-                      <Controller
-                        control={control}
-                        name="trainerId"
-                        rules={{
-                          required: "Trainer must be selected",
-                        }}
-                        render={({ field }) => {
-                          return (
-                            <Select
-                              label="Trainer"
-                              isInvalid={Boolean(errors.trainerId?.message)}
-                              errorMessage={errors.trainerId?.message}
-                              {...field}
-                              selectedKeys={[field.value]}
-                              isDisabled={isLoadingTrainers}
-                            >
-                              {trainerOptions.map((trainer) => (
-                                <SelectItem key={trainer.value}>
-                                  {trainer.label}
-                                </SelectItem>
-                              ))}
-                            </Select>
-                          );
-                        }}
-                      />
+                      {userData?.role === "trainer" ? (
+                        <Input label="Trainer" readOnly value={userData.name} />
+                      ) : (
+                        <Controller
+                          control={control}
+                          name="trainerId"
+                          rules={{
+                            required: "Trainer must be selected",
+                          }}
+                          render={({ field }) => {
+                            return (
+                              <Select
+                                label="Trainer"
+                                isInvalid={Boolean(errors.trainerId?.message)}
+                                errorMessage={errors.trainerId?.message}
+                                {...field}
+                                selectedKeys={[field.value]}
+                                isDisabled={isLoadingTrainers}
+                              >
+                                {trainerOptions.map((trainer) => (
+                                  <SelectItem key={trainer.value}>
+                                    {trainer.label}
+                                  </SelectItem>
+                                ))}
+                              </Select>
+                            );
+                          }}
+                        />
+                      )}
                     </div>
 
                     <div className="col-span-6">

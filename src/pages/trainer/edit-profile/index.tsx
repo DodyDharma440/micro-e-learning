@@ -20,4 +20,4 @@ const EditProfilePage = () => {
   );
 };
 
-export default withAuth(EditProfilePage, "user");
+export default withAuth(EditProfilePage, "trainer");

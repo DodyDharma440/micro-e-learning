@@ -43,7 +43,11 @@ export const courseColumns = ({
   onEdit,
   onDelete,
   onStatus,
-}: TableActionArgs<ICourse> & { onStatus: (d: ICourse) => void }) =>
+  isTrainer,
+}: TableActionArgs<ICourse> & {
+  onStatus: (d: ICourse) => void;
+  isTrainer: boolean;
+}) =>
   createTableColumns<ICourse>(({ accessor }) => [
     accessor("name", { header: "Name" }),
     accessor("thumbnailUrl", {
@@ -75,7 +79,9 @@ export const courseColumns = ({
             {original.enableForum ? (
               <Button
                 as={Link}
-                href={`/admin/courses/${original.id}/forum`}
+                href={`/${isTrainer ? "trainer" : "admin"}/courses/${
+                  original.id
+                }/forum`}
                 color="secondary"
                 size="sm"
               >
@@ -97,7 +103,9 @@ export const courseColumns = ({
           <div className="mx-auto">
             <Button
               as={Link}
-              href={`/admin/courses/${original.id}/lessons`}
+              href={`/${isTrainer ? "trainer" : "admin"}/courses/${
+                original.id
+              }/lessons`}
               size="sm"
               color="primary"
             >

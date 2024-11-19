@@ -21,9 +21,10 @@ import { useUserContext } from "@/common/contexts";
 
 type UserLayoutProps = {
   children: React.ReactNode;
+  isTrainer?: boolean;
 };
 
-const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
+const UserLayout: React.FC<UserLayoutProps> = ({ children, isTrainer }) => {
   const { push } = useRouter();
   const { theme, setTheme } = useTheme();
   const { userData } = useUserContext();
@@ -41,7 +42,7 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
           }}
         >
           <NavbarBrand>
-            <Link href="/user/courses">
+            <Link href={isTrainer ? "/trainer/course" : "/user/courses"}>
               <p className="font-bold text-inherit">E-LEARNING</p>
             </Link>
           </NavbarBrand>
@@ -75,11 +76,17 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
               <DropdownMenu aria-label="Profile Actions" variant="flat">
                 <DropdownItem key="profile" className="h-14 gap-2">
                   <p className="font-semibold">Signed in as</p>
-                  <p className="font-semibold">{userData?.username}</p>
+                  <p className="font-semibold">{userData?.name}</p>
                 </DropdownItem>
                 <DropdownItem
                   key="settings"
-                  onClick={() => push("/user/edit-profile")}
+                  onClick={() =>
+                    push(
+                      userData?.role === "trainer"
+                        ? "/trainer/edit-profile"
+                        : "/user/edit-profile"
+                    )
+                  }
                 >
                   Edit Profile
                 </DropdownItem>

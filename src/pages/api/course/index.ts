@@ -4,18 +4,25 @@ import {
   parseParams,
 } from "@/common/utils/api-response";
 import { makeHandler } from "@/common/utils/api-route";
+import { decodeToken } from "@/common/utils/auth";
 import { randStr } from "@/common/utils/helper";
 import type { ICoursePayload } from "@/modules/course/interfaces";
 
 export default makeHandler((prisma) => ({
   GET: async (req, res) => {
+    const userData = decodeToken(req);
+
     const searchFields = ["name"];
     const searchParam = parseParams(req, "search", {
       search: { fields: searchFields },
     });
 
     const count = await prisma.course.count({
-      where: { ...(searchParam as any).where, deleted: false },
+      where: {
+        ...(searchParam as any).where,
+        deleted: false,
+        ...(userData?.role === "trainer" ? { trainerId: userData.id } : {}),
+      },
     });
 
     const results = await prisma.course.findMany({
@@ -27,7 +34,11 @@ export default makeHandler((prisma) => ({
           select: { chapters: { where: { deleted: false } } },
         },
       },
-      where: { ...(searchParam as any).where, deleted: false },
+      where: {
+        ...(searchParam as any).where,
+        deleted: false,
+        ...(userData?.role === "trainer" ? { trainerId: userData.id } : {}),
+      },
     });
 
     createResponse(res, paginationResponse(results, count));

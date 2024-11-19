@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import type { CourseStatus } from "@prisma/client";
 
 import { AlertDialog, DataTable } from "@/common/components";
+import { useUserContext } from "@/common/contexts";
 import {
   useDataTableLifecycle,
   useDisclosureData,
@@ -17,6 +18,7 @@ import type { ICourse } from "../../interfaces";
 
 const CourseList = () => {
   const { push } = useRouter();
+  const { userData } = useUserContext();
 
   const {
     paginationProps,
@@ -94,10 +96,16 @@ const CourseList = () => {
   const columns = useMemo(() => {
     return courseColumns({
       onDelete: openDelete,
-      onEdit: (course) => push(`/admin/courses/${course.id}/edit`),
+      onEdit: (course) =>
+        push(
+          `/${userData?.role === "trainer" ? "trainer" : "admin"}/courses/${
+            course.id
+          }/edit`
+        ),
       onStatus: handleSetMessage,
+      isTrainer: userData?.role === "trainer",
     });
-  }, [handleSetMessage, openDelete, push]);
+  }, [handleSetMessage, openDelete, push, userData?.role]);
 
   useDataTableLifecycle({
     refetcher: refetch,
