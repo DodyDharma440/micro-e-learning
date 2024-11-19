@@ -59,7 +59,7 @@ const CourseList = () => {
       );
     };
 
-    switch (status) {
+    switch (statusData?.status) {
       case "draft":
         handleUpdate("published");
         break;
@@ -144,12 +144,12 @@ const CourseList = () => {
 
       <AlertDialog
         isOpen={isOpenStatus}
-        onClose={isLoadingStatus ? () => {} : close}
+        onClose={isLoadingStatus ? () => {} : closeStatus}
         title="Change Status"
         message={alertMessage}
         cancelButtonText="Cancel"
         confirmButtonText="Confirm"
-        onCancel={isLoadingStatus ? () => {} : close}
+        onCancel={isLoadingStatus ? () => {} : closeStatus}
         onConfirm={handleChangeStatus}
         color="primary"
         confirmButtonProps={{ isLoading: isLoadingStatus }}

@@ -73,11 +73,14 @@ export const courseColumns = ({
         return (
           <div className="mx-auto">
             {original.enableForum ? (
-              <Link href={`/admin/courses/${original.id}/forum`}>
-                <Button color="secondary" size="sm">
-                  View
-                </Button>
-              </Link>
+              <Button
+                as={Link}
+                href={`/admin/courses/${original.id}/forum`}
+                color="secondary"
+                size="sm"
+              >
+                View
+              </Button>
             ) : (
               "Disabled"
             )}
@@ -92,11 +95,14 @@ export const courseColumns = ({
       cell: function Cell({ row: { original } }) {
         return (
           <div className="mx-auto">
-            <Link href={`/admin/courses/${original.id}/lessons`}>
-              <Button size="sm" color="primary">
-                View
-              </Button>
-            </Link>
+            <Button
+              as={Link}
+              href={`/admin/courses/${original.id}/lessons`}
+              size="sm"
+              color="primary"
+            >
+              View
+            </Button>
           </div>
         );
       },
