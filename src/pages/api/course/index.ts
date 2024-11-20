@@ -44,6 +44,7 @@ export default makeHandler((prisma) => ({
     createResponse(res, paginationResponse(results, count));
   },
   POST: async (req, res) => {
+    const userData = decodeToken(req);
     const payload = req.body as ICoursePayload;
     let slug = payload.name.toLowerCase().split(" ").join("-");
     const existedCourse = await prisma.course.findUnique({ where: { slug } });
@@ -53,7 +54,11 @@ export default makeHandler((prisma) => ({
     }
 
     const createdCourse = await prisma.course.create({
-      data: { ...payload, slug },
+      data: {
+        ...payload,
+        createdBy: userData?.id,
+        slug,
+      },
     });
 
     return createResponse(res, createdCourse, 201);

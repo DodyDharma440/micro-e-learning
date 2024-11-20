@@ -18,12 +18,20 @@ export default makeHandler((prisma) => ({
     const userData = decodeToken(req);
     const body = req.body as ICourseForumReplyPayload;
 
-    const createdQuestion = await prisma.courseForumReply.create({
-      data: {
-        userId: userData?.id ?? "",
-        ...body,
-      },
-    });
+    const [createdQuestion] = await prisma.$transaction([
+      prisma.courseForumReply.create({
+        data: {
+          userId: userData?.id ?? "",
+          ...body,
+        },
+      }),
+      prisma.courseForumReply.update({
+        where: { id: body.parentId },
+        data: {
+          updatedAt: new Date(),
+        },
+      }),
+    ]);
 
     return createResponse(res, createdQuestion, 201);
   },
