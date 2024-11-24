@@ -9,7 +9,7 @@ import {
   LATEST_COURSES,
   RECENT_USERS,
 } from "../constants";
-import type { IDashboardStats } from "../interfaces";
+import type { ICourseDistribution, IDashboardStats } from "../interfaces";
 
 export const useGetStats = get<IDashboardStats>(
   () => apiELearning.get("/dashboard/stats"),
@@ -26,7 +26,7 @@ export const useGetRecentUsers = get<IUser[]>(
   [RECENT_USERS]
 );
 
-export const useGetCourseDistrib = get<any>(
+export const useGetCourseDistrib = get<ICourseDistribution>(
   () => apiELearning.get("/dashboard/course-distribution"),
   [COURSE_DISTRIBUTION]
 );

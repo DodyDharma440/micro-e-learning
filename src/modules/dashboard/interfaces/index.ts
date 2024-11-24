@@ -4,3 +4,6 @@ export interface IDashboardStats {
   draftCourse: number;
   activeForums: number;
 }
+
+export interface ICourseDistribution
+  extends Record<string, { name: string; count: number }> {}
