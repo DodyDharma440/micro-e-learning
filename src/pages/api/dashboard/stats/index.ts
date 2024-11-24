@@ -15,11 +15,16 @@ export default makeHandler((prisma) => ({
     const draftCourse = await prisma.course.count({
       where: { status: "draft", deleted: false, createdBy: userData?.id },
     });
-    const activeForums = await prisma.courseForum.count({
+    const activeForums = await prisma.course.count({
       where: {
-        course: { status: "published", deleted: false },
-        updatedAt: {
-          gte: dayjs().add(-1, "month").toDate(),
+        status: "published",
+        deleted: false,
+        CourseForum: {
+          some: {
+            updatedAt: {
+              gte: dayjs().add(-1, "month").toDate(),
+            },
+          },
         },
       },
     });

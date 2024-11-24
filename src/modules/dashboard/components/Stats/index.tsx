@@ -29,7 +29,7 @@ const Stats = () => {
             value={compactNumber(statsData?.activeCourse)}
             action={
               <Link href="/admin/courses/create" className="w-fit ml-auto">
-                <p className="text-sm text-gray-200 font-bold">Add course</p>
+                <p className="text-sm text-gray-200 font-bold">+ Add course</p>
               </Link>
             }
           />
@@ -42,7 +42,7 @@ const Stats = () => {
             value={compactNumber(statsData?.totalUsers)}
             action={
               <Link href="/admin/user-management" className="w-fit ml-auto">
-                <p className="text-sm text-gray-200 font-bold">Add user</p>
+                <p className="text-sm text-gray-200 font-bold">+ Add user</p>
               </Link>
             }
           />

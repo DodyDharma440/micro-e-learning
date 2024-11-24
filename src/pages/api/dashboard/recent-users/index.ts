@@ -7,7 +7,7 @@ export default makeHandler((prisma) => ({
       orderBy: {
         createdAt: "desc",
       },
-      take: 20,
+      take: 11,
     });
 
     return createResponse(res, users);

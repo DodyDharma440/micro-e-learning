@@ -8,7 +8,10 @@ export default makeHandler((prisma) => ({
       orderBy: {
         createdAt: "desc",
       },
-      take: 20,
+      include: {
+        category: true,
+      },
+      take: 11,
     });
 
     return createResponse(res, courses);
