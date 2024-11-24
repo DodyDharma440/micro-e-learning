@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  HiAcademicCap,
-  HiArchiveBox,
-  HiChatBubbleLeft,
-  HiUserGroup,
-} from "react-icons/hi2";
+import { HiAcademicCap, HiArchiveBox, HiChatBubbleLeft } from "react-icons/hi2";
 
 import Link from "next/link";
 
@@ -21,33 +16,20 @@ const Stats = () => {
   return (
     <Loader isLoading={isLoading} error={error} placeholderHeight="100px">
       <div className="grid grid-cols-12 gap-5">
-        <div className="col-span-3">
+        <div className="col-span-4">
           <StatCard
-            color="blue"
+            color="green"
             label="Active Course"
             icon={HiAcademicCap}
             value={compactNumber(statsData?.activeCourse)}
             action={
-              <Link href="/admin/courses/create" className="w-fit ml-auto">
+              <Link href="/trainer/courses/create" className="w-fit ml-auto">
                 <p className="text-sm text-gray-200 font-bold">+ Add course</p>
               </Link>
             }
           />
         </div>
-        <div className="col-span-3">
-          <StatCard
-            color="green"
-            label="Total Users"
-            icon={HiUserGroup}
-            value={compactNumber(statsData?.totalUsers)}
-            action={
-              <Link href="/admin/user-management" className="w-fit ml-auto">
-                <p className="text-sm text-gray-200 font-bold">+ Add user</p>
-              </Link>
-            }
-          />
-        </div>
-        <div className="col-span-3">
+        <div className="col-span-4">
           <StatCard
             color="yellow"
             label="Draft Course"
@@ -55,7 +37,7 @@ const Stats = () => {
             value={compactNumber(statsData?.draftCourse)}
           />
         </div>
-        <div className="col-span-3">
+        <div className="col-span-4">
           <StatCard
             color="purple"
             label="Active Forums"
