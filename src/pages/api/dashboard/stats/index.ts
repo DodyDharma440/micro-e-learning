@@ -25,12 +25,10 @@ export default makeHandler((prisma) => ({
     });
 
     return createResponse(res, {
-      stats: {
-        totalUsers,
-        activeCourse,
-        draftCourse,
-        activeForums,
-      },
+      totalUsers,
+      activeCourse,
+      draftCourse,
+      activeForums,
     });
   },
 }));
