@@ -6,12 +6,16 @@ import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 
+import { useDisclosure } from "@mantine/hooks";
 import { Button } from "@nextui-org/react";
 
 import { Content, Loader } from "@/common/components";
 import { withAuth } from "@/common/hocs";
 import { useGetCourseBySlug } from "@/modules/course/actions";
-import { UserCourseDetail } from "@/modules/course/components";
+import {
+  ModalCourseDetail,
+  UserCourseDetail,
+} from "@/modules/course/components";
 import { CourseDetailProvider } from "@/modules/course/contexts";
 
 type UserCourseDetailPageProps = {
@@ -24,6 +28,7 @@ const UserCourseDetailPage: NextPage<UserCourseDetailPageProps> = ({
   const { data, isLoading, isRefetching, error } = useGetCourseBySlug({
     id: courseSlug,
   });
+  const [isOpen, { open, close }] = useDisclosure();
 
   return (
     <>
@@ -41,6 +46,7 @@ const UserCourseDetailPage: NextPage<UserCourseDetailPageProps> = ({
                 <Button
                   color="primary"
                   startContent={<HiOutlineInformationCircle />}
+                  onClick={open}
                 >
                   Detail
                 </Button>
@@ -59,6 +65,8 @@ const UserCourseDetailPage: NextPage<UserCourseDetailPageProps> = ({
           >
             <UserCourseDetail />
           </Content>
+
+          <ModalCourseDetail isOpen={isOpen} onClose={close} />
         </CourseDetailProvider>
       </Loader>
     </>

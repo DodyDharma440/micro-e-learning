@@ -14,6 +14,8 @@ export default makeHandler((prisma) => ({
     const course = await prisma.course.findUnique({
       where: { slug, status: "published" },
       include: {
+        trainer: true,
+        category: true,
         chapters: {
           where: { deleted: false },
           include: {

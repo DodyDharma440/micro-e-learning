@@ -4,5 +4,6 @@ export { default as CourseLessonForm } from "./CourseLessonForm";
 export { default as CourseList } from "./CourseList";
 export { default as ForumDetail } from "./ForumDetail";
 export { default as ForumItem } from "./ForumItem";
+export { default as ModalCourseDetail } from "./ModalCourseDetail";
 export { default as UserCourseDetail } from "./UserCourseDetail";
 export { default as UserCourses } from "./UserCourses";
