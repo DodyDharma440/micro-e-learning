@@ -25,7 +25,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const userQuery = useGetProfile(
     {},
-    { enabled: isLoggedIn && pathname !== "/logout" }
+    { enabled: isLoggedIn && !["/", "/logout"].includes(pathname) }
   );
   const { data, isLoading, error } = userQuery;
 
