@@ -57,7 +57,7 @@ const LoginForm = () => {
       className="w-full  max-w-md px-10 mx-auto"
       onSubmit={handleSubmit(submitHandler)}
     >
-      <h1 className="text-2xl font-bold mb-4">Selamat Datang</h1>
+      <h1 className="text-2xl font-bold mb-4">Welcome to E-Learning</h1>
       <div className="flex flex-col gap-4 items-center justify-center w-full">
         <Input
           label="Username"
@@ -104,7 +104,7 @@ const LoginForm = () => {
                   color="default"
                   size="sm"
                 >
-                  Ingat saya
+                  Remember me
                 </Checkbox>
               );
             }}

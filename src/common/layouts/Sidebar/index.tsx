@@ -19,10 +19,12 @@ const Sidebar = () => {
   return (
     <div className="fixed top-0 bottom-0 py-8">
       <Card className="w-[280px] h-full p-8 bg-opacity-20 backdrop-blur-md">
-        <div className="flex items-center gap-4">
-          <div className="w-10 h-10 rounded-md bg-white bg-opacity-30"></div>
-          <h1 className="font-semibold text-xl">E-Learning</h1>
-        </div>
+        <Link href="/admin/dashboard">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-md bg-black/10 dark:bg-white/30"></div>
+            <h1 className="font-semibold text-xl">E-Learning</h1>
+          </div>
+        </Link>
 
         <Divider className="my-5" />
 

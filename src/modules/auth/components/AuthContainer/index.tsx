@@ -36,7 +36,7 @@ const AuthContainer = () => {
           <LoginForm />
         </div>
       </div>
-      <div className="col-span-7 bg-gray-200 dark:bg-black"></div>
+      <div className="col-span-7 bg-gray-200 dark:bg-neutral-900"></div>
     </div>
   );
 };
