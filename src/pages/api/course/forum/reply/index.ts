@@ -25,7 +25,7 @@ export default makeHandler((prisma) => ({
           ...body,
         },
       }),
-      prisma.courseForumReply.update({
+      prisma.courseForum.update({
         where: { id: body.parentId },
         data: {
           updatedAt: new Date(),
