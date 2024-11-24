@@ -48,7 +48,11 @@ export default makeHandler((prisma) => ({
       return createErrResponse(res, "Course not found", 404);
     }
 
-    if (user?.role === "user" && course?.categoryId !== user.workPositionId) {
+    if (
+      user?.role === "user" &&
+      course.categoryId &&
+      course?.categoryId !== user.workPositionId
+    ) {
       return createErrResponse(
         res,
         "You are not allowed to access this course",

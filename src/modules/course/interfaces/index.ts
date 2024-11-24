@@ -32,8 +32,8 @@ export interface ICourse extends BasicData {
   hideTrailer: boolean;
   trainerId: string;
   trainer: IUser;
-  categoryId: string;
-  category: IWorkPosition;
+  categoryId: string | null;
+  category: IWorkPosition | null;
   keypoints: string[];
   enableForum: boolean;
   chapters: ICourseChapter[];

@@ -101,6 +101,10 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
       formValues.hideTrailer = !isTrailer;
       formValues.enableForum = enableForumUi === "yes";
 
+      if (values.categoryId === "general") {
+        formValues.categoryId = null;
+      }
+
       const makeUploadFd = () => {
         const uploadFd = new FormData();
         if (thumbnailFile) uploadFd.append("file", thumbnailFile);
@@ -156,7 +160,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
       } = course;
       reset({
         name,
-        categoryId,
+        categoryId: categoryId ?? "general",
         trainerId,
         isTrailer: !hideTrailer,
         trailerUrl,
@@ -288,10 +292,14 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
                               isInvalid={Boolean(errors.categoryId?.message)}
                               errorMessage={errors.categoryId?.message}
                               isDisabled={isLoadingPositions}
-                              selectedKeys={[field.value]}
+                              selectedKeys={[field.value ?? ""]}
                               {...field}
+                              value={field.value ?? ""}
                             >
-                              {positionOptions.map((pos) => (
+                              {[
+                                { label: "General", value: "general" },
+                                ...positionOptions,
+                              ].map((pos) => (
                                 <SelectItem key={pos.value}>
                                   {pos.label}
                                 </SelectItem>

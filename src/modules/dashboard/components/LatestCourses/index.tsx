@@ -50,7 +50,7 @@ const LatestCourses = () => {
                       {course.name}
                     </p>
                     <p className="text-xs text-gray-400 dark:text-gray-400 line-clamp-1">
-                      Created for {course.category.name}
+                      Created for {course.category?.name ?? "all"}
                     </p>
                   </div>
                   <div>

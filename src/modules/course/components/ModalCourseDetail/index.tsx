@@ -38,7 +38,9 @@ const ModalCourseDetail: React.FC<ModalCourseDetailProps> = ({
           <hr className="dark:border-neutral-800" />
           <div>
             <h4 className="font-bold mb-3">Created for</h4>
-            <p className="whitespace-pre-wrap">{course?.category.name}</p>
+            <p className="whitespace-pre-wrap">
+              {course?.category?.name ?? "all"}
+            </p>
           </div>
           <hr className="dark:border-neutral-800" />
           <div>

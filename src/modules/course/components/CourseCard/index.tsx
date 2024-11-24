@@ -97,7 +97,8 @@ const CourseCard: React.FC<CourseCardProps> = ({
         prev += curr._count?.lessons ?? 0;
         return prev;
       }, 0);
-      const result = (100 * (course?._count.CourseProgress ?? 0)) / totalLesson;
+      const result =
+        (100 * (course?._count.CourseProgress ?? 0)) / (totalLesson || 1);
       return result.toFixed(0);
     }
     return "0";

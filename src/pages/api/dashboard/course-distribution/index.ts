@@ -15,8 +15,8 @@ export default makeHandler((prisma) => ({
     const categories = await prisma.workPosition.findMany();
     const data = grouped.reduce((prev: ICourseDistribution, curr) => {
       const category = categories.find((c) => c.id === curr.categoryId);
-      prev[curr.categoryId] = {
-        name: category?.name ?? "",
+      prev[curr.categoryId ?? "all"] = {
+        name: category?.name ?? "General",
         count: curr._count._all,
       };
       return prev;

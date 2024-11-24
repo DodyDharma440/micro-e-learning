@@ -14,7 +14,8 @@ const UserCourseDetail = () => {
       return prev;
     }, 0);
 
-    const result = (100 * (course?._count.CourseProgress ?? 0)) / totalLesson;
+    const result =
+      (100 * (course?._count.CourseProgress ?? 0)) / (totalLesson || 1);
     return result.toFixed(0);
   }, [course?._count.CourseProgress, course?.chapters]);
 

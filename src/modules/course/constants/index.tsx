@@ -67,8 +67,9 @@ export const courseColumns = ({
       },
     }),
     accessor("status", { header: "Status" }),
-    accessor("category.name", {
+    accessor((r) => r.category?.name ?? "General", {
       header: "Category",
+      id: "category",
     }),
     accessor("enableForum", {
       header: "Forums",
@@ -131,7 +132,10 @@ export const courseColumns = ({
             >
               <HiOutlineTrash />
             </Button>
-            <Button color="primary" onClick={() => onStatus(row.original)}>
+            <Button
+              color={row.original.status === "draft" ? "success" : "primary"}
+              onClick={() => onStatus(row.original)}
+            >
               {statusActionLabel[row.original.status]}
             </Button>
           </div>

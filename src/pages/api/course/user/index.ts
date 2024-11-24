@@ -33,9 +33,11 @@ export default makeHandler((prisma) => ({
         },
       },
       where: {
-        AND: [
-          { deleted: false },
+        deleted: false,
+        status: "published",
+        OR: [
           { categoryId: user?.workPositionId, status: "published" },
+          { categoryId: { equals: null } },
         ],
       },
     });

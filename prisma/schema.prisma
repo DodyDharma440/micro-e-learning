@@ -62,8 +62,8 @@ model Course {
   hideTrailer          Boolean
   trainerId            String
   trainer              User                   @relation(fields: [trainerId], references: [id])
-  categoryId           String
-  category             WorkPosition           @relation(fields: [categoryId], references: [id])
+  categoryId           String?
+  category             WorkPosition?          @relation(fields: [categoryId], references: [id])
   keypoints            Json?
   enableForum          Boolean
   chapters             CourseChapter[]
