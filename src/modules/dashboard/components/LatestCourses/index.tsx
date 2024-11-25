@@ -38,12 +38,14 @@ const LatestCourses = () => {
                   key={course.id}
                 >
                   <div className="w-[80px] h-[50px] bg-black/5 rounded-lg relative overflow-hidden">
-                    <Image
-                      src={course.thumbnailUrl}
-                      alt="thumb"
-                      fill
-                      className="object-cover"
-                    />
+                    {course.thumbnail?.url ? (
+                      <Image
+                        src={course.thumbnail?.url}
+                        alt="thumb"
+                        fill
+                        className="object-cover"
+                      />
+                    ) : null}
                   </div>
                   <div className="flex-1">
                     <p className="mb-1 font-semibold line-clamp-1">

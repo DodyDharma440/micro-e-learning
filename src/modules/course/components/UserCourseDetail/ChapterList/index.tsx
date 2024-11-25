@@ -22,7 +22,7 @@ const ChapterList = () => {
     const chapter = course?.chapters.find((c) =>
       c.lessons.some((l) => l.id === activeLesson)
     );
-    setActiveChapter(new Set([chapter?.id ?? ""]));
+    setActiveChapter((prev) => new Set([...prev, chapter?.id ?? ""]));
   }, [activeLesson, course?.chapters]);
 
   return (

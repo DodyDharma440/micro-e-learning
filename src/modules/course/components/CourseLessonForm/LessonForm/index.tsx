@@ -72,7 +72,7 @@ const LessonForm: React.FC<LessonFormProps> = ({
     },
   });
   const lessonType = useWatch({ control, name: "lessonType" });
-  const contentUrl = useWatch({ control, name: "contentUrl" });
+  const content = useWatch({ control, name: "content" });
 
   const { mutate: createLesson, isPending: isLoadingCreate } =
     useCreateLesson();
@@ -89,7 +89,7 @@ const LessonForm: React.FC<LessonFormProps> = ({
     const makeUploadFd = () => {
       const uploadFd = new FormData();
       if (documentFile) uploadFd.append("file", documentFile);
-      uploadFd.append("fileName", `lesson-${values.name}-${chapter.id}`);
+      uploadFd.append("fileName", documentFile?.name ?? "File");
       return uploadFd;
     };
 
@@ -100,8 +100,12 @@ const LessonForm: React.FC<LessonFormProps> = ({
           uploadDocs(
             { formValues: uploadFd },
             {
-              onSuccess: (res) => {
-                formValues.contentUrl = res.data.url;
+              onSuccess: ({ data }) => {
+                formValues.content = {
+                  fileId: data.fileId,
+                  url: data.url,
+                  name: data.name,
+                };
                 updateLesson(
                   {
                     formValues,
@@ -132,7 +136,11 @@ const LessonForm: React.FC<LessonFormProps> = ({
       }
 
       if (values.lessonType === "VIDEO") {
-        formValues.contentUrl = youtubeUrl ?? "";
+        formValues.content = {
+          name: null,
+          fileId: null,
+          url: youtubeUrl ?? "",
+        };
         updateLesson(
           { formValues, id: lesson.id, chapterId: chapter.id },
           {
@@ -150,8 +158,12 @@ const LessonForm: React.FC<LessonFormProps> = ({
         uploadDocs(
           { formValues: uploadFd },
           {
-            onSuccess: (res) => {
-              formValues.contentUrl = res.data.url;
+            onSuccess: ({ data }) => {
+              formValues.content = {
+                url: data.url,
+                fileId: data.fileId,
+                name: data.name,
+              };
               createLesson(
                 { formValues, id: chapter.id },
                 {
@@ -167,7 +179,11 @@ const LessonForm: React.FC<LessonFormProps> = ({
       }
 
       if (values.lessonType === "VIDEO") {
-        formValues.contentUrl = youtubeUrl ?? "";
+        formValues.content = {
+          url: youtubeUrl ?? "",
+          name: null,
+          fileId: null,
+        };
         createLesson(
           { formValues, id: chapter.id },
           {
@@ -184,12 +200,17 @@ const LessonForm: React.FC<LessonFormProps> = ({
   useEffect(() => {
     if (isOpen) {
       if (lesson) {
-        const { name, order, contentUrl, lessonType } = lesson;
+        const { name, order, content, lessonType } = lesson;
         setValue("name", name);
         setValue("order", order);
-        setValue("contentUrl", lessonType === "DOCUMENT" ? contentUrl : "");
+        setValue(
+          "content",
+          lessonType === "DOCUMENT"
+            ? content
+            : { name: null, url: "", fileId: null }
+        );
         setValue("lessonType", lessonType);
-        setValue("youtubeUrl", lessonType === "VIDEO" ? contentUrl : "");
+        setValue("youtubeUrl", lessonType === "VIDEO" ? content?.url : "");
       } else {
         reset({
           name: "",
@@ -276,7 +297,7 @@ const LessonForm: React.FC<LessonFormProps> = ({
                 control={control}
                 name="documentFile"
                 rules={{
-                  required: contentUrl ? false : "Document must be uploaded",
+                  required: content?.url ? false : "Document must be uploaded",
                   validate: (val) => {
                     if (val) {
                       const sizeMB = val.size / 1024 / 1024;
@@ -294,10 +315,14 @@ const LessonForm: React.FC<LessonFormProps> = ({
                         {...field}
                         onClear={() => {
                           setValue("documentFile", null);
-                          setValue("contentUrl", "");
+                          setValue("content", {
+                            url: "",
+                            name: null,
+                            fileId: null,
+                          });
                         }}
                         errorMessage={errors.documentFile?.message}
-                        docUrl={contentUrl}
+                        docUrl={content?.url}
                       />
                     </>
                   );

@@ -118,8 +118,12 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
           uploadImage(
             { formValues: uploadFd },
             {
-              onSuccess: (res) => {
-                formValues.thumbnailUrl = res.data.url;
+              onSuccess: ({ data }) => {
+                formValues.thumbnail = {
+                  url: data.url,
+                  fileId: data.fileId,
+                  name: data.name,
+                };
 
                 updateCourse({ formValues, id: course.id });
               },
@@ -134,8 +138,12 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
         uploadImage(
           { formValues: uploadFd },
           {
-            onSuccess: (res) => {
-              formValues.thumbnailUrl = res.data.url;
+            onSuccess: ({ data }) => {
+              formValues.thumbnail = {
+                url: data.url,
+                fileId: data.fileId,
+                name: data.name,
+              };
               createCourse({ formValues });
             },
           }
@@ -207,7 +215,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
                     control={control}
                     name="thumbnailFile"
                     rules={{
-                      required: course?.thumbnailUrl
+                      required: course?.thumbnail?.url
                         ? false
                         : "Thumbnail must be uploaded",
                       validate: (val) => {
@@ -225,7 +233,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
                           <ImageUploader
                             description="course thumbnail"
                             {...field}
-                            imageUrl={course?.thumbnailUrl}
+                            imageUrl={course?.thumbnail?.url}
                             errorMessage={errors.thumbnailFile?.message}
                           />
                         </>

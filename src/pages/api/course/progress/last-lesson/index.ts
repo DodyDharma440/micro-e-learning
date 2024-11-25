@@ -8,17 +8,32 @@ export default makeHandler((prisma) => ({
     const userData = decodeToken(req);
     const payload = req.body as ICourseLastLessonPayload;
 
-    const progress = await prisma.courseUserLastLesson.upsert({
+    const currentProgress = await prisma.courseUserLastLesson.findFirst({
       where: {
         userId: userData?.id,
         courseId: payload.courseId,
+        id: payload.id,
       },
-      update: {
-        courseId: payload.courseId,
-        courseLessonId: payload.lessonId,
-        userId: userData?.id ?? "",
-      },
-      create: {
+    });
+
+    if (currentProgress) {
+      const progress = await prisma.courseUserLastLesson.update({
+        where: {
+          userId: userData?.id,
+          courseId: payload.courseId,
+          id: payload.id,
+        },
+        data: {
+          courseId: payload.courseId,
+          courseLessonId: payload.lessonId,
+          userId: userData?.id ?? "",
+        },
+      });
+      return createResponse(res, progress);
+    }
+
+    const progress = await prisma.courseUserLastLesson.create({
+      data: {
         courseId: payload.courseId,
         courseLessonId: payload.lessonId,
         userId: userData?.id ?? "",

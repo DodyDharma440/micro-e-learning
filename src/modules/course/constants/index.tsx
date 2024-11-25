@@ -50,18 +50,21 @@ export const courseColumns = ({
 }) =>
   createTableColumns<ICourse>(({ accessor }) => [
     accessor("name", { header: "Name" }),
-    accessor("thumbnailUrl", {
+    accessor((row) => row.thumbnail?.url, {
       header: "Thumbnail",
       justifyHeader: "center",
+      id: "thumbnail",
       cell: ({ row: { original } }) => {
         return (
           <div className="w-[100px] h-[70px] rounded-md bg-white/10 mx-auto relative overflow-hidden">
-            <Image
-              src={original.thumbnailUrl}
-              alt="thumb"
-              fill
-              className="object-cover"
-            />
+            {original.thumbnail?.url ? (
+              <Image
+                src={original.thumbnail?.url}
+                alt="thumb"
+                fill
+                className="object-cover"
+              />
+            ) : null}
           </div>
         );
       },

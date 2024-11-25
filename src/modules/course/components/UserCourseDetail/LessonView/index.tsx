@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Button, Card, useDisclosure } from "@nextui-org/react";
 
 import { AlertDialog } from "@/common/components";
+import { convertYoutubeUrl } from "@/common/utils/helper";
 import { useUpdateCourseProgress } from "@/modules/course/actions";
 import { useCourseDetail } from "@/modules/course/contexts";
 import type { ICourseLesson } from "@/modules/course/interfaces";
@@ -80,15 +81,15 @@ const LessonView = () => {
 
   return (
     <Card isBlurred className="p-4 w-full">
-      <div className="w-full h-[550px] bg-black dark:bg-white bg-opacity-25 dark:bg-opacity-10 rounded-md relative overflow-hidden">
+      <div className="w-full h-[450px] bg-black dark:bg-white bg-opacity-25 dark:bg-opacity-10 rounded-md relative overflow-hidden">
         {lesson ? (
           <>
             {lesson.lessonType === "DOCUMENT" ? (
-              <div className="w-full h-full bg-primary-500/30 flex items-center justify-center flex-col gap-4 text-center p-5">
+              <div className="w-full h-full bg-blue-100 dark:bg-primary-500/30 flex items-center justify-center flex-col gap-4 text-center p-5">
                 <HiDocument size={46} />
-                <p className="max-w-[400px]">{lesson.name}</p>
+                <p className="max-w-[400px]">{lesson.content?.name}</p>
                 <a
-                  href={lesson.contentUrl}
+                  href={lesson.content?.url}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -102,13 +103,14 @@ const LessonView = () => {
             {lesson.lessonType === "VIDEO" ? (
               <iframe
                 className="w-full h-full object-center"
-                src={lesson.contentUrl}
+                src={convertYoutubeUrl(lesson.content?.url)}
+                allowFullScreen
               />
             ) : null}
           </>
-        ) : course?.thumbnailUrl ? (
+        ) : course?.thumbnail?.url ? (
           <Image
-            src={course?.thumbnailUrl}
+            src={course?.thumbnail.url}
             alt="thumb"
             fill
             className="object-cover"
@@ -120,7 +122,7 @@ const LessonView = () => {
           <Button
             onClick={onOpen}
             className="mt-4 ml-auto"
-            color="primary"
+            color="success"
             startContent={<HiCheck />}
           >
             Mark as complete
@@ -135,7 +137,7 @@ const LessonView = () => {
             }?`}
             cancelButtonText="Cancel"
             confirmButtonText="Confirm"
-            onCancel={isLoadingUpdate ? () => {} : close}
+            onCancel={isLoadingUpdate ? () => {} : onClose}
             onConfirm={handleMarkComplete}
             color="primary"
             confirmButtonProps={{ isLoading: isLoadingUpdate }}

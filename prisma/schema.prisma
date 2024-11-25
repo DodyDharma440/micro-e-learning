@@ -57,7 +57,7 @@ model Course {
   name                 String
   slug                 String                 @unique
   description          String?
-  thumbnailUrl         String
+  thumbnail            Json?
   trailerUrl           String?
   hideTrailer          Boolean
   trainerId            String
@@ -100,7 +100,7 @@ model CourseLesson {
   name                 String
   order                Int
   lessonType           CourseLessonType
-  contentUrl           String
+  content              Json?
   chapter              CourseChapter          @relation(fields: [chapterId], references: [id])
   chapterId            String
   createdAt            DateTime               @default(now())
@@ -155,5 +155,5 @@ model CourseUserLastLesson {
   courseId       String
   lesson         CourseLesson @relation(fields: [courseLessonId], references: [id])
   courseLessonId String
-  userId         String       @unique
+  userId         String
 }

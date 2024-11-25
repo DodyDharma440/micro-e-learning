@@ -28,6 +28,7 @@ export const CourseDetailProvider: React.FC<CourseDetailProviderProps> = ({
   children,
 }) => {
   const [activeLesson, setActiveLesson] = useState<string | null>(null);
+  const [progressId, setProgressId] = useState<string>();
   const [course, setCourse] = useState(initialCourse);
 
   const { mutate: updateLastLesson } = useUpdateLastLesson();
@@ -41,15 +42,20 @@ export const CourseDetailProvider: React.FC<CourseDetailProviderProps> = ({
       const lastLessonId =
         initialCourse.CourseUserLastLesson?.[0]?.courseLessonId;
       setActiveLesson(lastLessonId ?? null);
+      setProgressId(initialCourse.CourseUserLastLesson?.[0]?.id);
     }
   }, [initialCourse]);
 
   useDidUpdate(() => {
     if (course && activeLesson)
       updateLastLesson({
-        formValues: { courseId: course?.id, lessonId: activeLesson },
+        formValues: {
+          courseId: course?.id,
+          lessonId: activeLesson,
+          id: progressId,
+        },
       });
-  }, [activeLesson]);
+  }, [activeLesson, progressId, course]);
 
   return (
     <CourseDetailContext.Provider

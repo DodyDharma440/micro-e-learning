@@ -111,12 +111,14 @@ const CourseCard: React.FC<CourseCardProps> = ({
   return (
     <Card isBlurred>
       <div className="h-[200px] relative overflow-hidden bg-black dark:bg-white bg-opacity-10 dark:bg-opacity-5">
-        <Image
-          src={course.thumbnailUrl}
-          alt="thumb"
-          fill
-          className="object-cover"
-        />
+        {course.thumbnail?.url ? (
+          <Image
+            src={course.thumbnail?.url}
+            alt="thumb"
+            fill
+            className="object-cover"
+          />
+        ) : null}
         {!isReadOnly ? (
           <>
             <div className="flex items-center gap-2 absolute top-2 right-2">

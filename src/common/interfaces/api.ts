@@ -24,8 +24,8 @@ export type BasicData = {
   deletedBy?: string | null;
 };
 
-export interface IFileData {
-  name: string;
-  fileId: string;
+export interface IFileData extends Record<string, string | null> {
+  name: string | null;
+  fileId: string | null;
   url: string;
 }

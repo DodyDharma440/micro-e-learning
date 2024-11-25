@@ -1,6 +1,6 @@
 import type { CourseLessonType, CourseStatus } from "@prisma/client";
 
-import type { BasicData } from "@/common/interfaces/api";
+import type { BasicData, IFileData } from "@/common/interfaces/api";
 import type { IUser } from "@/modules/auth/interfaces";
 import type { IWorkPosition } from "@/modules/user/interfaces";
 
@@ -8,7 +8,7 @@ export interface ICourseLesson extends BasicData {
   name: string;
   order: number;
   lessonType: CourseLessonType;
-  contentUrl: string;
+  content?: IFileData;
   chapterId: string;
   CourseProgress?: [{ isCompleted: boolean }];
 }
@@ -27,7 +27,7 @@ export interface ICourse extends BasicData {
   name: string;
   slug: string;
   description: string | null;
-  thumbnailUrl: string;
+  thumbnail?: IFileData;
   trailerUrl: string | null;
   hideTrailer: boolean;
   trainerId: string;
@@ -97,6 +97,7 @@ export interface ICourseLastLesson extends BasicData {
 export interface ICourseLastLessonPayload {
   lessonId: string;
   courseId: string;
+  id?: string;
 }
 
 export interface ICourseForumReply extends ICourseForum {
