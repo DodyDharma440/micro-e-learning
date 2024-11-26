@@ -18,6 +18,7 @@ import {
 
 import { useUploadImage } from "@/common/actions/imagekit";
 import { DocumentUploader } from "@/common/components";
+import { validateYoutubeUrl } from "@/common/utils/helper";
 import { useCreateLesson, useUpdateLesson } from "@/modules/course/actions";
 import type {
   ICourseChapter,
@@ -277,6 +278,11 @@ const LessonForm: React.FC<LessonFormProps> = ({
                 name="youtubeUrl"
                 rules={{
                   required: "Youtube URL should not be empty",
+                  validate: (val) => {
+                    if (!validateYoutubeUrl(val ?? "")) {
+                      return "Youtube URL not valid";
+                    }
+                  },
                 }}
                 render={({ field }) => {
                   return (

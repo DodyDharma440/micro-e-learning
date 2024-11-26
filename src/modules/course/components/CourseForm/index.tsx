@@ -19,6 +19,7 @@ import {
 import { useUploadImage } from "@/common/actions/imagekit";
 import { Content, ImageUploader } from "@/common/components";
 import { useUserContext } from "@/common/contexts";
+import { validateYoutubeUrl } from "@/common/utils/helper";
 import { useGetTrainers, useGetWorkPositions } from "@/modules/user/actions";
 
 import { useCreateCourse, useUpdateCourse } from "../../actions";
@@ -266,6 +267,11 @@ const CourseForm: React.FC<CourseFormProps> = ({ course }) => {
                       errorMessage={errors.trailerUrl?.message}
                       {...register("trailerUrl", {
                         required: "Trailer URL should not be empty",
+                        validate: (val) => {
+                          if (!validateYoutubeUrl(val ?? "")) {
+                            return "Youtube URL not valid";
+                          }
+                        },
                       })}
                     />
                   ) : null}

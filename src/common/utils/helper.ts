@@ -17,3 +17,9 @@ export const convertYoutubeUrl = (url?: string) => {
   const videoId = match && match[2].length === 11 ? match[2] : null;
   return "https://www.youtube.com/embed/" + videoId;
 };
+
+export const validateYoutubeUrl = (value: string) => {
+  return new RegExp(
+    /https?:\/\/(.+?\.)?(youtube\.com|youtu\.be)(\/[A-Za-z0-9\-\._~:\/\?#\[\]@!$&'\(\)\*\+,;\=]*)?$/g
+  ).test(value);
+};
