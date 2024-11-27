@@ -3,21 +3,15 @@ import React, { useMemo } from "react";
 import { Card, Progress } from "@nextui-org/react";
 
 import { useCourseDetail } from "../../contexts";
+import { calcProgress } from "../../utils";
 import ChapterList from "./ChapterList";
 import LessonView from "./LessonView";
 
 const UserCourseDetail = () => {
   const { course } = useCourseDetail();
   const totalProgress = useMemo(() => {
-    const totalLesson = (course?.chapters ?? []).reduce((prev, curr) => {
-      prev += curr.lessons.length;
-      return prev;
-    }, 0);
-
-    const result =
-      (100 * (course?._count.CourseProgress ?? 0)) / (totalLesson || 1);
-    return result.toFixed(0);
-  }, [course?._count.CourseProgress, course?.chapters]);
+    return calcProgress(course);
+  }, [course]);
 
   return (
     <div>

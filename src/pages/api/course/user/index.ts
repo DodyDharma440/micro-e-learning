@@ -27,7 +27,7 @@ export default makeHandler((prisma) => ({
         _count: {
           select: {
             CourseProgress: {
-              where: { isCompleted: true },
+              where: { isCompleted: true, userId: userData?.id },
             },
           },
         },

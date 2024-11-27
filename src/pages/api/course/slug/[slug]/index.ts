@@ -26,7 +26,10 @@ export default makeHandler((prisma) => ({
               include: {
                 CourseProgress:
                   user?.role === "user"
-                    ? { select: { isCompleted: true } }
+                    ? {
+                        select: { isCompleted: true },
+                        where: { userId: userData?.id },
+                      }
                     : false,
               },
             },
@@ -38,7 +41,9 @@ export default makeHandler((prisma) => ({
             : false,
         _count: {
           select: {
-            CourseProgress: { where: { isCompleted: true } },
+            CourseProgress: {
+              where: { isCompleted: true, userId: userData?.id },
+            },
           },
         },
       },

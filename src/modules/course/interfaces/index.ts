@@ -123,3 +123,9 @@ export interface ICourseForumPayload {
 export interface ICourseForumReplyPayload extends ICourseForumPayload {
   parentId: string;
 }
+
+export interface ICourseUserProgress extends IUser {
+  _count: {
+    CourseProgress: number;
+  };
+}

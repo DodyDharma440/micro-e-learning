@@ -6,6 +6,7 @@ import {
   COURSE,
   COURSE_FORUM,
   COURSE_FORUM_DETAIL,
+  COURSE_PROGRESS,
   COURSE_SLUG,
   COURSES,
   USER_COURSES,
@@ -22,6 +23,7 @@ import type {
   ICourseLessonPayload,
   ICoursePayload,
   ICourseProgressPayload,
+  ICourseUserProgress,
 } from "../interfaces";
 
 export const useGetCourses = get<PaginationResponse<ICourse>>(
@@ -100,6 +102,15 @@ export const useUpdateLesson = patch<
 export const useDeleteLesson = remove<any>(
   ({ id }) => apiELearning.delete(`/course/-/chapter/-/lesson/${id}`),
   []
+);
+
+export const useGetUsersProgress = getById<
+  PaginationResponse<ICourseUserProgress>,
+  { urlParams?: string }
+>(
+  ({ id, urlParams }) =>
+    apiELearning.get(`/course/${id}/user-progress${urlParams ?? ""}`),
+  ({ id }) => [COURSE_PROGRESS, id]
 );
 
 export const useGetUserCourses = get<ICourse[]>(

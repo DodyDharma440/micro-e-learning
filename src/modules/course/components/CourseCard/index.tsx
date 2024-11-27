@@ -14,6 +14,7 @@ import { AlertDialog } from "@/common/components";
 
 import { useUpdateCourse } from "../../actions";
 import type { ICourse } from "../../interfaces";
+import { calcProgress } from "../../utils";
 
 type CourseCardProps = {
   course: ICourse;
@@ -93,16 +94,10 @@ const CourseCard: React.FC<CourseCardProps> = ({
 
   const totalProgress = useMemo(() => {
     if (withProgress) {
-      const totalLesson = course.chapters?.reduce((prev, curr) => {
-        prev += curr._count?.lessons ?? 0;
-        return prev;
-      }, 0);
-      const result =
-        (100 * (course?._count.CourseProgress ?? 0)) / (totalLesson || 1);
-      return result.toFixed(0);
+      return calcProgress(course);
     }
     return "0";
-  }, [course?._count.CourseProgress, course.chapters, withProgress]);
+  }, [course, withProgress]);
 
   useEffect(() => {
     setStatus(course.status);

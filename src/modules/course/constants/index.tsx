@@ -10,14 +10,18 @@ import type { CourseStatus } from "@prisma/client";
 import type { TableActionArgs } from "@/common/interfaces/layout";
 import { createTableColumns } from "@/common/utils/react-table";
 
-import type { ICourse } from "../interfaces";
+import type { ICourse, ICourseUserProgress } from "../interfaces";
 import { type IChapterForm } from "../interfaces";
+import { calcProgress } from "../utils";
 
 export const COURSES = "courses";
 export const COURSE = "course";
+export const COURSE_PROGRESS = "course-progress";
+
 export const COURSE_SLUG = "course-slug";
 export const COURSE_FORUM = "course-forum";
 export const COURSE_FORUM_DETAIL = "course-forum-detail";
+
 export const USER_COURSES = "user-courses";
 
 export const defaultChapter: IChapterForm = {
@@ -119,6 +123,26 @@ export const courseColumns = ({
         );
       },
     }),
+    accessor(() => "", {
+      header: "Progress",
+      id: "progress",
+      justifyHeader: "center",
+      cell: function Cell({ row: { original } }) {
+        return (
+          <div className="mx-auto">
+            <Button
+              as={Link}
+              href={`/${isTrainer ? "trainer" : "admin"}/courses/${
+                original.id
+              }/progress`}
+              size="sm"
+            >
+              View
+            </Button>
+          </div>
+        );
+      },
+    }),
     {
       header: "Action",
       justifyHeader: "center",
@@ -145,4 +169,15 @@ export const courseColumns = ({
         );
       },
     },
+  ]);
+
+export const userProgressColumns = ({ course }: { course?: ICourse }) =>
+  createTableColumns<ICourseUserProgress>(({ accessor }) => [
+    accessor("name", {
+      header: "Name",
+    }),
+    accessor((row) => `${calcProgress(course, row._count.CourseProgress)}%`, {
+      header: "Progress",
+      id: "progress",
+    }),
   ]);

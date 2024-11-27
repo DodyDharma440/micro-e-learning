@@ -76,8 +76,10 @@ const Sidebar = () => {
           <Card className="p-4" isBlurred>
             <div className="flex items-center gap-3">
               <Avatar name={userData?.name} src={userData?.avatar?.url} />
-              <div>
-                <p className="mb-[2px] font-bold text-sm">{userData?.name}</p>
+              <div className="flex-1">
+                <p className="mb-[2px] font-bold text-sm line-clamp-1">
+                  {userData?.name}
+                </p>
                 <p className="text-[10px] text-gray-400 dark:text-gray-500 capitalize">
                   {userData?.role}
                 </p>
