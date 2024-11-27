@@ -23,7 +23,13 @@ const handler = makeHandler((prisma) => ({
     const results = await prisma.user.findMany({
       ...parseParams(req, "pagination"),
       ...searchParam,
-      include: {
+      select: {
+        id: true,
+        name: true,
+        avatar: true,
+        role: true,
+        username: true,
+        workPositionId: true,
         workPosition: true,
       },
     });
