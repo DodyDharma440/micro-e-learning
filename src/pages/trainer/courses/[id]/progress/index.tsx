@@ -41,4 +41,4 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   };
 };
 
-export default withAuth(CourseLessonPage, "superadmin");
+export default withAuth(CourseLessonPage, "trainer");
