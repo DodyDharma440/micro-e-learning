@@ -115,7 +115,10 @@ const CourseLessonForm: React.FC<CourseLessonFormProps> = ({ course }) => {
               });
               break;
             case "create":
-              setChapters((prev) => [...prev, { ...defaultChapter, ...data }]);
+              setChapters((prev) => [
+                ...prev,
+                { ...defaultChapter, ...data, order: prev.length + 1 },
+              ]);
               break;
           }
         }}

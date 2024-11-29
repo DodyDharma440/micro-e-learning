@@ -172,7 +172,13 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
                 );
                 prev[indexChapter] = {
                   ...prev[indexChapter],
-                  lessons: [...prev[indexChapter].lessons, data],
+                  lessons: [
+                    ...prev[indexChapter].lessons,
+                    {
+                      ...data,
+                      order: (prev[indexChapter]?.lessons?.length ?? 0) + 1,
+                    },
+                  ],
                 };
 
                 return [...prev];
