@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { HiPlus } from "react-icons/hi";
 
 import { Button } from "@nextui-org/react";
+import update from "immutability-helper";
 
 import { AlertDialog, Content, EmptyPlaceholder } from "@/common/components";
 import { useUserContext } from "@/common/contexts";
@@ -37,6 +40,18 @@ const CourseLessonForm: React.FC<CourseLessonFormProps> = ({ course }) => {
     deleteChapter({ id: deleteData?.id ?? "" });
   };
 
+  const moveItem = useCallback((dragIndex: number, hoverIndex: number) => {
+    setChapters((prev) => {
+      const newValue = update(prev, {
+        $splice: [
+          [dragIndex, 1],
+          [hoverIndex, 0, prev?.[dragIndex] as any],
+        ],
+      });
+      return newValue;
+    });
+  }, []);
+
   useEffect(() => {
     if (course) {
       setChapters(course.chapters);
@@ -60,25 +75,27 @@ const CourseLessonForm: React.FC<CourseLessonFormProps> = ({ course }) => {
         </Button>
       }
     >
-      {chapters?.length ? (
-        <div className="grid grid-cols-12 gap-4">
-          {chapters.map((chapter, index) => {
-            return (
-              <div key={chapter.id} className="col-span-6">
+      <DndProvider backend={HTML5Backend}>
+        {chapters?.length ? (
+          <div className="grid grid-cols-12 gap-4">
+            {chapters.map((chapter, index) => {
+              return (
                 <ChapterItem
                   index={index}
                   chapter={chapter}
                   onEdit={open}
                   onDelete={openDelete}
                   onUpdateChapters={setChapters}
+                  moveItem={moveItem}
+                  key={chapter.id}
                 />
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <EmptyPlaceholder message="This course doesn't have any chapters. Please add more chapter to this course." />
-      )}
+              );
+            })}
+          </div>
+        ) : (
+          <EmptyPlaceholder message="This course doesn't have any chapters. Please add more chapter to this course." />
+        )}
+      </DndProvider>
 
       <ChapterForm
         isOpen={isOpen}
