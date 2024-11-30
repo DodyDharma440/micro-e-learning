@@ -8,7 +8,7 @@ import ChapterList from "./ChapterList";
 import LessonView from "./LessonView";
 
 const UserCourseDetail = () => {
-  const { course } = useCourseDetail();
+  const { course, isReadOnly } = useCourseDetail();
   const totalProgress = useMemo(() => {
     return calcProgress(course);
   }, [course]);
@@ -20,7 +20,9 @@ const UserCourseDetail = () => {
           <Card isBlurred className="p-4">
             <div>
               <div className="flex items-center justify-between mb-2">
-                <p className="font-medium">Your Progress</p>
+                <p className="font-medium">
+                  {isReadOnly ? "" : "Your "}Progress
+                </p>
                 <p className="font-bold">{totalProgress}%</p>
               </div>
               <Progress

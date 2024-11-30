@@ -171,7 +171,13 @@ export const courseColumns = ({
     },
   ]);
 
-export const userProgressColumns = ({ course }: { course?: ICourse }) =>
+export const userProgressColumns = ({
+  course,
+  isTrainer,
+}: {
+  course?: ICourse;
+  isTrainer: boolean;
+}) =>
   createTableColumns<ICourseUserProgress>(({ accessor }) => [
     accessor("name", {
       header: "Name",
@@ -180,4 +186,23 @@ export const userProgressColumns = ({ course }: { course?: ICourse }) =>
       header: "Progress",
       id: "progress",
     }),
+    {
+      header: "Action",
+      justifyHeader: "center",
+      cell: ({ row }) => {
+        return (
+          <Button
+            className="mx-auto"
+            size="sm"
+            color="primary"
+            as={Link}
+            href={`/${isTrainer ? "trainer" : "admin"}/courses/${
+              course?.id
+            }/progress/${row.original.id}`}
+          >
+            View Detail
+          </Button>
+        );
+      },
+    },
   ]);

@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 
 import { Content, DataTable } from "@/common/components";
+import { useUserContext } from "@/common/contexts";
 import { useDataTableLifecycle, useServerDataTable } from "@/common/hooks";
 
 import { useGetUsersProgress } from "../../actions";
@@ -8,6 +9,7 @@ import { userProgressColumns } from "../../constants";
 import { useCourseDetail } from "../../contexts";
 
 const CourseUserProgress = () => {
+  const { userData } = useUserContext();
   const { course } = useCourseDetail();
 
   const {
@@ -27,8 +29,11 @@ const CourseUserProgress = () => {
   const users = data?.data.data.nodes || [];
 
   const columns = useMemo(() => {
-    return userProgressColumns({ course });
-  }, [course]);
+    return userProgressColumns({
+      course,
+      isTrainer: userData?.role === "trainer",
+    });
+  }, [course, userData?.role]);
 
   useDataTableLifecycle({
     refetcher: refetch,
@@ -37,7 +42,7 @@ const CourseUserProgress = () => {
   });
 
   return (
-    <Content title="User Progress" withBackButton>
+    <Content title={`User Progress - ${course?.name}`} withBackButton>
       <DataTable.Wrapper content="search-perpage">
         <DataTable.PerPage {...perPageProps} />
         <DataTable.Search {...searchProps} />

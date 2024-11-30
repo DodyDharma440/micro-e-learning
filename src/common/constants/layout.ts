@@ -12,6 +12,7 @@ export const adminPaths = [
   "/admin/courses/[id]/edit",
   "/admin/courses/[id]/forum",
   "/admin/courses/[id]/progress",
+  "/admin/courses/[id]/progress/[user_id]",
   "/admin/courses/[id]/forum/[question_id]",
   "/admin/user-management",
   "/admin/edit-profile",
@@ -29,6 +30,7 @@ export const adminMenu: ISidebarItem[] = [
       "/admin/courses/[id]/edit",
       "/admin/courses/[id]/forum",
       "/admin/courses/[id]/progress",
+      "/admin/courses/[id]/progress/[user_id]",
       "/admin/courses/[id]/forum/[question_id]",
     ],
   },
@@ -57,6 +59,7 @@ export const trainerPaths = [
   "/trainer/courses/[id]/edit",
   "/trainer/courses/[id]/forum",
   "/trainer/courses/[id]/progress",
+  "/trainer/courses/[id]/progress/[user_id]",
   "/trainer/courses/[id]/forum/[question_id]",
   "/trainer/edit-profile",
 ];

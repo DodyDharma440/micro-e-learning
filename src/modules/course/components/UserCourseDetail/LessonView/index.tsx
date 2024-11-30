@@ -13,7 +13,7 @@ import { useCourseDetail } from "@/modules/course/contexts";
 import type { ICourseLesson } from "@/modules/course/interfaces";
 
 const LessonView = () => {
-  const { activeLesson, course, setCourse } = useCourseDetail();
+  const { activeLesson, course, setCourse, isReadOnly } = useCourseDetail();
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const lesson = useMemo(() => {
@@ -117,7 +117,9 @@ const LessonView = () => {
           />
         ) : null}
       </div>
-      {activeLesson && !lesson?.CourseProgress?.[0]?.isCompleted ? (
+      {activeLesson &&
+      !lesson?.CourseProgress?.[0]?.isCompleted &&
+      !isReadOnly ? (
         <>
           <Button
             onClick={onOpen}

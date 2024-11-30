@@ -113,6 +113,11 @@ export const useGetUsersProgress = getById<
   ({ id }) => [COURSE_PROGRESS, id]
 );
 
+export const useGetUserProgress = getById<ICourse, { userId: string }>(
+  ({ id, userId }) => apiELearning.get(`/course/${id}/user-progress/${userId}`),
+  ({ id, userId }) => [`${COURSE_PROGRESS}-detail`, id, userId]
+);
+
 export const useGetUserCourses = get<ICourse[]>(
   () => apiELearning.get("/course/user"),
   [USER_COURSES]

@@ -10,22 +10,26 @@ export type CourseDetailCtx = {
   setCourse: React.Dispatch<React.SetStateAction<ICourse | undefined>>;
   activeLesson: string | null;
   setActiveLesson: React.Dispatch<React.SetStateAction<string | null>>;
+  isReadOnly: boolean;
 };
 
 export const CourseDetailContext = createContext<CourseDetailCtx>({
   activeLesson: null,
   setActiveLesson: () => {},
   setCourse: () => {},
+  isReadOnly: false,
 });
 
 type CourseDetailProviderProps = {
   course?: ICourse;
   children: React.ReactNode;
+  isReadOnly?: boolean;
 };
 
 export const CourseDetailProvider: React.FC<CourseDetailProviderProps> = ({
   course: initialCourse,
   children,
+  isReadOnly,
 }) => {
   const [activeLesson, setActiveLesson] = useState<string | null>(null);
   const [progressId, setProgressId] = useState<string>();
@@ -47,7 +51,7 @@ export const CourseDetailProvider: React.FC<CourseDetailProviderProps> = ({
   }, [initialCourse]);
 
   useDidUpdate(() => {
-    if (course && activeLesson)
+    if (course && activeLesson && !isReadOnly)
       updateLastLesson({
         formValues: {
           courseId: course?.id,
@@ -55,7 +59,7 @@ export const CourseDetailProvider: React.FC<CourseDetailProviderProps> = ({
           id: progressId,
         },
       });
-  }, [activeLesson, progressId, course]);
+  }, [activeLesson, progressId, course, isReadOnly]);
 
   return (
     <CourseDetailContext.Provider
@@ -64,6 +68,7 @@ export const CourseDetailProvider: React.FC<CourseDetailProviderProps> = ({
         setCourse,
         activeLesson,
         setActiveLesson,
+        isReadOnly: isReadOnly ?? false,
       }}
     >
       {children}
