@@ -3,6 +3,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { HiPlus } from "react-icons/hi";
 
+import { useDidUpdate } from "@mantine/hooks";
 import { Button } from "@nextui-org/react";
 import update from "immutability-helper";
 
@@ -10,7 +11,7 @@ import { AlertDialog, Content, EmptyPlaceholder } from "@/common/components";
 import { useUserContext } from "@/common/contexts";
 import { useDisclosureData } from "@/common/hooks";
 
-import { useDeleteChapter } from "../../actions";
+import { useDeleteChapter, useUpdateChapterOrder } from "../../actions";
 import { defaultChapter } from "../../constants";
 import type { ICourse, ICourseChapter } from "../../interfaces";
 import ChapterForm from "./ChapterForm";
@@ -23,6 +24,11 @@ type CourseLessonFormProps = {
 const CourseLessonForm: React.FC<CourseLessonFormProps> = ({ course }) => {
   const { userData } = useUserContext();
   const [chapters, setChapters] = useState<ICourseChapter[]>([]);
+
+  const [isUpdateOrder, setIsUpdateOrder] = useState(false);
+  const { mutate: updateOrder } = useUpdateChapterOrder({
+    onSuccess: () => setIsUpdateOrder(false),
+  });
 
   const [isOpen, { open, close }, chapterData] =
     useDisclosureData<ICourseChapter | null>({ closeDelay: 1 });
@@ -50,7 +56,17 @@ const CourseLessonForm: React.FC<CourseLessonFormProps> = ({ course }) => {
       });
       return newValue;
     });
+    setIsUpdateOrder(true);
   }, []);
+
+  useDidUpdate(() => {
+    if (course?.id && isUpdateOrder) {
+      updateOrder({
+        formValues: { ids: chapters.map((v) => v.id) },
+        id: course?.id,
+      });
+    }
+  }, [chapters, course?.id, updateOrder]);
 
   useEffect(() => {
     if (course) {

@@ -18,8 +18,10 @@ export default makeHandler((prisma) => ({
         category: true,
         chapters: {
           where: { deleted: false },
+          orderBy: { order: "asc" },
           include: {
             lessons: {
+              orderBy: { order: "asc" },
               where: {
                 deleted: false,
               },

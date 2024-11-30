@@ -78,6 +78,7 @@ export const useDragDrop = <T extends HTMLElement>({
   const [{ isDragging }, drag] = dragHooks;
 
   const opacity = isDragging ? 0 : 1;
+  const cursor = isDragging ? "grabbing" : "grab";
   drag(dropHooks[0](ref));
 
   return {
@@ -87,5 +88,6 @@ export const useDragDrop = <T extends HTMLElement>({
     drop: dropHooks,
     ref,
     preview: dragHooks[2],
+    cursor,
   };
 };

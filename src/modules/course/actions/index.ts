@@ -155,3 +155,15 @@ export const useSendQuestionReply = post<any, ICourseForumReplyPayload>(
   [],
   { successMessage: "Your reply has been sent" }
 );
+
+export const useUpdateChapterOrder = patch<any, { ids: string[] }>(
+  ({ formValues, id }) =>
+    apiELearning.patch(`/course/${id}/chapter/order`, formValues),
+  []
+);
+
+export const useUpdateLessonOrder = patch<any, { ids: string[] }>(
+  ({ formValues, id }) =>
+    apiELearning.patch(`/course/[id]/chapter/${id}/lesson/order`, formValues),
+  []
+);

@@ -1,14 +1,18 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { HiOutlineTrash, HiPlus } from "react-icons/hi";
 import { HiOutlinePencil } from "react-icons/hi2";
 import { RxDragHandleDots2 } from "react-icons/rx";
 
+import { useDidUpdate } from "@mantine/hooks";
 import { Button, Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
 import update from "immutability-helper";
 
 import { AlertDialog, EmptyPlaceholder } from "@/common/components";
 import { useDisclosureData, useDragDrop } from "@/common/hooks";
-import { useDeleteLesson } from "@/modules/course/actions";
+import {
+  useDeleteLesson,
+  useUpdateLessonOrder,
+} from "@/modules/course/actions";
 import type { ICourseLesson } from "@/modules/course/interfaces";
 import { type ICourseChapter } from "@/modules/course/interfaces";
 
@@ -34,10 +38,16 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
   moveItem,
   index,
 }) => {
-  const { ref, preview, handlerId, opacity } = useDragDrop<HTMLDivElement>({
-    index,
-    itemType: ITEM_TYPE,
-    onMove: moveItem,
+  const { ref, preview, handlerId, opacity, cursor } =
+    useDragDrop<HTMLDivElement>({
+      index,
+      itemType: ITEM_TYPE,
+      onMove: moveItem,
+    });
+
+  const [isUpdateOrder, setIsUpdateOrder] = useState(false);
+  const { mutate: updateOrder } = useUpdateLessonOrder({
+    onSuccess: () => setIsUpdateOrder(false),
   });
 
   const [isOpenLesson, { open, close }, lessonData] =
@@ -75,21 +85,35 @@ const ChapterItem: React.FC<ChapterItemProps> = ({
         prev[index].lessons = newValue;
         return [...prev];
       });
+      setIsUpdateOrder(true);
     },
     [index, onUpdateChapters]
   );
 
+  useDidUpdate(() => {
+    if (chapter?.id && isUpdateOrder) {
+      updateOrder({
+        formValues: { ids: chapter.lessons.map((v) => v.id) },
+        id: chapter?.id,
+      });
+    }
+  }, [chapter.lessons, chapter?.id, updateOrder]);
+
   return (
-    <div
-      className="col-span-6"
-      style={{ opacity }}
-      ref={preview}
-      data-handler-id={handlerId}
-    >
-      <Card isBlurred>
+    <div className="col-span-6">
+      <Card
+        isBlurred
+        ref={preview}
+        style={{ opacity }}
+        data-handler-id={handlerId}
+      >
         <CardHeader className="px-6 py-4">
           <div className="flex items-center gap-4 w-full">
-            <div className="flex items-center justify-center" ref={ref}>
+            <div
+              className="flex items-center justify-center"
+              style={{ cursor }}
+              ref={ref}
+            >
               <RxDragHandleDots2 size={20} />
             </div>
             <p className="font-semibold text-lg flex-1">{chapter.name}</p>

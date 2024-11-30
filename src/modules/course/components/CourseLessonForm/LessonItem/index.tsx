@@ -31,11 +31,12 @@ const LessonItem: React.FC<LessonItemProps> = ({
   index,
   moveItem,
 }) => {
-  const { ref, preview, handlerId, opacity } = useDragDrop<HTMLDivElement>({
-    index,
-    itemType: `${ITEM_TYPE}-${chapterId}`,
-    onMove: moveItem,
-  });
+  const { ref, preview, handlerId, opacity, cursor } =
+    useDragDrop<HTMLDivElement>({
+      index,
+      itemType: `${ITEM_TYPE}-${chapterId}`,
+      onMove: moveItem,
+    });
 
   return (
     <div
@@ -44,7 +45,11 @@ const LessonItem: React.FC<LessonItemProps> = ({
       data-handler-id={handlerId}
       className="rounded-lg flex gap-4 items-center border border-gray-400 dark:border-gray-800 px-4 py-3"
     >
-      <div className="flex items-center justify-center" ref={ref}>
+      <div
+        className="flex items-center justify-center"
+        style={{ cursor }}
+        ref={ref}
+      >
         <RxDragHandleDots2 size={20} />
       </div>
 

@@ -18,7 +18,13 @@ export default makeHandler((prisma) => ({
       include: {
         chapters: {
           where: { deleted: false },
-          include: { lessons: { where: { deleted: false } } },
+          orderBy: { order: "asc" },
+          include: {
+            lessons: {
+              where: { deleted: false },
+              orderBy: { order: "asc" },
+            },
+          },
         },
         CourseProgress: user?.role === "user",
       },
