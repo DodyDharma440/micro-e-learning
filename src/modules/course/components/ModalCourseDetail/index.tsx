@@ -10,6 +10,8 @@ import {
   ModalHeader,
 } from "@nextui-org/react";
 
+import { convertYoutubeUrl } from "@/common/utils/helper";
+
 import { useCourseDetail } from "../../contexts";
 
 type ModalCourseDetailProps = {
@@ -48,6 +50,19 @@ const ModalCourseDetail: React.FC<ModalCourseDetailProps> = ({
             <p className="whitespace-pre-wrap">{course?.description}</p>
           </div>
           <hr className="dark:border-neutral-800" />
+          {!course?.hideTrailer && course?.trailerUrl ? (
+            <>
+              <div>
+                <h4 className="font-bold mb-3">Trailer</h4>
+                <iframe
+                  className="w-full h-[240px] object-center rounded-md"
+                  src={convertYoutubeUrl(course.trailerUrl)}
+                  allowFullScreen
+                />
+              </div>
+              <hr className="dark:border-neutral-800" />
+            </>
+          ) : null}
           <div>
             <h4 className="font-bold mb-3">Keypoints</h4>
             <ul className="list-disc list-inside">

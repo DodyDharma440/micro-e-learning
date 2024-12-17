@@ -35,7 +35,11 @@ export const CourseDetailProvider: React.FC<CourseDetailProviderProps> = ({
   const [progressId, setProgressId] = useState<string>();
   const [course, setCourse] = useState(initialCourse);
 
-  const { mutate: updateLastLesson } = useUpdateLastLesson();
+  const { mutate: updateLastLesson } = useUpdateLastLesson({
+    onSuccess: ({ data }) => {
+      setProgressId(data.data.id);
+    },
+  });
 
   useEffect(() => {
     setCourse(initialCourse);

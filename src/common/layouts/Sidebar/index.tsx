@@ -1,6 +1,7 @@
 import React from "react";
 import { HiMoon, HiSun } from "react-icons/hi2";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTheme } from "next-themes";
@@ -20,9 +21,15 @@ const Sidebar = () => {
     <div className="fixed top-0 bottom-0 py-8">
       <Card className="w-[280px] h-full p-8 bg-opacity-20 backdrop-blur-md">
         <Link href="/admin/dashboard">
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-md bg-black/10 dark:bg-white/30"></div>
-            <h1 className="font-semibold text-xl">E-Learning</h1>
+          <div className="flex items-center justify-center gap-4">
+            <div className="h-10 w-[114px] relative overflow-hidden">
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                fill
+                className="object-contain"
+              />
+            </div>
           </div>
         </Link>
 

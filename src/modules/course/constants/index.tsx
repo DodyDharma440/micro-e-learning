@@ -78,30 +78,6 @@ export const courseColumns = ({
       header: "Category",
       id: "category",
     }),
-    accessor("enableForum", {
-      header: "Forums",
-      justifyHeader: "center",
-      cell: function Cell({ row: { original } }) {
-        return (
-          <div className="mx-auto">
-            {original.enableForum ? (
-              <Button
-                as={Link}
-                href={`/${isTrainer ? "trainer" : "admin"}/courses/${
-                  original.id
-                }/forum`}
-                color="secondary"
-                size="sm"
-              >
-                View
-              </Button>
-            ) : (
-              "Disabled"
-            )}
-          </div>
-        );
-      },
-    }),
     accessor(() => "", {
       header: "Lessons",
       id: "lesson",
@@ -139,6 +115,30 @@ export const courseColumns = ({
             >
               View
             </Button>
+          </div>
+        );
+      },
+    }),
+    accessor("enableForum", {
+      header: "Forums",
+      justifyHeader: "center",
+      cell: function Cell({ row: { original } }) {
+        return (
+          <div className="mx-auto">
+            {original.enableForum ? (
+              <Button
+                as={Link}
+                href={`/${isTrainer ? "trainer" : "admin"}/courses/${
+                  original.id
+                }/forum`}
+                color="secondary"
+                size="sm"
+              >
+                View
+              </Button>
+            ) : (
+              "Disabled"
+            )}
           </div>
         );
       },

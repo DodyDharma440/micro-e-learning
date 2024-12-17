@@ -1,6 +1,7 @@
 import React from "react";
 import { HiMoon, HiSun } from "react-icons/hi2";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTheme } from "next-themes";
@@ -43,7 +44,14 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children, isTrainer }) => {
         >
           <NavbarBrand>
             <Link href={isTrainer ? "/trainer/course" : "/user/courses"}>
-              <p className="font-bold text-inherit">E-LEARNING</p>
+              <div className="h-6 w-[68px] relative overflow-hidden">
+                <Image
+                  src="/logo.png"
+                  alt="Logo"
+                  fill
+                  className="object-contain"
+                />
+              </div>
             </Link>
           </NavbarBrand>
 
