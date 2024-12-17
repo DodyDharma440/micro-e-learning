@@ -85,7 +85,9 @@ export const parseSearchParams = (req: NextApiRequest, fields?: string[]) => {
       set(obj, splitted);
       searchQuery.push(obj);
     } else {
-      searchQuery.push({ [field]: { contains: searchValue } });
+      searchQuery.push({
+        [field]: { contains: searchValue, mode: "insensitive" },
+      });
     }
   });
 
