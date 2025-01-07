@@ -1,5 +1,5 @@
 import type { BasicData, IFileData } from "@/common/interfaces/api";
-import type { IWorkPosition } from "@/modules/user/interfaces";
+import type { IWorkPosition } from "@/modules/work-position/interfaces";
 
 export type UserRole = "superadmin" | "trainer" | "user";
 

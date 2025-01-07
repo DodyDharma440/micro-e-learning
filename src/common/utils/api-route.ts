@@ -23,6 +23,7 @@ prisma.$use(async (params, next) => {
     "Course",
     "CourseChapter",
     "CourseLesson",
+    "WorkPosition",
   ];
 
   if (params.model && modelsSoftDelete.includes(params.model)) {

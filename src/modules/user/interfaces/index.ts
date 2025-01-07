@@ -1,8 +1,4 @@
-import type { BasicData, IFileData } from "@/common/interfaces/api";
-
-export interface IWorkPosition extends BasicData {
-  name: string;
-}
+import type { IFileData } from "@/common/interfaces/api";
 
 export interface IEditProfilePayload
   extends Partial<{

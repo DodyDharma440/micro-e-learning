@@ -1,12 +1,12 @@
 import { apiELearning } from "@/common/configs/api";
 import { get, post } from "@/common/utils/react-query";
 import type { IUser } from "@/modules/auth/interfaces";
+import type { IWorkPosition } from "@/modules/work-position/interfaces";
 
 import { USER_WORK_POSITIONS, USERS_TRAINER } from "../constants";
 import type {
   IEditProfilePayload,
   IUpdatePasswordPayload,
-  IWorkPosition,
 } from "../interfaces";
 
 export const useGetTrainers = get<IUser[]>(

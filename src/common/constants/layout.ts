@@ -1,5 +1,6 @@
 import { HiLogout } from "react-icons/hi";
 import { HiRectangleGroup, HiTv, HiUser, HiUserGroup } from "react-icons/hi2";
+import { LuWorkflow } from "react-icons/lu";
 
 import type { ISidebarItem } from "../interfaces/layout";
 
@@ -16,6 +17,7 @@ export const adminPaths = [
   "/admin/courses/[id]/forum/[question_id]",
   "/admin/user-management",
   "/admin/edit-profile",
+  "/admin/work-position",
 ];
 export const adminMenu: ISidebarItem[] = [
   { label: "Dashboard", path: "/admin/dashboard", icon: HiRectangleGroup },
@@ -40,6 +42,7 @@ export const adminMenu: ISidebarItem[] = [
     icon: HiUserGroup,
   },
   { label: "Edit Profile", path: "/admin/edit-profile", icon: HiUser },
+  { label: "Work Position", path: "/admin/work-position", icon: LuWorkflow },
   { label: "Logout", path: "/logout", icon: HiLogout },
 ];
 
@@ -62,4 +65,5 @@ export const trainerPaths = [
   "/trainer/courses/[id]/progress/[user_id]",
   "/trainer/courses/[id]/forum/[question_id]",
   "/trainer/edit-profile",
+  "/trainer/work-position",
 ];

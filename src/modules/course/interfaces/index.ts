@@ -2,7 +2,7 @@ import type { CourseLessonType, CourseStatus } from "@prisma/client";
 
 import type { BasicData, IFileData } from "@/common/interfaces/api";
 import type { IUser } from "@/modules/auth/interfaces";
-import type { IWorkPosition } from "@/modules/user/interfaces";
+import type { IWorkPosition } from "@/modules/work-position/interfaces";
 
 export interface ICourseLesson extends BasicData {
   name: string;

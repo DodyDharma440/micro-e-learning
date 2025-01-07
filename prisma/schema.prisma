@@ -39,7 +39,8 @@ model User {
 
 model WorkPosition {
   id        String   @id @default(uuid())
-  name      String
+  name      String   @unique
+  deleted   Boolean  @default(false)
   User      User[]
   Course    Course[]
   createdAt DateTime @default(now())
