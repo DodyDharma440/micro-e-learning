@@ -12,7 +12,7 @@ export default makeHandler((prisma) => ({
     const slug = req.query.slug as string;
 
     const course = await prisma.course.findUnique({
-      where: { slug, status: "published" },
+      where: { slug, status: "published", deleted: false },
       include: {
         trainer: true,
         category: true,

@@ -81,7 +81,7 @@ const LessonView = () => {
 
   return (
     <Card isBlurred className="p-4 w-full">
-      <div className="w-full h-[450px] bg-black dark:bg-white bg-opacity-25 dark:bg-opacity-10 rounded-md relative overflow-hidden">
+      <div className="w-full h-[250px] md:h-[300px] lg:h-[450px] bg-black dark:bg-white bg-opacity-25 dark:bg-opacity-10 rounded-md relative overflow-hidden">
         {lesson ? (
           <>
             {lesson.lessonType === "DOCUMENT" ? (

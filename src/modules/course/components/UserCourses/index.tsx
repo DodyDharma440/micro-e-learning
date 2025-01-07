@@ -17,7 +17,10 @@ const UserCourses = () => {
         <div className="grid grid-cols-12 gap-4">
           {courses.map((course) => {
             return (
-              <div key={course.id} className="col-span-4">
+              <div
+                key={course.id}
+                className="col-span-12 md:col-span-6 lg:col-span-4"
+              >
                 <Link href={`/user/courses/${course.slug}`}>
                   <CourseCard course={course} isReadOnly withProgress />
                 </Link>

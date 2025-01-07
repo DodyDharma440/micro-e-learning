@@ -3,7 +3,7 @@ import { HiArrowLeft } from "react-icons/hi";
 
 import { useRouter } from "next/router";
 
-import { Button } from "@nextui-org/react";
+import { Button, cn } from "@nextui-org/react";
 
 type ContentProps = {
   title?: React.ReactNode;
@@ -12,6 +12,7 @@ type ContentProps = {
   withBackButton?: boolean;
   backAction?: () => void;
   backHref?: string;
+  classNames?: Partial<Record<"container", string>>;
 };
 
 const Content: React.FC<ContentProps> = ({
@@ -21,12 +22,18 @@ const Content: React.FC<ContentProps> = ({
   withBackButton,
   backAction,
   backHref,
+  classNames,
 }) => {
   const { push, back } = useRouter();
 
   return (
     <div className="px-5">
-      <div className="flex items-center justify-between mb-5">
+      <div
+        className={cn(
+          "flex items-center justify-between mb-5",
+          classNames?.container
+        )}
+      >
         <div className="flex items-center gap-4">
           {withBackButton ? (
             <Button

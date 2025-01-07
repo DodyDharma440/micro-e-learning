@@ -75,7 +75,7 @@ const EditProfileForm = () => {
   }, [reset, userData?.name, userData?.username]);
 
   return (
-    <div className="mx-auto max-w-[500px]">
+    <div className="mx-auto max-w-[500px] mb-6">
       <Card isBlurred className="p-4">
         <div>
           <h2 className="font-bold mb-4">Profile Picture</h2>

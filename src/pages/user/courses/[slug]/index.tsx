@@ -41,8 +41,11 @@ const UserCourseDetailPage: NextPage<UserCourseDetailPageProps> = ({
           <Content
             withBackButton
             title={data?.data.data.name}
+            classNames={{
+              container: "flex-col !items-start md:flex-row !md:items-center",
+            }}
             action={
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 justify-end w-full md:w-fit mt-2 md:mt-0">
                 <Button
                   color="primary"
                   startContent={<HiOutlineInformationCircle />}

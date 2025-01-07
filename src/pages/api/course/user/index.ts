@@ -33,6 +33,7 @@ export default makeHandler((prisma) => ({
                 lesson: { deleted: false },
               },
             },
+            chapters: true,
           },
         },
       },
